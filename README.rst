@@ -100,7 +100,8 @@ need to follow these steps:
 
     .. code:: bash
     
-        poetry run python -m pip install ansys-fluent-parametric
+        cd pyfluent-parametric
+        poetry run python -m pip install .
         
     5. Finally, verify your development installation by running:
 
