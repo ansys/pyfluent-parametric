@@ -58,7 +58,7 @@ jobs:
 
   docs:
     name: Documentation
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -70,6 +70,9 @@ jobs:
           python -m pip install --upgrade pip poetry tox
       - name: Generate the documentation with tox
         run: tox -e doc
+        env:
+          ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
+          PYFLUENT_START_INSTANCE: 0
 
 
   build:

@@ -1,9 +1,12 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
 
+import ansys.fluent.core as pyfluent
 from pyansys_sphinx_theme import pyansys_logo_black
 
 from ansys.fluent.parametric import __version__
+
+pyfluent.BUILDING_GALLERY = True
 
 # Project information
 project = "ansys-fluent-parametric"
@@ -34,6 +37,7 @@ extensions = [
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
+    "sphinx_gallery.gen_gallery",
 ]
 
 # Intersphinx mapping
