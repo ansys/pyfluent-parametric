@@ -65,11 +65,17 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-      - name: Install dependencies
+      - name: Install pyfluent-parametric
         run: |
-          python -m pip install --upgrade pip poetry tox
-      - name: Generate the documentation with tox
-        run: tox -e doc
+          python -m pip install --upgrade pip poetry
+          python -m pip install -r requirements/requirements_build.txt
+          poetry build
+          pip install dist/ansys_fluent_parametric-0.1.dev0-py3-none-any.whl
+      - name: Generate the documentation
+        run: |
+        	sudo rm -rf /home/ansys/.local/share/ansys_fluent_parametric/examples/*
+	        pip install -r requirements/requirements_docs.txt
+	        xvfb-run make -C doc html
         env:
           ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
           PYFLUENT_START_INSTANCE: 0
