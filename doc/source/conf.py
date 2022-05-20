@@ -161,11 +161,11 @@ sphinx_gallery_conf = {
 
 
 # -- Options for HTML output -------------------------------------------------
-html_short_title = html_title = "PyFluent"
+html_short_title = html_title = "pyfluent-parametric"
 html_theme = "pyansys_sphinx_theme"
 html_logo = pyansys_logo_black
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/pyfluent",
+    "github_url": "https://github.com/pyansys/pyfluent-parametric",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
@@ -176,7 +176,7 @@ html_theme_options = {
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "pyfluentdoc"
+htmlhelp_basename = "pyfluent-parametric-doc"
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -188,7 +188,7 @@ latex_elements = {}
 latex_documents = [
     (
         master_doc,
-        f"pyfluent-Documentation-{__version__}.tex",
+        f"pyfluent-parametric-Documentation-{__version__}.tex",
         "ansys.fluent.core Documentation",
         author,
         "manual",
@@ -203,8 +203,8 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "ansys.fluent.core",
-        "ansys.fluent.core Documentation",
+        "ansys.fluent.parametric",
+        "ansys.fluent.parametric Documentation",
         [author],
         1,
     )
@@ -219,12 +219,10 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "ansys.fluent.core",
-        "ansys.fluent.core Documentation",
+        "ansys.fluent.parametric",
+        "ansys.fluent.parametric Documentation",
         author,
-        "ansys.fluent.core",
-        "Pythonic interface for Fluent using gRPC",
-        "Engineering Software",
+        "ansys.fluent.parametric",
     ),
 ]
 

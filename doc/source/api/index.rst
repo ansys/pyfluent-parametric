@@ -14,6 +14,5 @@ Here we should discuss the different API modules at a high level.
    :maxdepth: 4
    :hidden:
    
-   core/index
    parametric
-   post/index
+   
