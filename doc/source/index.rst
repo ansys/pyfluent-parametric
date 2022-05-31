@@ -1,5 +1,5 @@
-PyFluent Documentation |version|
-================================
+pyfluent-parametric Documentation |version|
+===========================================
 
 .. toctree::
    :hidden:
