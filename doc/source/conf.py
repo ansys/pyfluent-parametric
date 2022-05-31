@@ -5,11 +5,12 @@ import platform
 import subprocess
 
 import ansys.fluent.core as pyfluent
-from ansys.fluent.core import __version__
 import numpy as np
 from pyansys_sphinx_theme import pyansys_logo_black
 import pyvista
 from sphinx_gallery.sorting import FileNameSortKey
+
+from ansys.fluent.parametric import __version__
 
 # Manage errors
 pyvista.set_error_output_file("errors.txt")
@@ -31,7 +32,7 @@ pyfluent.BUILDING_GALLERY = True
 
 # -- Project information -----------------------------------------------------
 
-project = "ansys.fluent.core"
+project = "ansys-fluent-parametric"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS Inc."
 

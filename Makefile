@@ -1,3 +1,7 @@
+style:
+	@echo "Running code style"
+	@pre-commit run --all-files --show-diff-on-failure
+
 install:
 	@python -m pip install --upgrade pip poetry
 	@python -m pip install -r requirements/requirements_build.txt
