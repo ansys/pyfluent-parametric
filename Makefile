@@ -1,5 +1,5 @@
 style:
-	@echo "Running code style"
+	@python -m pip install pre-commit
 	@pre-commit run --all-files --show-diff-on-failure
 
 install:
