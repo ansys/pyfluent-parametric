@@ -1,67 +1,11 @@
-from email.headerregistry import Group
 from pathlib import Path
 
-from ansys.fluent.core.solver.flobject import Boolean, Command, Group, NamedObject, String
+from ansys.fluent.core.solver.flobject import Command, NamedObject
+from ansys.fluent.core.solver.settings import root
 import pytest
 from pytest_mock import MockerFixture
 
 from ansys.fluent.parametric import ParametricProject
-
-
-class root(Group):
-    class file(Group):
-        class parametric_project(Group):
-            class open(Command):
-                class project_filename(String):
-                    pass
-
-                class load_case(Boolean):
-                    pass
-
-                argument_names = ["project_filename", "load_case"]
-                project_filename = project_filename
-                load_case = load_case
-
-            class save(Command):
-                pass
-
-            class save_as(Command):
-                class project_filename(String):
-                    pass
-
-                argument_names = ["project_filename"]
-                project_filename = project_filename
-
-            class save_as_copy(Command):
-                class project_filename(String):
-                    pass
-
-                argument_names = ["project_filename"]
-                project_filename = project_filename
-
-            class export(Command):
-                class project_filename(String):
-                    pass
-
-                argument_names = ["project_filename"]
-                project_filename = project_filename
-
-            class archive(Command):
-                class archive_name(String):
-                    pass
-
-                argument_names = ["archive_name"]
-                archive_name = archive_name
-
-            command_names = ["open", "save", "save_as", "save_as_copy", "export", "archive"]
-            open = open
-
-    class parametric_studies(NamedObject):
-        pass
-
-    child_names = ["file", "parametric_studies"]
-    file = file
-    parametric_studies = parametric_studies
 
 
 @pytest.fixture(autouse=True)
@@ -73,7 +17,7 @@ def mock_settings_service(mocker: MockerFixture) -> None:
 @pytest.fixture(name="parametric_project")
 def fixture_parametric_project() -> ParametricProject:
     return ParametricProject(
-        root.file.parametric_project(), root.parametric_studies(), "abc.flprj", False
+        root.file.parametric_project(), root.parametric_studies(), "abc.flprj"
     )
 
 
@@ -116,7 +60,9 @@ class TestParamtericProject:
     ) -> None:
         spy = mocker.spy(root.file.parametric_project.save_as_copy, "__call__")
         parametric_project.export(project_filepath="abc.flprj")
-        spy.assert_called_once_with(project_filename="abc.flprj", convert_to_managed=False)
+        spy.assert_called_once_with(
+            project_filename="abc.flprj", convert_to_managed=False
+        )
 
     def test_archive(
         self,
