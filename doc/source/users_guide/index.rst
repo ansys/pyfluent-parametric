@@ -15,15 +15,6 @@ constituent modules and components.
    :maxdepth: 1
    :hidden:
 
-   launching_ansys_fluent
-   meshing_workflows
-   general_settings
-   solver_settings
-   models
-   materials
-   boundary_conditions
-   solution
-   postprocessing
    parametric_workflows
 
 
