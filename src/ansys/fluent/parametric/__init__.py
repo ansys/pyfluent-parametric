@@ -225,7 +225,9 @@ class ParametricStudy:
             )
             self.project_filepath.rmdir()
             old_study_names = self._parametric_studies.get_object_names()
-            self._parametric_studies.initialize(project_filename=self.project_filepath.stem)
+            self._parametric_studies.initialize(
+                project_filename=self.project_filepath.stem
+            )
             new_study_names = self._parametric_studies.get_object_names()
             self.name = set(new_study_names).difference(set(old_study_names)).pop()
             base_design_point = DesignPoint(
@@ -281,7 +283,9 @@ class ParametricStudy:
         self._parametric_studies.duplicate(copy_design_points=copy_design_points)
         new_study_names = self._parametric_studies.get_object_names()
         clone_name = set(new_study_names).difference(set(old_study_names)).pop()
-        current_study = ParametricStudy.get_all_studies()[ParametricStudy.current_study_name]
+        current_study = ParametricStudy.get_all_studies()[
+            ParametricStudy.current_study_name
+        ]
         if copy_design_points:
             clone_design_points = {
                 k: DesignPoint(k, self._parametric_studies[clone_name].design_points[k])
@@ -293,7 +297,9 @@ class ParametricStudy:
                 self._parametric_studies[clone_name].design_points[BASE_DP_NAME],
             )
             clone_design_points = {BASE_DP_NAME: base_design_point}
-        clone = ParametricStudy(self._parametric_studies, clone_name, clone_design_points)
+        clone = ParametricStudy(
+            self._parametric_studies, clone_name, clone_design_points
+        )
         ParametricStudy.current_study_name = clone.name
         return clone
 
@@ -392,7 +398,9 @@ class ParametricStudy:
             )
             design_points.remove(self.current_design_point)
         dp_settings = self._parametric_studies[self.name].design_points
-        dp_settings.delete_design_points(design_points=[dp.name for dp in design_points])
+        dp_settings.delete_design_points(
+            design_points=[dp.name for dp in design_points]
+        )
         for design_point in design_points:
             self.design_points.pop(design_point.name)
             del design_point
@@ -442,7 +450,9 @@ class ParametricStudy:
             List of design points.
         """
         dp_settings = self._parametric_studies[self.name].design_points
-        dp_settings.clear_generated_data(design_points=[dp.name for dp in design_points])
+        dp_settings.clear_generated_data(
+            design_points=[dp.name for dp in design_points]
+        )
 
     def load_current_design_point_case_data(self) -> None:
         """Load case-data of the current design point."""
@@ -506,7 +516,9 @@ class ParametricProject:
         if open_project:
             self.open(project_filepath=project_filepath)
 
-    def open(self, project_filepath: str = "default.flprj", load_case: bool = True) -> None:
+    def open(
+        self, project_filepath: str = "default.flprj", load_case: bool = True
+    ) -> None:
         """Open a project.
 
         Parameters
@@ -525,7 +537,9 @@ class ParametricProject:
             study = ParametricStudy(self._parametric_studies, study_name)
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
-                study.design_points[dp_name] = DesignPoint(dp_name, dps_settings[dp_name])
+                study.design_points[dp_name] = DesignPoint(
+                    dp_name, dps_settings[dp_name]
+                )
 
     def save(self) -> None:
         """Save project."""
@@ -635,7 +649,9 @@ class ParametricSession:
         self.project = None
         self._session = launcher()
         self.scheme_eval = self._session.scheme_eval.scheme_eval
-        self.scheme_eval("(set parametric-study-dependents-manager " "save-project-at-exit? #f)")
+        self.scheme_eval(
+            "(set parametric-study-dependents-manager " "save-project-at-exit? #f)"
+        )
         if start_transcript:
             self.start_transcript()
         self._root = self._session.solver.root
@@ -660,7 +676,9 @@ class ParametricSession:
                 study = ParametricStudy(studies_settings, study_name)
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
-                    study.design_points[dp_name] = DesignPoint(dp_name, dps_settings[dp_name])
+                    study.design_points[dp_name] = DesignPoint(
+                        dp_name, dps_settings[dp_name]
+                    )
                 self.studies[study_name] = study
             ParametricStudy.current_study_name = self._root.current_parametric_study()
 

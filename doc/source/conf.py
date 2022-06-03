@@ -124,7 +124,9 @@ def _stop_fluent_container(gallery_conf, fname):
     try:
         is_linux = platform.system() == "Linux"
         container_names = (
-            subprocess.check_output("docker container ls --format {{.Names}}", shell=is_linux)
+            subprocess.check_output(
+                "docker container ls --format {{.Names}}", shell=is_linux
+            )
             .decode("utf-8")
             .strip()
             .split()
