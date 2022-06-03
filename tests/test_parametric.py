@@ -1,7 +1,13 @@
 from email.headerregistry import Group
 from pathlib import Path
 
-from ansys.fluent.core.solver.flobject import Boolean, Command, Group, NamedObject, String
+from ansys.fluent.core.solver.flobject import (
+    Boolean,
+    Command,
+    Group,
+    NamedObject,
+    String,
+)
 import pytest
 from pytest_mock import MockerFixture
 
@@ -53,7 +59,14 @@ class root(Group):
                 argument_names = ["archive_name"]
                 archive_name = archive_name
 
-            command_names = ["open", "save", "save_as", "save_as_copy", "export", "archive"]
+            command_names = [
+                "open",
+                "save",
+                "save_as",
+                "save_as_copy",
+                "export",
+                "archive",
+            ]
             open = open
 
     class parametric_studies(NamedObject):
@@ -116,7 +129,9 @@ class TestParamtericProject:
     ) -> None:
         spy = mocker.spy(root.file.parametric_project.save_as_copy, "__call__")
         parametric_project.export(project_filepath="abc.flprj")
-        spy.assert_called_once_with(project_filename="abc.flprj", convert_to_managed=False)
+        spy.assert_called_once_with(
+            project_filename="abc.flprj", convert_to_managed=False
+        )
 
     def test_archive(
         self,
