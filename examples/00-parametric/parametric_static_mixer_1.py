@@ -21,11 +21,8 @@ from pathlib import Path
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
-from ansys.fluent.post import set_config
 
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
-
-set_config(blocking=True, set_view_on_display="isometric")
 
 ############################################################################
 # Launch Fluent in 3D and double precision
