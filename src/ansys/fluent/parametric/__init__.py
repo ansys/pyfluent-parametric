@@ -370,7 +370,7 @@ class ParametricStudy:
         self.set_as_current()
         dp_settings = self._parametric_studies[self.name].design_points
         dps_before = dp_settings.get_object_names()
-        dp_settings.create(
+        dp_settings.create_1(
             write_data=write_data,
             capture_simulation_report_data=capture_simulation_report_data,
         )
