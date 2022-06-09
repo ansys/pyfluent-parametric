@@ -12,8 +12,8 @@ This parametric study workflow test performs these steps
 
 This test queries the following using PyTest:
 - Input parameters
-- Output parameters 
-- Number of design points after creation, duplication and deletion 
+- Output parameters
+- Number of design points after creation, duplication and deletion
 """
 
 ############################################################################
@@ -22,12 +22,15 @@ from pathlib import Path
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import pytest
+
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
 
 ############################################################################
 # Launch Fluent in 3D and double precision
 
-session = pyfluent.launch_fluent(precision="double", processor_count=2, start_transcript=False)
+session = pyfluent.launch_fluent(
+    precision="double", processor_count=2, start_transcript=False
+)
 
 ############################################################################
 # Read the hopper/mixer case
@@ -56,7 +59,6 @@ session.solver.tui.define.boundary_conditions.set.velocity_inlet(
 session.solver.tui.define.boundary_conditions.set.velocity_inlet(
     "inlet1", (), "temperature", "yes", "inlet1_temp", 300, "quit"
 )
-
 session.solver.tui.define.boundary_conditions.set.velocity_inlet(
     "inlet2", (), "vmag", "yes", "no", "inlet2_vel", 1, "quit"
 )
@@ -122,10 +124,12 @@ study_1.design_points["Base DP"].input_parameters = input_parameters_update
 ###########################################################################
 # Validate input parameters of base design point
 
-base_DP_input_expected = {'inlet1_vel': 0.5,
- 'inlet2_temp': 350.0,
- 'inlet2_vel': 1.0,
- 'inlet1_temp': 300.0}
+base_DP_input_expected = {
+    "inlet1_vel": 0.5,
+    "inlet2_temp": 350.0,
+    "inlet2_vel": 1.0,
+    "inlet1_temp": 300.0,
+}
 base_DP_input_tested = study_1.design_points["Base DP"].input_parameters
 
 assert base_DP_input_tested == base_DP_input_expected
@@ -139,7 +143,10 @@ study_1.update_current_design_point()
 # Validate Base DP output parameters
 
 assert len(study_1.design_points) == 1
-base_DP_output_expected = {'outlet-temp-avg-op': 333.3487, 'outlet-vel-avg-op': 1.506855}
+base_DP_output_expected = {
+    "outlet-temp-avg-op": 333.3487,
+    "outlet-vel-avg-op": 1.506855,
+}
 base_DP_output_tested = study_1.design_points["Base DP"].output_parameters
 
 assert base_DP_output_tested == pytest.approx(base_DP_output_expected)
@@ -158,13 +165,15 @@ study_1.design_points["DP1"].input_parameters = design_point_1_input_parameters
 # Validate new design points
 
 assert len(study_1.design_points) == 2
-DP1_input_expected = {'inlet2_vel': 1.0,
- 'inlet2_temp': 350.0,
- 'inlet1_vel': 1.0,
- 'inlet1_temp': 500.0}
+DP1_input_expected = {
+    "inlet2_vel": 1.0,
+    "inlet2_temp": 350.0,
+    "inlet1_vel": 1.0,
+    "inlet1_temp": 500.0,
+}
 DP1_input_tested = study_1.design_points["DP1"].input_parameters
 assert DP1_input_tested == DP1_input_expected
- 
+
 ##########################################################################
 # Duplicate design points
 
@@ -186,9 +195,9 @@ study_1.update_all_design_points()
 ###########################################################################
 # Validate all output design points
 
-BaseDP_output_expected = {'outlet-temp-avg-op': 333.3487, 'outlet-vel-avg-op': 1.506855}
-DP1_output_expected = {'outlet-temp-avg-op': 425.004, 'outlet-vel-avg-op': 2.029791}
-DP2_output_expected = {'outlet-temp-avg-op': 425.004, 'outlet-vel-avg-op': 2.029791}
+BaseDP_output_expected = {"outlet-temp-avg-op": 333.3487, "outlet-vel-avg-op": 1.506855}
+DP1_output_expected = {"outlet-temp-avg-op": 425.004, "outlet-vel-avg-op": 2.029791}
+DP2_output_expected = {"outlet-temp-avg-op": 425.004, "outlet-vel-avg-op": 2.029791}
 
 BaseDP_output_tested = study_1.design_points["Base DP"].output_parameters
 DP1_output_tested = study_1.design_points["DP1"].output_parameters
