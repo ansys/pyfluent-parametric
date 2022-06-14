@@ -109,10 +109,18 @@ session.solver.tui.solve.monitors.residual.criterion_type("0")
 case_path = str(Path(pyfluent.EXAMPLES_PATH) / "Static_Mixer_Parameters.cas.h5")
 session.solver.tui.file.write_case(case_path)
 
+assert (
+    Path(pyfluent.EXAMPLES_PATH) / "Static_Mixer_Parameters.cas.h5"
+).exists() == True
+
 ###########################################################################
 # Instantiate a parametric study from a Fluent session
 
 study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
+
+parametricStudies_exp = 1
+parametricStudies_test = len(ParametricStudy._all_studies.keys())
+assert parametricStudies_test == parametricStudies_exp
 
 ###########################################################################
 # Access and modify input parameters of base DP
@@ -228,6 +236,10 @@ assert len(study_1.design_points) == 2
 study_2 = study_1.duplicate()
 assert len(study_2.design_points) == 2
 
+parametricStudies_exp = 2
+parametricStudies_test = len(ParametricStudy._all_studies.keys())
+assert parametricStudies_test == parametricStudies_exp
+
 #########################################################################
 # Rename the newly created parametric study
 
@@ -238,12 +250,18 @@ study_2.rename("New Study")
 
 study_1.delete()
 
+parametricStudies_exp = 1
+parametricStudies_test = len(ParametricStudy._all_studies.keys())
+assert parametricStudies_test == parametricStudies_exp
+
 #########################################################################
 # Save the parametric project and close Fluent
 
 project_filepath = str(Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study.flprj")
 
 session.solver.tui.file.parametric_project.save_as(project_filepath)
+
+assert (Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study.flprj").exists() == True
 
 session.exit()
 
@@ -272,6 +290,10 @@ project_filepath_save_as = str(
 )
 proj.save_as(project_filepath=project_filepath_save_as)
 
+assert (
+    Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study_save_as.flprj"
+).exists() == True
+
 #########################################################################
 # Export the current project
 
@@ -280,10 +302,16 @@ project_filepath_export = str(
 )
 proj.export(project_filepath=project_filepath_export)
 
+assert (
+    Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study_export.flprj"
+).exists() == True
+
 #########################################################################
 # Archive the current project
 
 proj.archive()
+
+assert (Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study.flprz").exists() == True
 
 #########################################################################
 # Close Fluent
