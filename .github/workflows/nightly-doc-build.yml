@@ -8,6 +8,9 @@ on:
 jobs:
   nightly_docs_build:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+          image-tag: [latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -37,6 +40,8 @@ jobs:
 
       - name: Pull Fluent docker image
         run: make docker-pull
+        env:
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
       - name: Generate the documentation
         run: make build-doc
@@ -45,8 +50,10 @@ jobs:
           PYFLUENT_START_INSTANCE: 0
           PYFLUENT_LAUNCH_CONTAINER: 1
           DOCS_CNAME: dev.fluentparametric.docs.pyansys.com
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
       - name: Deploy
+        if: ${{ matrix.image-tag == 'latest'}}
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           repository-name: pyansys/pyfluent-parametric-dev-docs

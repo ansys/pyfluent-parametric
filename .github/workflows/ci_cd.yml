@@ -40,6 +40,8 @@ jobs:
     runs-on: self-hosted
     strategy:
       fail-fast: false
+      matrix:
+        image-tag: [latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -61,6 +63,8 @@ jobs:
 
       - name: Pull Fluent docker image
         run: make docker-pull
+        env:
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
       - name: Test with pytest
         run: make unittest
@@ -68,11 +72,15 @@ jobs:
           ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
           PYFLUENT_START_INSTANCE: 0
           PYFLUENT_LAUNCH_CONTAINER: 1
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
 
   docs:
     name: Documentation
     runs-on: self-hosted
+    strategy:
+      matrix:
+        image-tag: [latest]
     steps:
       - uses: actions/checkout@v3
 
@@ -102,6 +110,8 @@ jobs:
 
       - name: Pull Fluent docker image
         run: make docker-pull
+        env:
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
       - name: Retrieve pyfluent-parametric version
         run: |
@@ -113,9 +123,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: doc/source/examples
-          key: Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ hashFiles('examples/**') }}-${{ github.sha }}
+          key: Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ matrix.image-tag }}-${{ hashFiles('examples/**') }}-${{ github.sha }}
           restore-keys: |
-            Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ hashFiles('examples/**') }}
+            Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ matrix.image-tag }}-${{ hashFiles('examples/**') }}
 
       - name: Generate the documentation
         run: make build-doc
@@ -124,20 +134,21 @@ jobs:
           PYFLUENT_START_INSTANCE: 0
           PYFLUENT_LAUNCH_CONTAINER: 1
           DOCS_CNAME: fluentparametric.docs.pyansys.com
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
         with:
-          name: HTML-Documentation
+          name: HTML-Documentation-tag-${{ matrix.image-tag }}
           path: doc/_build/html
           retention-days: 7
 
       - name: Deploy
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags') && ${{ matrix.image-tag == 'latest'}}
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           repository-name: pyansys/pyfluent-parametric-docs
-          token: ${{ steps.get_workflow_token.outputs.token }}
+          token: ${{ secrets.DOC_DEPLOYMENT_PAT }}
           BRANCH: gh-pages
           FOLDER: doc/_build/html
           CLEAN: true
