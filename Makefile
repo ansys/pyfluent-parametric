@@ -3,6 +3,7 @@ style:
 	@pre-commit run --all-files --show-diff-on-failure
 
 install:
+	@pip uninstall ansys-api-fluent -y
 	@python -m pip install --upgrade pip poetry
 	@python -m pip install -r requirements/requirements_build.txt
 	@pip install install_data/ansys_api_fluent-0.1.0-py3-none-any.whl
@@ -14,6 +15,7 @@ docker-pull:
 	@python .ci/pull_fluent_image.py
 
 unittest:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
 	@pip install -r requirements/requirements_tests.txt
 	@pytest -v --cov=ansys.fluent --cov-report html:cov_html --cov-config=.coveragerc
 
