@@ -31,7 +31,7 @@ Pyfluent parametric
    :alt: Black
 
 
-A Python wrapper for Ansys fluent parametric
+A Python wrapper for Ansys Fluent parametric
 
 
 How to install
