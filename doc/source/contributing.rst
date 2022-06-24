@@ -10,20 +10,20 @@ it and all `Guidelines and Best Practices
 <https://dev.docs.pyansys.com/guidelines/index.html>`_ before attempting to
 contribute to PyFluent.
  
-The following contribution information is specific to PyFluent.
+The following contribution information is specific to PyFluent Parametric.
 
-Cloning the PyFluent Repository
--------------------------------
-Run this code to clone and install the latest version of PyFluent in development
-mode:
+Cloning the PyFluent Parametric Repository
+------------------------------------------
+Run this code to clone and install the latest version of PyFluent Parametric in
+development mode:
 
 .. code::
 
-    git clone https://github.com/pyansys/pyfluent.git
-    cd pyfluent
-    pip install pip -U
-    pip install -e .
-    pip install -e .[post] # If you want to use pyvista
+   git clone https://github.com/pyansys/pyfluent-parametric.git
+   cd pyfluent-parametric
+   pip install pip -U
+   pip install install_data/ansys_api_fluent-0.1.0-py3-none-any.whl  # till public release
+   pip install -e .
 
 Building Documentation
 ----------------------
@@ -32,7 +32,7 @@ directory of the repository:
 
 .. code:: 
 
-    pip install -r requirements_docs.txt
+    pip install -r requirements/requirements_doc.txt
     cd doc
     make html
 
@@ -46,8 +46,8 @@ browser.  To clean the documentation you can execute this command:
 
 Posting Issues
 --------------
-Use the `PyFluent Issues <https://github.com/pyansys/pyfluent/issues>`_ page to
-submit questions, report bugs, and request new features.
+Use the `PyFluent Parametric Issues <https://github.com/pyansys/pyfluent-parametric/issues>`_
+page to submit questions, report bugs, and request new features.
 
 
 Code Style
