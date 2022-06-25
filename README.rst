@@ -6,8 +6,8 @@ PyFluent Parametric
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |pypi| image:: https://img.shields.io/pypi/v/pyfluent-parametric.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/pyfluent-parametric
+.. |pypi| image:: https://img.shields.io/pypi/v/ansys-fluent-parametric.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/ansys-fluent-parametric
    :alt: PyPI
 
 .. |GH-CI| image:: https://github.com/pyansys/pyfluent-parametric/actions/workflows/ci_cd.yml/badge.svg
