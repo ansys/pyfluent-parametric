@@ -38,16 +38,12 @@ For a local "development" version, install with:
 .. code::
 
    git clone https://github.com/pyansys/pyfluent-parametric.git
-   cd pyfluent
+   cd pyfluent-parametric
    pip install -e .
 
-(Remove this section when PyFluent project goes public) 
-Until PyFluent project goes public, install the latest release from
-the artifactory.
-
-.. code::
-
-   python -m pip install --extra-index-url http://conanreader:conanreader@canartifactory.ansys.com:8080/artifactory/api/pypi/pypi/simple --trusted-host canartifactory.ansys.com ansys-fluent-parametric
+Follow `README.rst. <https://github.com/pyansys/pyfluent-parametric/blob/main/README.rst>`_ This will allow you to install the PyFluent Parametric ``ansys-fluent-parametric`` module
+and modify it locally and have the changes reflected in your setup
+after restarting the Python kernel.
 
 This will allow you to install the PyFluent ``ansys-fluent-parametric`` module
 and modify it locally and have the changes reflected in your setup
