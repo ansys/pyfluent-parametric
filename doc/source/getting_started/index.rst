@@ -19,11 +19,11 @@ The ``ansys-fluent-parametric`` package currently supports Python 3.7 through
 Python 3.10 on Windows and Linux.
 
 Install the latest release from `PyPi
-<https://pypi.org/project/ansys-fluent-core/>`_ with:
+<https://pypi.org/project/ansys-fluent-parametric/>`_ with:
 
 .. code::
 
-   pip install ansys-fluent-core
+   pip install ansys-fluent-parametric
 
 Alternatively, install the latest from `pyfluent-parametric GitHub
 <https://github.com/pyansys/pyfluent-parametric/issues>`_ via:
