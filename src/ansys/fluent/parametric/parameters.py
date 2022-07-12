@@ -69,7 +69,7 @@ class _InputParametersSchemeImpl(MutableMapping[str, str]):
             yield name
 
 
-class InputParameters(MutableMapping[str, V]):
+class InputParameters(MutableMapping):
     """Class to access and modify input parameter values in Fluent.
 
     Methods
@@ -229,7 +229,7 @@ class InputParameters(MutableMapping[str, V]):
             yield name
 
 
-class OutputParameters(Mapping[str, str]):
+class OutputParameters(Mapping):
     """Class to access output parameter values in Fluent.
 
     Methods
