@@ -10,3 +10,5 @@ Parameters
    
    DesignPoint
    ParametricStudy
+   InputParameters
+   OutputParameters
