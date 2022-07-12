@@ -10,7 +10,7 @@ from ansys.fluent.core.session import Session
 V = Union[str, float]
 
 
-class _InputParametersSettingsImpl(MutableMapping[str, str]):
+class _InputParametersSettingsImpl(MutableMapping):
     """
     InputParameters implementation using settings API
     """
@@ -35,7 +35,7 @@ class _InputParametersSettingsImpl(MutableMapping[str, str]):
             yield name
 
 
-class _InputParametersSchemeImpl(MutableMapping[str, str]):
+class _InputParametersSchemeImpl(MutableMapping):
     """
     InputParameters implementation using scheme-eval API
     """
