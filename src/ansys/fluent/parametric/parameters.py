@@ -72,6 +72,19 @@ class _InputParametersSchemeImpl(MutableMapping[str, str]):
 class InputParameters(MutableMapping[str, V]):
     """Class to access and modify input parameter values in Fluent.
 
+    Methods
+    -------
+    get_unit_label(name)
+        Get Fluent's unit label of an input parameter.
+    __setitem__(name, value)
+        Set value of an input parameter.
+    __getitem__(name)
+        Get value of an input parameter.
+    __len__()
+        Get the number of input parameters.
+    __iter__()
+        Get an iterator over input parameters.
+
     Examples
     --------
     >>> inp = InputParameters(session)
@@ -218,6 +231,15 @@ class InputParameters(MutableMapping[str, V]):
 
 class OutputParameters(Mapping[str, str]):
     """Class to access output parameter values in Fluent.
+
+    Methods
+    -------
+    __getitem__(name)
+        Get value of an output parameter.
+    __len__()
+        Get the number of output parameters.
+    __iter__()
+        Get an iterator over output parameters.
 
     Examples
     --------
