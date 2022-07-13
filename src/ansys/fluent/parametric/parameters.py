@@ -25,7 +25,7 @@ class _InputParametersSettingsImpl(MutableMapping):
         raise NotImplementedError()
 
     def __getitem__(self, name: str) -> str:
-        return self._named_expressions[name].definition()
+        raise NotImplementedError()
 
     def __len__(self) -> int:
         return len(self._named_expressions)
@@ -57,9 +57,7 @@ class _InputParametersSchemeImpl(MutableMapping):
         raise NotImplementedError()
 
     def __getitem__(self, name: str) -> str:
-        return self._scheme_eval(
-            f'(send (send (get expressions-package named-expression-manager) get-object-by-name "{name}") get-var \'definition)'  # noqa: E501
-        )
+        raise NotImplementedError()
 
     def __len__(self) -> int:
         return len(self._get_parameter_names())
@@ -94,7 +92,7 @@ class InputParameters(MutableMapping):
     '0.3 [m/s]'
     >>> inp['parameter-1'] = '40 [cm/s]'
     >>> inp['parameter-1']
-    '40 [cm/s]'
+    '0.4 [m/s]'
     >>> inp.get_unit_label('parameter-1')
     'm/s'
     >>> inp['parameter-1'] = 0.5
@@ -199,11 +197,11 @@ class InputParameters(MutableMapping):
         """
         if name not in list(self._impl.keys()):
             raise LookupError(f"Parameter {name} doesn't exist.")
-        value = self._impl[name]
-        try:
-            return float(value)
-        except ValueError:
-            return value
+        value = self._session.scheme_eval.scheme_eval(
+            f'(send (get-input-parameter "{name}") get-parameter-value)'
+        )
+        unit_label = self.get_unit_label(name)
+        return f"{value} [{unit_label}]" if unit_label else value
 
     def __len__(self) -> int:
         """Get the number of input parameters.
