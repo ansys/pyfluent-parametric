@@ -161,7 +161,7 @@ class InputParameters(MutableMapping):
             Strings are accepted in the form "<value> [<unit-label>]", e.g., "5 [m/s]".
             The unit-label should be a valid unit-label in Fluent.
             Float values are set in Fluent with unit-label returned by
-             ``get_unit_label`` method.
+            ``get_unit_label`` method.
 
         """
         if name not in list(self._impl.keys()):
@@ -191,7 +191,7 @@ class InputParameters(MutableMapping):
         Union[str, float]
             Value of the input parameter
             If the parameter has units, a string in the form
-             "<value> [<unit-label>]", e.g., "5 [m/s]" is returned.
+            "<value> [<unit-label>]", e.g., "5 [m/s]" is returned.
             If the parameter doesn't have units, a real number is returned.
 
         """
