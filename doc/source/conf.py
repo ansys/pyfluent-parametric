@@ -252,3 +252,19 @@ epub_title = project
 
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ["search.html"]
+
+
+def maybe_skip_member(app, what, name, obj, skip, options):
+    try:
+        if name.startswith("_") or obj.__qualname__.split(".")[0] in (
+            "MutableMapping",
+            "Mapping",
+        ):
+            return True
+    except AttributeError:
+        pass
+    return skip
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", maybe_skip_member)

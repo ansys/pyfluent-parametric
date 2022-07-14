@@ -50,7 +50,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.8
+          python-version: 3.7
 
       - name: Install pyfluent-parametric
         run: make install
@@ -97,7 +97,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Install pyfluent-parametric
         run: make install
@@ -145,11 +145,11 @@ jobs:
           retention-days: 7
 
       - name: Deploy
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags') && ${{ matrix.image-tag == 'latest'}}
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags') && matrix.image-tag == 'latest'
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           repository-name: pyansys/pyfluent-parametric-docs
-          token: ${{ secrets.DOC_DEPLOYMENT_PAT }}
+          token: ${{ steps.get_workflow_token.outputs.token  }}
           BRANCH: gh-pages
           FOLDER: doc/_build/html
           CLEAN: true
@@ -157,6 +157,7 @@ jobs:
 
   build:
     name: Build library
+    needs: [style, tests, docs]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
