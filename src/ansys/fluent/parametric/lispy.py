@@ -4,6 +4,32 @@
 
 ################ Symbol, Procedure, classes
 
+
+''' Example usage
+
+import h5py
+f = h5py.File('E:/elbow1_param.cas.h5')
+settings = f['settings']
+rpvars = settings['Rampant Variables']
+rpvars0 = rpvars[0]
+from ansys.fluent.parametric import lispy
+lines = lispy.parse(rpvars0.decode())[1]
+exprs = None
+for line in lines:
+  if type(line) == list and len(line) and line[0] == "named-expressions":
+    exprs = line
+    
+input_params = []
+for expr in expr_data:
+  for attr in expr:
+    if attr[0] == 'input-parameter' and attr[2] == True:
+      input_params.append(expr)
+
+import pprint
+pprint.pprint(input_params)
+
+'''
+
 import re, sys, io
 
 class Symbol(str): pass
@@ -219,7 +245,9 @@ def eval(x, env=global_env):
 
 def expand(x, toplevel=False):
     "Walk tree of x, making optimizations/fixes, and signaling SyntaxError."
-    require(x, x!=[])                    # () => Error
+    #require(x, x!=[])                    # () => Error
+    if x == []:
+        return x
     if not isa(x, list):                 # constant => unchanged
         return x
     elif x[0] is _quote:                 # (quote exp)
