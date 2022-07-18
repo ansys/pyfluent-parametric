@@ -4,31 +4,9 @@
 
 ################ Symbol, Procedure, classes
 
+## This code is copied from https://github.com/norvig/pytudes/blob/main/py/lispy.py and modified
+## as necessary
 
-''' Example usage
-
-import h5py
-f = h5py.File('E:/elbow1_param.cas.h5')
-settings = f['settings']
-rpvars = settings['Rampant Variables']
-rpvars0 = rpvars[0]
-from ansys.fluent.parametric import lispy
-lines = lispy.parse(rpvars0.decode())[1]
-exprs = None
-for line in lines:
-  if type(line) == list and len(line) and line[0] == "named-expressions":
-    exprs = line
-    
-input_params = []
-for expr in expr_data:
-  for attr in expr:
-    if attr[0] == 'input-parameter' and attr[2] == True:
-      input_params.append(expr)
-
-import pprint
-pprint.pprint(input_params)
-
-'''
 
 import re, sys, io
 
