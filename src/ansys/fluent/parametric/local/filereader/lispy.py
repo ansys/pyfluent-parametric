@@ -67,10 +67,20 @@ def read(inport):
     def read_ahead(token):
         if '(' == token:
             L = []
+            cons = None
             while True:
                 token = inport.next_token()
                 if token == ')': return L
-                else: L.append(read_ahead(token))
+                if token == '.':
+                    if len(L) > 1:
+                        cons = [L.pop()]
+                else:
+                    ahead = read_ahead(token)
+                    if cons:
+                        cons.append(ahead)
+                        ahead = cons
+                        cons = None
+                    L.append(ahead)
         elif ')' == token: raise SyntaxError('unexpected )')
         elif token in quotes: return [quotes[token], read(inport)]
         elif token is eof_object: raise SyntaxError('unexpected EOF in list')

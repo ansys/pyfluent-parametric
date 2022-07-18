@@ -17,7 +17,7 @@ class CaseReader:
         input_params = []
         for expr in exprs:
             for attr in expr:
-                if attr[0] == 'input-parameter' and attr[2] == True:
+                if attr[0] == 'input-parameter' and attr[1] == True:
                     input_params.append(expr)
         return input_params
 
