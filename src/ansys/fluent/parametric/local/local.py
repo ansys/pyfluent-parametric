@@ -467,7 +467,7 @@ def run_local_study_in_fluent(
         return study_inputs
 
     @asynchronous
-    def make_parametric_study(case_filepath):
+    def make_parametric_session(case_filepath):
         return FluentParametricSession(case_filepath=case_filepath)
 
     @asynchronous
@@ -492,7 +492,7 @@ def run_local_study_in_fluent(
     sessions = []
     studies = []
     for i in range(num_servers):
-        sessions.append(make_parametric_study(
+        sessions.append(make_parametric_session(
             case_filepath=local_study.case_filepath
             ))
 
@@ -503,7 +503,7 @@ def run_local_study_in_fluent(
 
     updates = []
     for study in studies:
-        update_design_point(study)
+        updates.append(update_design_point(study))
 
     for update in updates:
         update.result()
