@@ -51,8 +51,10 @@ del study
 """
 
 from enum import Enum
+from math import ceil
 
 import ansys.fluent as pyfluent
+from .filereader.casereader import CaseReader
 
 
 class DesignPointStatus(Enum):
@@ -349,9 +351,9 @@ class ParametricStudy:
         self,
         case_file_name: str = "",
         base_design_point_name: str = "Base DP",
-        launcher=FluentLauncher(),
+        launcher=None,
     ):
-        self.__session = launcher()
+        self.__session = launcher() if launcher else FluentLauncher()
         if case_file_name:
             self.__session.initialize_with_case(case_file_name)
         base_design_point = DesignPoint(base_design_point_name)
@@ -378,3 +380,77 @@ class ParametricStudy:
 
     def design_point(self, idx_or_name) -> DesignPoint:
         return self.__design_point_table.find_design_point(idx_or_name)
+
+
+class CaseParametricStudy:
+    """
+    Parametric study that manages design points to parametrize a
+    Fluent solver set-up.
+
+    Methods
+    -------
+    add_design_point(design_point_name: str) -> DesignPoint
+        Add a design point
+    design_point(idx_or_name)
+        Get a design point, either by name (str) or an index
+        indicating the position in the table (by order of insertion).
+        Raises
+        ------
+        RuntimeError
+            If the design point is not found.
+    """
+
+    def __init__(
+        self,
+        case_file_path: str,
+        base_design_point_name: str = "Base DP"
+    ):
+        base_design_point = DesignPoint(base_design_point_name)
+        case_reader = CaseReader(case_file_path=case_file_path)
+        inputs = case_reader.input_parameters()
+        for parameter in inputs:
+            name, value = None, None
+            for k, v in parameter:
+                if k == "name":
+                    name = v
+                elif k == "definition":
+                    value = v
+            base_design_point.inputs[name] = value
+        outputs = case_reader.output_parameters()
+        for parameter in outputs:
+            name, value = None, None
+            for k, v in parameter:
+                if k == "name":
+                    name = v
+                elif k == "definition":
+                    value = v
+            base_design_point.outputs[name] = value
+        self.__design_point_table = DesignPointTable(base_design_point)
+
+    def add_design_point(self, design_point_name: str) -> DesignPoint:
+        return self.__design_point_table.add_design_point(design_point_name)
+
+    def design_point(self, idx_or_name) -> DesignPoint:
+        return self.__design_point_table.find_design_point(idx_or_name)
+
+    def apply_to_studies(self, studies) -> None:
+        num_studies = len(studies)
+        total_num_points = num_points = len(self.__design_point_table)
+        for study in studies:
+            count = ceil(num_points/num_studies)
+            range_base = total_num_points - num_points
+            num_points -= count
+            num_studies -= 1
+            self.apply_to_study(
+                study,
+                range(range_base, range_base + count),
+                )
+
+    def apply_to_study(self, study, design_point_range=None) -> None:
+        if design_point_range is None:
+            design_point_range = range(0, len(self.__design_point_table))
+        for idx in design_point_range:
+            design_point = self.design_point(idx_or_name = idx)
+            for k, v in design_point.inputs.items():
+                # want to chose the name via design_point.name
+                study.add_design_point().input_parameters = {k : v}
