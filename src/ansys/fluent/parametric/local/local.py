@@ -1,6 +1,27 @@
 """
 Classes for running a parametric study in Fluent.
 
+Example
+-------
+>>> from ansys.fluent.parametric.local.local import LocalParametricStudy, run_local_study_in_fluent
+
+>>> local_study = LocalParametricStudy(case_filepath="E:\elbow1_param.cas.h5")
+
+>>> design_point = local_study.design_point("Base DP")
+>>> design_point.input_parameters['v1'] = 0.0
+
+>>> for idx in range(1, 20):
+>>>    design_point = local_study.add_design_point("dp_"+str(idx))
+>>>    design_point.input_parameters['v1'] = float(idx)/10.0
+    
+>>> run_local_study_in_fluent(local_study, 5)
+
+>>> for design_point in local_study.design_point_table:
+>>>    for k, v in design_point.input_parameters.items():
+>>>        print("input parameter", k, v)
+>>>    for k, v in design_point.output_parameters.items():
+>>>        print("output parameter", k, v)
+>>>    print(72 * "-")
 
 """
 

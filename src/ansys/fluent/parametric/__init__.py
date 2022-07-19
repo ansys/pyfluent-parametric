@@ -55,7 +55,7 @@ Using parametric session
 
 from pathlib import Path
 import tempfile
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import LOG
@@ -68,6 +68,22 @@ except ModuleNotFoundError:
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 BASE_DP_NAME = "Base DP"
+
+def convert_units_for_design_point(value: Dict[str, Union[float, str]]) -> Dict[str, float]:
+    def conv(val):
+        if type(val) is float:
+            return val
+        if type(val) is not str:
+            raise RuntimeError("Invalid value type for input parameter")
+        pos = val.find(" [")
+        if pos == -1:
+            return float(val)
+        return float(val[:pos])
+
+    return dict(map(
+        lambda x: (x[0], conv(x[1])), 
+        value.items() 
+        ))
 
 
 class DesignPoint:
@@ -97,8 +113,8 @@ class DesignPoint:
         return self._dp_settings.input_parameters()
 
     @input_parameters.setter
-    def input_parameters(self, value: Dict[str, float]) -> None:
-        self._dp_settings.input_parameters = value
+    def input_parameters(self, value: Dict[str, Union[float, str]]) -> None:
+        self._dp_settings.input_parameters = convert_units_for_design_point(value)
 
     @property
     def output_parameters(self) -> Dict[str, float]:
