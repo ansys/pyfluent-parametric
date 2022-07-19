@@ -113,6 +113,11 @@ session.solver.tui.file.write_case(case_path)
 
 study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
 
+###############################################################################
+# .. image:: /_static/DP_table_011.png
+#   :width: 500pt
+#   :align: center
+
 ###########################################################################
 # Access and modify input parameters of base DP
 
@@ -144,6 +149,11 @@ design_point_2 = study_1.duplicate_design_point(design_point_1)
 # Update all design points for study 1
 
 study_1.update_all_design_points()
+
+###############################################################################
+# .. image:: /_static/DP_table_012.png
+#   :width: 500pt
+#   :align: center
 
 ###############################################################################
 # Export design point table as a CSV table
