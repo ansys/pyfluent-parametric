@@ -59,6 +59,8 @@ from ansys.fluent.core.utils.async_execution import asynchronous
 from .filereader.casereader import CaseReader
 
 from ansys.fluent.parametric import ParametricSession as FluentParametricSession
+from ansys.fluent.parametric import BASE_DP_NAME
+
 
 class DesignPointStatus(Enum):
     """
@@ -440,7 +442,8 @@ class CaseParametricStudy:
 
 def run_local_study_in_fluent(
     local_study,
-    num_servers):
+    num_servers,
+    capture_report_data=False):
 
     source_table_size = len(local_study.design_point_table)
 
@@ -472,8 +475,19 @@ def run_local_study_in_fluent(
 
     @asynchronous
     def apply_to_study(study, inputs):
+        first = True
         for inpt in inputs:
-            study.add_design_point().input_parameters = inpt.copy()
+            if first:
+                design_point = study.design_points[BASE_DP_NAME]
+                design_point.capture_simulation_report_data_enabled = (
+                    capture_report_data
+                )
+                first = False
+            else:
+                design_point = study.add_design_point(
+                    capture_simulation_report_data=capture_report_data
+                    )
+            design_point.input_parameters = inpt.copy()
 
     @asynchronous
     def update_design_point(study):
