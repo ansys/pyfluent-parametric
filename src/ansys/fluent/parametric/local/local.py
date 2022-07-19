@@ -53,11 +53,12 @@ del study
 from enum import Enum
 from math import ceil
 
-import ansys.fluent as pyfluent
+
+from ansys.fluent.core.utils.async_execution import asynchronous
+
 from .filereader.casereader import CaseReader
 
 from ansys.fluent.parametric import ParametricSession as FluentParametricSession
-
 
 class DesignPointStatus(Enum):
     """
@@ -465,28 +466,47 @@ def run_local_study_in_fluent(
                 ))
         return study_inputs
 
-    def apply_to_study(study, inputs) -> None:
+    @asynchronous
+    def make_parametric_study(case_filepath):
+        return FluentParametricSession(case_filepath=case_filepath)
+
+    @asynchronous
+    def apply_to_study(study, inputs):
         for inpt in inputs:
             study.add_design_point().input_parameters = inpt.copy()
 
+    @asynchronous
+    def update_design_point(study):
+        study.update_all_design_points()
+
     def apply_to_studies(studies, inputs) -> None:
+        results = []
         for item in list(zip(studies, inputs)):
             study, inpt = item
-            apply_to_study(study, inpt)
+            results.append(apply_to_study(study, inpt))
+        for result in results:
+            result.result()
 
     study_inputs = make_input_for_studies(num_servers)
 
     sessions = []
     studies = []
     for i in range(num_servers):
-        session = FluentParametricSession(case_filepath=local_study.case_filepath)
-        sessions.append(session)
-        studies.append(next(iter(session.studies.values())))
+        sessions.append(make_parametric_study(
+            case_filepath=local_study.case_filepath
+            ))
+
+    for session in sessions:
+        studies.append(next(iter(session.result().studies.values())))
 
     apply_to_studies(studies, study_inputs)
 
+    updates = []
     for study in studies:
-        study.update_all_design_points()
+        update_design_point(study)
+
+    for update in updates:
+        update.result()
 
     for study in studies:
         for name, design_point in study.design_points.items():
