@@ -467,9 +467,7 @@ def run_local_study_in_fluent(
 
     def apply_to_study(study, inputs) -> None:
         for inpt in inputs:
-            for k, v in inpt.items():
-                # want to choose the name via design_point.name
-                study.add_design_point().input_parameters = {k : v}
+            study.add_design_point().input_parameters = inpt.copy()
 
     def apply_to_studies(studies, inputs) -> None:
         for item in list(zip(studies, inputs)):
