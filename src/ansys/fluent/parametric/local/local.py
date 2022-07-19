@@ -413,24 +413,28 @@ class CaseParametricStudy:
         self.case_filepath = case_filepath
         base_design_point = DesignPoint(base_design_point_name)
         case_reader = CaseReader(case_file_path=case_filepath)
-        inputs = case_reader.input_parameters()
-        for parameter in inputs:
+
+        def parameter_info(parameter):
             name, value = None, None
             for k, v in parameter:
                 if k == "name":
                     name = v
                 elif k == "definition":
                     value = v
-            base_design_point.inputs[name] = value
-        outputs = case_reader.output_parameters()
-        for parameter in outputs:
-            name, value = None, None
-            for k, v in parameter:
-                if k == "name":
-                    name = v
-                elif k == "definition":
-                    value = v
-            base_design_point.outputs[name] = value
+            return name, value
+
+        def set_parameter_info(source, target):
+            for parameter in source:
+                target.update((parameter_info(parameter),))
+
+        set_parameter_info(
+            source=case_reader.input_parameters(),
+            target=base_design_point.inputs)
+
+        set_parameter_info(
+            source=case_reader.output_parameters(),
+            target=base_design_point.outputs)
+        
         self.design_point_table = DesignPointTable(base_design_point)
 
     def add_design_point(self, design_point_name: str) -> DesignPoint:
@@ -522,13 +526,14 @@ def run_local_study_in_fluent(
     for update in updates:
         update.result()
 
+    it = iter(local_study.design_point_table)
+
     for study in studies:
-        for name, design_point in study.design_points.items():
-            for k, v in design_point.input_parameters.items():
-                print("input parameter", k, v)
-            for k, v in design_point.output_parameters.items():
-                print("output parameter", k, v)
-            print(72 * "-")
+        for _, design_point in study.design_points.items():
+            next(it).outputs = design_point.output_parameters.copy()
+
+
+
 
 
 
