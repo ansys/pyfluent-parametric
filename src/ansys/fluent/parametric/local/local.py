@@ -56,6 +56,8 @@ from math import ceil
 import ansys.fluent as pyfluent
 from .filereader.casereader import CaseReader
 
+from ansys.fluent.parametric import ParametricSession as FluentParametricSession
+
 
 class DesignPointStatus(Enum):
     """
@@ -359,10 +361,10 @@ class ParametricStudy:
         base_design_point = DesignPoint(base_design_point_name)
         base_design_point.inputs = self.__session.input_parameters.copy()
         base_design_point.outputs = self.__session.output_parameters.copy()
-        self.__design_point_table = DesignPointTable(base_design_point)
+        self.design_point_table = DesignPointTable(base_design_point)
 
     def update_all(self):
-        for design_point in self.__design_point_table:
+        for design_point in self.design_point_table:
             if design_point.status != DesignPointStatus.BLOCKED:
                 self.update_design_point(design_point)
 
@@ -376,10 +378,10 @@ class ParametricStudy:
         )
 
     def add_design_point(self, design_point_name: str) -> DesignPoint:
-        return self.__design_point_table.add_design_point(design_point_name)
+        return self.design_point_table.add_design_point(design_point_name)
 
     def design_point(self, idx_or_name) -> DesignPoint:
-        return self.__design_point_table.find_design_point(idx_or_name)
+        return self.design_point_table.find_design_point(idx_or_name)
 
 
 class CaseParametricStudy:
@@ -402,11 +404,12 @@ class CaseParametricStudy:
 
     def __init__(
         self,
-        case_file_path: str,
+        case_filepath: str,
         base_design_point_name: str = "Base DP"
     ):
+        self.case_filepath = case_filepath
         base_design_point = DesignPoint(base_design_point_name)
-        case_reader = CaseReader(case_file_path=case_file_path)
+        case_reader = CaseReader(case_file_path=case_filepath)
         inputs = case_reader.input_parameters()
         for parameter in inputs:
             name, value = None, None
@@ -425,32 +428,75 @@ class CaseParametricStudy:
                 elif k == "definition":
                     value = v
             base_design_point.outputs[name] = value
-        self.__design_point_table = DesignPointTable(base_design_point)
+        self.design_point_table = DesignPointTable(base_design_point)
 
     def add_design_point(self, design_point_name: str) -> DesignPoint:
-        return self.__design_point_table.add_design_point(design_point_name)
+        return self.design_point_table.add_design_point(design_point_name)
 
     def design_point(self, idx_or_name) -> DesignPoint:
-        return self.__design_point_table.find_design_point(idx_or_name)
+        return self.design_point_table.find_design_point(idx_or_name)
 
-    def apply_to_studies(self, studies) -> None:
-        num_studies = len(studies)
-        total_num_points = num_points = len(self.__design_point_table)
-        for study in studies:
-            count = ceil(num_points/num_studies)
+
+def run_local_study_in_fluent(
+    local_study,
+    num_servers):
+
+    source_table_size = len(local_study.design_point_table)
+
+    def make_input_for_study(design_point_range) -> None:
+        if design_point_range is None:
+            design_point_range = range(0, source_table_size)
+        study_input = []
+        for idx in design_point_range:
+            design_point = local_study.design_point(idx_or_name = idx)
+            study_input.append(design_point.inputs.copy())
+        return study_input
+
+    def make_input_for_studies(num_servers) -> None:
+        study_inputs = []
+        total_num_points = num_points = source_table_size
+        for i in range(num_servers):
+            count = ceil(num_points/num_servers)
             range_base = total_num_points - num_points
             num_points -= count
-            num_studies -= 1
-            self.apply_to_study(
-                study,
-                range(range_base, range_base + count),
-                )
+            num_servers -= 1
+            study_inputs.append(make_input_for_study(
+                range(range_base, range_base + count)
+                ))
+        return study_inputs
 
-    def apply_to_study(self, study, design_point_range=None) -> None:
-        if design_point_range is None:
-            design_point_range = range(0, len(self.__design_point_table))
-        for idx in design_point_range:
-            design_point = self.design_point(idx_or_name = idx)
-            for k, v in design_point.inputs.items():
-                # want to chose the name via design_point.name
+    def apply_to_study(study, inputs) -> None:
+        for inpt in inputs:
+            for k, v in inpt.items():
+                # want to choose the name via design_point.name
                 study.add_design_point().input_parameters = {k : v}
+
+    def apply_to_studies(studies, inputs) -> None:
+        for item in list(zip(studies, inputs)):
+            study, inpt = item
+            apply_to_study(study, inpt)
+
+    study_inputs = make_input_for_studies(num_servers)
+
+    sessions = []
+    studies = []
+    for i in range(num_servers):
+        session = FluentParametricSession(case_filepath=local_study.case_filepath)
+        sessions.append(session)
+        studies.append(next(iter(session.studies.values())))
+
+    apply_to_studies(studies, study_inputs)
+
+    for study in studies:
+        study.update_all_design_points()
+
+    for study in studies:
+        for name, design_point in study.design_points.items():
+            for k, v in design_point.input_parameters.items():
+                print("input parameter", k, v)
+            for k, v in design_point.output_parameters.items():
+                print("output parameter", k, v)
+            print(72 * "-")
+
+
+
