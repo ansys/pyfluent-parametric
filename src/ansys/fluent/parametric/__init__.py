@@ -69,7 +69,10 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 BASE_DP_NAME = "Base DP"
 
-def convert_units_for_design_point(value: Dict[str, Union[float, str]]) -> Dict[str, float]:
+
+def convert_units_for_design_point(
+    value: Dict[str, Union[float, str]]
+) -> Dict[str, float]:
     def conv(val):
         if type(val) in (float, int):
             return val
@@ -80,10 +83,7 @@ def convert_units_for_design_point(value: Dict[str, Union[float, str]]) -> Dict[
             return float(val)
         return float(val[:pos])
 
-    return dict(map(
-        lambda x: (x[0], conv(x[1])), 
-        value.items() 
-        ))
+    return dict(map(lambda x: (x[0], conv(x[1])), value.items()))
 
 
 class DesignPoint:
@@ -297,9 +297,7 @@ class ParametricStudy:
         self._parametric_studies.duplicate(copy_design_points=copy_design_points)
         new_study_names = self._parametric_studies.get_object_names()
         clone_name = set(new_study_names).difference(set(old_study_names)).pop()
-        current_study = self.get_all_studies()[
-            self.session.current_study_name
-        ]
+        current_study = self.get_all_studies()[self.session.current_study_name]
         if copy_design_points:
             clone_design_points = {
                 k: DesignPoint(k, self._parametric_studies[clone_name].design_points[k])
@@ -523,7 +521,7 @@ class ParametricProject:
         parametric_studies,
         project_filepath: str,
         session=None,
-        open_project: bool = True
+        open_project: bool = True,
     ):
         self._parametric_project = parametric_project
         self._parametric_studies = parametric_studies
@@ -615,16 +613,15 @@ class ParametricSessionLauncher:
     def __call__(self):
         return pyfluent.launch_fluent(*self._args, **self._kwargs)
 
+
 class BaseParametricSession:
-    
-    def __init__(
-        self
-    ):
+    def __init__(self):
         self._all_studies: Dict[int, "ParametricStudy"] = {}
         self.current_study_name = None
-        
+
     def register_study(self, study):
         self._all_studies[id(study)] = study
+
 
 class ParametricSession(BaseParametricSession):
     """ParametricSession class which encapsulates studies and project.
@@ -692,14 +689,14 @@ class ParametricSession(BaseParametricSession):
                 parametric_studies=self._root.parametric_studies,
                 project_filepath=str(study.project_filepath),
                 open_project=False,
-                session=self._session
+                session=self._session,
             )
         elif project_filepath is not None:
             self.project = ParametricProject(
                 parametric_project=self._root.file.parametric_project,
                 parametric_studies=self._root.parametric_studies,
                 project_filepath=project_filepath,
-                session=self._session
+                session=self._session,
             )
             studies_settings = self._root.parametric_studies
             for study_name in studies_settings.get_object_names():
