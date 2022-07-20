@@ -8,7 +8,7 @@ This local parametric study workflow test performs these steps
 from pathlib import Path
 from ansys.fluent.core import examples, session
 import ansys.fluent.core as pyfluent
-from ansys.fluent.parametric.local.local import LocalParametricStudy
+from ansys.fluent.parametric.local import LocalParametricStudy
 
 
 def test_parametric_local():

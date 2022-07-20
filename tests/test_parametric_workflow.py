@@ -116,10 +116,11 @@ assert (
 ###########################################################################
 # Instantiate a parametric study from a Fluent session
 
-study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
+study_1 = ParametricStudy(
+    session.solver.root.parametric_studies).initialize()
 
 parametricStudies_exp = 1
-parametricStudies_test = len(ParametricStudy._all_studies.keys())
+parametricStudies_test = len(study_1.get_all_studies().keys())
 assert parametricStudies_test == parametricStudies_exp
 
 ###########################################################################
@@ -237,7 +238,7 @@ study_2 = study_1.duplicate()
 assert len(study_2.design_points) == 2
 
 parametricStudies_exp = 2
-parametricStudies_test = len(ParametricStudy._all_studies.keys())
+parametricStudies_test = len(study_1.get_all_studies().keys())
 assert parametricStudies_test == parametricStudies_exp
 
 #########################################################################
@@ -251,7 +252,7 @@ study_2.rename("New Study")
 study_1.delete()
 
 parametricStudies_exp = 1
-parametricStudies_test = len(ParametricStudy._all_studies.keys())
+parametricStudies_test = len(study_1.get_all_studies().keys())
 assert parametricStudies_test == parametricStudies_exp
 
 #########################################################################

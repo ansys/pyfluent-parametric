@@ -71,10 +71,10 @@ BASE_DP_NAME = "Base DP"
 
 def convert_units_for_design_point(value: Dict[str, Union[float, str]]) -> Dict[str, float]:
     def conv(val):
-        if type(val) is float:
+        if type(val) in (float, int):
             return val
         if type(val) is not str:
-            raise RuntimeError("Invalid value type for input parameter")
+            raise RuntimeError("Invalid value type for input parameter", val, type(val))
         pos = val.find(" [")
         if pos == -1:
             return float(val)
@@ -204,18 +204,18 @@ class ParametricStudy:
     def __init__(
         self,
         parametric_studies,
-        session,
+        session=None,
         name: Optional[str] = None,
         design_points: Dict[str, DesignPoint] = None,
     ):
         self._parametric_studies = parametric_studies
-        self.session = session
+        self.session = session if session is not None else BaseParametricSession()
         self.name = name
         self.design_points = {}
         if design_points is not None:
             self.design_points = design_points
         self.project_filepath = None
-        session.register_study(self)
+        self.session.register_study(self)
 
     def get_all_studies(self) -> Dict[str, "ParametricStudy"]:
         """Get all currently active studies.
@@ -323,7 +323,7 @@ class ParametricStudy:
             LOG.error("Cannot delete the current study %s", self.name)
         else:
             del self._parametric_studies[self.name]
-            ParametricStudy._all_studies.pop(id(self))
+            self.session._all_studies.pop(id(self))
             del self
 
     def use_base_data(self) -> None:
@@ -522,13 +522,13 @@ class ParametricProject:
         parametric_project,
         parametric_studies,
         project_filepath: str,
-        session,
+        session=None,
         open_project: bool = True
     ):
         self._parametric_project = parametric_project
         self._parametric_studies = parametric_studies
         self.project_filepath = project_filepath
-        self.session = session
+        self.session = session if session is not None else BaseParametricSession()
         if open_project:
             self.open(project_filepath=project_filepath)
 
@@ -615,8 +615,18 @@ class ParametricSessionLauncher:
     def __call__(self):
         return pyfluent.launch_fluent(*self._args, **self._kwargs)
 
+class BaseParametricSession:
+    
+    def __init__(
+        self
+    ):
+        self._all_studies: Dict[int, "ParametricStudy"] = {}
+        self.current_study_name = None
+        
+    def register_study(self, study):
+        self._all_studies[id(study)] = study
 
-class ParametricSession:
+class ParametricSession(BaseParametricSession):
     """ParametricSession class which encapsulates studies and project.
 
     Attributes
@@ -701,9 +711,6 @@ class ParametricSession:
                     )
                 self.studies[study_name] = study
             self.current_study_name = self._root.current_parametric_study()
-
-    def register_study(self, study):
-        self._all_studies[id(study)] = study
 
     def new_study(self) -> ParametricStudy:
         """Create new study.
