@@ -38,7 +38,7 @@ def test_parametric_local():
         "inlet2", (), "temperature", "yes", "no", "inlet2_temp", 350, "quit"
     )
 
-    session.solver.root.solution.report_definitions.surface["outlet-temp-avg"] = {}
+    session.solver.root.solution.report_definitions.surface.create("outlet-temp-avg")
     session.solver.root.solution.report_definitions.surface[
         "outlet-temp-avg"
     ].report_type = "surface-areaavg"
@@ -49,7 +49,7 @@ def test_parametric_local():
         "outlet-temp-avg"
     ].surface_names = ["outlet"]
 
-    session.solver.root.solution.report_definitions.surface["outlet-vel-avg"] = {}
+    session.solver.root.solution.report_definitions.surface.create("outlet-vel-avg")
     session.solver.root.solution.report_definitions.surface[
         "outlet-vel-avg"
     ].report_type = "surface-areaavg"
