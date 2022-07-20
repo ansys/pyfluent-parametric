@@ -15,7 +15,9 @@ from ansys.fluent.parametric.local import LocalParametricStudy
 
 def test_parametric_local():
 
-    session = pyfluent.launch_fluent()
+    session = pyfluent.launch_fluent(
+        precision="double", processor_count=2, start_transcript=False
+    )
 
     import_filename = examples.download_file(
         "Static_Mixer_main.cas.h5", "pyfluent/static_mixer"
