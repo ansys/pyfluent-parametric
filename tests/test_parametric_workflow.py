@@ -116,8 +116,7 @@ assert (
 ###########################################################################
 # Instantiate a parametric study from a Fluent session
 
-study_1 = ParametricStudy(
-    session.solver.root.parametric_studies).initialize()
+study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
 
 parametricStudies_exp = 1
 parametricStudies_test = len(study_1.get_all_studies().keys())
