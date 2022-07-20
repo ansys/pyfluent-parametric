@@ -6,8 +6,10 @@ This local parametric study workflow test performs these steps
 
 ############################################################################
 from pathlib import Path
-from ansys.fluent.core import examples, session
+
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import examples
+
 from ansys.fluent.parametric.local import LocalParametricStudy
 
 
@@ -22,7 +24,7 @@ def test_parametric_local():
     session.solver.tui.file.read_case(case_file_name=import_filename)
 
     session.solver.tui.define.parameters.enable_in_TUI("yes")
-    
+
     session.solver.tui.define.boundary_conditions.set.velocity_inlet(
         "inlet1", (), "vmag", "yes", "inlet1_vel", 1, "quit"
     )
@@ -66,7 +68,9 @@ def test_parametric_local():
         "report-definition", "outlet-vel-avg"
     )
 
-    param_case_path = str(Path(pyfluent.EXAMPLES_PATH) / "Static_Mixer_Parameters.cas.h5")
+    param_case_path = str(
+        Path(pyfluent.EXAMPLES_PATH) / "Static_Mixer_Parameters.cas.h5"
+    )
     session.solver.tui.file.write_case(param_case_path)
 
     local_study = LocalParametricStudy(case_filepath=param_case_path)
@@ -81,5 +85,5 @@ def test_parametric_local():
 
     assert len(output_parameters)
 
-    print (input_parameters)
-    print (output_parameters)
+    print(input_parameters)
+    print(output_parameters)

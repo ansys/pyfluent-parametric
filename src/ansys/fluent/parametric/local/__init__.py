@@ -28,13 +28,11 @@ for design_point in local_study.design_point_table:
 from enum import Enum
 from math import ceil
 
-
 from ansys.fluent.core.utils.async_execution import asynchronous
 
-from .filereader.casereader import CaseReader
+from ansys.fluent.parametric import BASE_DP_NAME, ParametricSession
 
-from ansys.fluent.parametric import ParametricSession
-from ansys.fluent.parametric import BASE_DP_NAME
+from .filereader.casereader import CaseReader
 
 
 class LocalDesignPoint:
@@ -146,11 +144,7 @@ class LocalParametricStudy:
             If the design point is not found.
     """
 
-    def __init__(
-        self,
-        case_filepath: str,
-        base_design_point_name: str = "Base DP"
-    ):
+    def __init__(self, case_filepath: str, base_design_point_name: str = "Base DP"):
         self.case_filepath = case_filepath
         base_design_point = LocalDesignPoint(base_design_point_name)
         case_reader = CaseReader(case_file_path=case_filepath)
@@ -180,12 +174,14 @@ class LocalParametricStudy:
 
         set_input_parameter_info(
             source=case_reader.input_parameters(),
-            target=base_design_point.input_parameters)
+            target=base_design_point.input_parameters,
+        )
 
         set_output_parameter_info(
             source=case_reader.output_parameters(),
-            target=base_design_point.output_parameters)
-        
+            target=base_design_point.output_parameters,
+        )
+
         print(case_reader.output_parameters())
 
         self.design_point_table = LocalDesignPointTable(base_design_point)
@@ -197,10 +193,7 @@ class LocalParametricStudy:
         return self.design_point_table.find_design_point(idx_or_name)
 
 
-def run_local_study_in_fluent(
-    local_study,
-    num_servers,
-    capture_report_data=False):
+def run_local_study_in_fluent(local_study, num_servers, capture_report_data=False):
 
     source_table_size = len(local_study.design_point_table)
 
@@ -209,7 +202,7 @@ def run_local_study_in_fluent(
             design_point_range = range(0, source_table_size)
         study_input = []
         for idx in design_point_range:
-            design_point = local_study.design_point(idx_or_name = idx)
+            design_point = local_study.design_point(idx_or_name=idx)
             study_input.append(design_point.input_parameters.copy())
         return study_input
 
@@ -217,13 +210,13 @@ def run_local_study_in_fluent(
         study_inputs = []
         total_num_points = num_points = source_table_size
         for i in range(num_servers):
-            count = ceil(num_points/num_servers)
+            count = ceil(num_points / num_servers)
             range_base = total_num_points - num_points
             num_points -= count
             num_servers -= 1
-            study_inputs.append(make_input_for_study(
-                range(range_base, range_base + count)
-                ))
+            study_inputs.append(
+                make_input_for_study(range(range_base, range_base + count))
+            )
         return study_inputs
 
     @asynchronous
@@ -243,7 +236,7 @@ def run_local_study_in_fluent(
             else:
                 design_point = study.add_design_point(
                     capture_simulation_report_data=capture_report_data
-                    )
+                )
             design_point.input_parameters = inpt.copy()
 
     @asynchronous
@@ -263,9 +256,9 @@ def run_local_study_in_fluent(
     sessions = []
     studies = []
     for i in range(num_servers):
-        sessions.append(make_parametric_session(
-            case_filepath=local_study.case_filepath
-            ))
+        sessions.append(
+            make_parametric_session(case_filepath=local_study.case_filepath)
+        )
 
     for session in sessions:
         studies.append(next(iter(session.result().studies.values())))
