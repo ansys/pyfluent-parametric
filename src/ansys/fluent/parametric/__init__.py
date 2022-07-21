@@ -97,10 +97,8 @@ class DesignPoint:
         return self._dp_settings.input_parameters()
 
     @input_parameters.setter
-    def input_parameters(self, value: Dict[str, Union[float, str]]) -> None:
-        self._dp_settings.input_parameters = convert_units_for_design_point_parameters(
-            value
-        )
+    def input_parameters(self, value: Dict[str, float]) -> None:
+        self._dp_settings.input_parameters = value
 
     @property
     def output_parameters(self) -> Dict[str, float]:
