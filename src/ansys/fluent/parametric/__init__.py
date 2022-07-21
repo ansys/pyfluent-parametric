@@ -740,8 +740,5 @@ class ParametricSession:
         """Stop streaming of Fluent transcript."""
         self._session.stop_transcript()
 
-    def foo(self):
-        return 42
-
 
 from ansys.fluent.parametric.parameters import InputParameters, OutputParameters
