@@ -29,8 +29,8 @@ class OutputParameter:
 
 
 class CaseReader:
-    def __init__(self, case_file_path):
-        file = h5py.File(case_file_path)
+    def __init__(self, case_filepath):
+        file = h5py.File(case_filepath)
         settings = file["settings"]
         rpvars = settings["Rampant Variables"][0]
         rp_vars_str = rpvars.decode()

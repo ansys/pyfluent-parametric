@@ -70,7 +70,7 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 BASE_DP_NAME = "Base DP"
 
 
-def convert_units_for_design_point(
+def convert_units_for_design_point_parameters(
     value: Dict[str, Union[float, str]]
 ) -> Dict[str, float]:
     def conv(val):
@@ -114,7 +114,9 @@ class DesignPoint:
 
     @input_parameters.setter
     def input_parameters(self, value: Dict[str, Union[float, str]]) -> None:
-        self._dp_settings.input_parameters = convert_units_for_design_point(value)
+        self._dp_settings.input_parameters = convert_units_for_design_point_parameters(
+            value
+        )
 
     @property
     def output_parameters(self) -> Dict[str, float]:

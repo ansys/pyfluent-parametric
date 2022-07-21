@@ -126,51 +126,7 @@ class LocalDesignPointTable(list):
         self.remove(self.find_design_point(idx_or_name))
 
 
-class LocalParametricStudy:
-    """
-    Local version of parametric study that manages design points to parametrize a
-    Fluent solver set-up.
-
-    Methods
-    -------
-    add_design_point(design_point_name: str) -> LocalDesignPoint
-        Add a design point
-    design_point(idx_or_name)
-        Get a design point, either by name (str) or an index
-        indicating the position in the table (by order of insertion).
-        Raises
-        ------
-        RuntimeError
-            If the design point is not found.
-    """
-
-    def __init__(self, case_filepath: str, base_design_point_name: str = "Base DP"):
-        self.case_filepath = case_filepath
-        base_design_point = LocalDesignPoint(base_design_point_name)
-        case_reader = CaseReader(case_file_path=case_filepath)
-
-        def set_output_parameter_info(source, target):
-            for parameter in source:
-                target.update(((parameter.name, None),))
-
-        for parameter in case_reader.input_parameters():
-            base_design_point.input_parameters.update(
-                ((parameter.name, parameter.value),)
-            )
-
-        for parameter in case_reader.output_parameters():
-            base_design_point.output_parameters.update(((parameter.name, None),))
-
-        self.design_point_table = LocalDesignPointTable(base_design_point)
-
-    def add_design_point(self, design_point_name: str) -> LocalDesignPoint:
-        return self.design_point_table.add_design_point(design_point_name)
-
-    def design_point(self, idx_or_name) -> LocalDesignPoint:
-        return self.design_point_table.find_design_point(idx_or_name)
-
-
-def run_local_study_in_fluent(local_study, num_servers, capture_report_data=False):
+def _run_local_study_in_fluent(local_study, num_servers, capture_report_data):
 
     source_table_size = len(local_study.design_point_table)
 
@@ -254,3 +210,50 @@ def run_local_study_in_fluent(local_study, num_servers, capture_report_data=Fals
     for study in studies:
         for _, design_point in study.design_points.items():
             next(it).output_parameters = design_point.output_parameters.copy()
+
+
+class LocalParametricStudy:
+    """
+    Local version of parametric study that manages design points to parametrize a
+    Fluent solver set-up.
+
+    Methods
+    -------
+    add_design_point(design_point_name: str) -> LocalDesignPoint
+        Add a design point
+    design_point(idx_or_name)
+        Get a design point, either by name (str) or an index
+        indicating the position in the table (by order of insertion).
+        Raises
+        ------
+        RuntimeError
+            If the design point is not found.
+    """
+
+    def __init__(self, case_filepath: str, base_design_point_name: str = "Base DP"):
+        self.case_filepath = case_filepath
+        base_design_point = LocalDesignPoint(base_design_point_name)
+        case_reader = CaseReader(case_file_path=case_filepath)
+
+        base_design_point.input_parameters = {
+            p.name: p.value for p in case_reader.input_parameters()
+        }
+
+        base_design_point.output_parameters = {
+            p.name: None for p in case_reader.output_parameters()
+        }
+
+        self.design_point_table = LocalDesignPointTable(base_design_point)
+
+    def add_design_point(self, design_point_name: str) -> LocalDesignPoint:
+        return self.design_point_table.add_design_point(design_point_name)
+
+    def design_point(self, idx_or_name) -> LocalDesignPoint:
+        return self.design_point_table.find_design_point(idx_or_name)
+
+    def run_in_fluent(self, num_servers, capture_report_data=False):
+        _run_local_study_in_fluent(
+            local_study=self,
+            num_servers=num_servers,
+            capture_report_data=capture_report_data,
+        )
