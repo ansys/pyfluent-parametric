@@ -10,8 +10,10 @@ from math import inf
 
 from ansys.fluent.core import examples
 
-from ansys.fluent.parametric import convert_design_point_parameter_units
-from ansys.fluent.parametric.local import LocalParametricStudy
+from ansys.fluent.parametric.local import (
+    LocalParametricStudy,
+    convert_design_point_parameter_units,
+)
 
 
 def test_local_parametric_setup():

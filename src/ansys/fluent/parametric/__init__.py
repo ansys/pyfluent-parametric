@@ -55,7 +55,7 @@ Using parametric session
 
 from pathlib import Path
 import tempfile
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import LOG
@@ -193,7 +193,9 @@ class ParametricStudy:
         design_points: Dict[str, DesignPoint] = None,
     ):
         self._parametric_studies = parametric_studies
-        self.session = session if session is not None else BaseParametricSession()
+        self.session = (
+            session if session is not None else (_shared_parametric_study_registry())
+        )
         self.name = name
         self.design_points = {}
         if design_points is not None:
@@ -510,7 +512,9 @@ class ParametricProject:
         self._parametric_project = parametric_project
         self._parametric_studies = parametric_studies
         self.project_filepath = project_filepath
-        self.session = session if session is not None else BaseParametricSession()
+        self.session = (
+            session if session is not None else (_shared_parametric_study_registry())
+        )
         if open_project:
             self.open(project_filepath=project_filepath)
 
@@ -598,7 +602,7 @@ class ParametricSessionLauncher:
         return pyfluent.launch_fluent(*self._args, **self._kwargs)
 
 
-class BaseParametricSession:
+class ParametricStudyRegistry:
     def __init__(self):
         self._all_studies: Dict[int, "ParametricStudy"] = {}
         self.current_study_name = None
@@ -607,7 +611,7 @@ class BaseParametricSession:
         self._all_studies[id(study)] = study
 
 
-class ParametricSession(BaseParametricSession):
+class ParametricSession(ParametricStudyRegistry):
     """ParametricSession class which encapsulates studies and project.
 
     Attributes
@@ -653,8 +657,6 @@ class ParametricSession(BaseParametricSession):
             False.
         """
         self.studies = {}
-        self._all_studies: Dict[int, "ParametricStudy"] = {}
-        self.current_study_name = None
         self.project = None
         self._session = launcher()
         self.scheme_eval = self._session.scheme_eval.scheme_eval
@@ -750,6 +752,15 @@ class ParametricSession(BaseParametricSession):
     def stop_transcript(self) -> None:
         """Stop streaming of Fluent transcript."""
         self._session.stop_transcript()
+
+
+def _shared_parametric_study_registry():
+    if _shared_parametric_study_registry.instance is None:
+        _shared_parametric_study_registry.instance = ParametricStudyRegistry()
+    return _shared_parametric_study_registry.instance
+
+
+_shared_parametric_study_registry.instance = None
 
 
 from ansys.fluent.parametric.parameters import InputParameters, OutputParameters
