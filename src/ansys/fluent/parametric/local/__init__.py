@@ -42,7 +42,10 @@ from ansys.fluent.parametric import (
     ParametricSessionLauncher,
 )
 
-from .filereader.casereader import CaseReader
+try:
+    from ansys.fluent.core.filereader.casereader import CaseReader
+except ImportError:
+    from ansys.fluent.parametric.local.filereader.casereader import CaseReader
 
 
 def convert_design_point_parameter_units(
