@@ -149,25 +149,17 @@ class LocalParametricStudy:
         base_design_point = LocalDesignPoint(base_design_point_name)
         case_reader = CaseReader(case_file_path=case_filepath)
 
-        def set_input_parameter_info(source, target):
-            for parameter in source:
-                target.update(((parameter.name, parameter.value),))
-
         def set_output_parameter_info(source, target):
             for parameter in source:
                 target.update(((parameter.name, None),))
 
-        set_input_parameter_info(
-            source=case_reader.input_parameters(),
-            target=base_design_point.input_parameters,
-        )
+        for parameter in case_reader.input_parameters():
+            base_design_point.input_parameters.update(
+                ((parameter.name, parameter.value),)
+            )
 
-        set_output_parameter_info(
-            source=case_reader.output_parameters(),
-            target=base_design_point.output_parameters,
-        )
-
-        print(case_reader.output_parameters())
+        for parameter in case_reader.output_parameters():
+            base_design_point.output_parameters.update(((parameter.name, None),))
 
         self.design_point_table = LocalDesignPointTable(base_design_point)
 

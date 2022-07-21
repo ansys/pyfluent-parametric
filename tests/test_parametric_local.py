@@ -26,8 +26,20 @@ def test_parametric_local():
 
     input_parameters = base_design_point.input_parameters
 
-    assert len(input_parameters)
+    assert len(input_parameters) == 4
+
+    assert input_parameters["inlet1_temp"] == "300 [K]"
+
+    assert input_parameters["inlet1_vel"] == "1 [m/s]"
+
+    assert input_parameters["inlet2_temp"] == "350 [K]"
+
+    assert input_parameters["inlet2_vel"] == "1 [m/s]"
 
     output_parameters = base_design_point.output_parameters
 
-    assert len(output_parameters)
+    assert len(output_parameters) == 2
+
+    assert output_parameters["outlet-temp-avg-op"] == None
+
+    assert output_parameters["outlet-vel-avg-op"] == None
