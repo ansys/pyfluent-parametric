@@ -23,9 +23,9 @@ class OutputParameter:
             parameter = parameter[1]
             for elem in parameter:
                 if len(elem) and elem[0] == "name":
-                    return elem[1][1], None
+                    return elem[1][1]
 
-        self.name, self.value = output_parameter_info(raw_data)
+        self.name = output_parameter_info(raw_data)
 
 
 class CaseReader:
