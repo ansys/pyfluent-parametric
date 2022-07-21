@@ -1,31 +1,36 @@
 """
-Classes for running a parametric study in Fluent.
+Classes for locally defining a parametric study for Fluent without
+running Fluent. The study can then be submitted to be executed in 
+parallel.
 
 Example
 -------
-from ansys.fluent.parametric.local.local import LocalParametricStudy, run_local_study_in_fluent
 
-local_study = LocalParametricStudy(case_filepath="E:\elbow1_param.cas.h5")
+Set up a local study
 
-design_point = local_study.design_point("Base DP")
-design_point.input_parameters['v1'] = 0.0
+>>> from ansys.fluent.parametric.local.local import LocalParametricStudy
+>>> local_study = LocalParametricStudy(case_filepath="E:\elbow1_param.cas.h5")
+>>> design_point = local_study.design_point("Base DP")
+>>> design_point.input_parameters['v1'] = 0.0
+>>> for idx in range(1, 20):
+>>>   design_point = local_study.add_design_point("dp_"+str(idx))
+>>>   design_point.input_parameters['v1'] = float(idx)/10.0
 
-for idx in range(1, 20):
-   design_point = local_study.add_design_point("dp_"+str(idx))
-   design_point.input_parameters['v1'] = float(idx)/10.0
-    
-run_local_study_in_fluent(local_study, 5)
+Run in Fluent
 
-for design_point in local_study.design_point_table:
-   for k, v in design_point.input_parameters.items():
-       print("input parameter", k, v)
-   for k, v in design_point.output_parameters.items():
-       print("output parameter", k, v)
-   print(72 * "-")
+>>> local_study.run_in_fluent(5)
+
+Display results
+
+>>> for design_point in local_study.design_point_table:
+>>>   for k, v in design_point.input_parameters.items():
+>>>     print("input parameter", k, v)
+>>>   for k, v in design_point.output_parameters.items():
+>>>     print("output parameter", k, v)
+>>> print(72 * "-")
 
 """
 
-from enum import Enum
 from math import ceil
 
 from ansys.fluent.core.utils.async_execution import asynchronous
@@ -228,6 +233,8 @@ class LocalParametricStudy:
         ------
         RuntimeError
             If the design point is not found.
+    run_in_fluent
+        Run the study in Fluent
     """
 
     def __init__(self, case_filepath: str, base_design_point_name: str = "Base DP"):

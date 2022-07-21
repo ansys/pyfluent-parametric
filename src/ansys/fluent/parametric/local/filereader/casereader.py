@@ -1,42 +1,84 @@
+"""
+Reader for Fluent case files.
+
+Example
+-------
+
+>>> from ansys.fluent.parametric.local.filereader.casereader import CaseReader
+
+Instantiate a case reader
+
+>>> reader = CaseReader(case_filepath=case_filepath)
+
+Get lists of input and output parameters
+
+>>> input_parameters = reader.input_parameters()
+>>> output_parameters = reader.output_parameters()
+
+
+"""
+
+from typing import List
+
 import h5py
 
 from . import lispy
 
 
 class InputParameter:
-    def __init__(self, raw_data):
-        def input_parameter_info(parameter):
-            name, value = None, None
-            for k, v in parameter:
-                if k == "name":
-                    name = v
-                elif k == "definition":
-                    value = v
-            return name, value
+    """Class to represent an input parameter
 
-        self.name, self.value = input_parameter_info(raw_data)
+    Attributes
+    ----------
+    name : str
+    value
+        The value of this input parameter, usually
+        a string, qualified by units
+    """
+
+    def __init__(self, raw_data):
+        self.name, self.name = None, None
+        for k, v in raw_data:
+            if k == "name":
+                self.name = v
+            elif k == "definition":
+                self.value = v
 
 
 class OutputParameter:
-    def __init__(self, raw_data):
-        def output_parameter_info(parameter):
-            parameter = parameter[1]
-            for elem in parameter:
-                if len(elem) and elem[0] == "name":
-                    return elem[1][1]
+    """Class to represent an output parameter
 
-        self.name = output_parameter_info(raw_data)
+    Attributes
+    ----------
+    name : str
+    """
+
+    def __init__(self, raw_data):
+        parameter = raw_data[1]
+        for elem in parameter:
+            if len(elem) and elem[0] == "name":
+                self.name = elem[1][1]
 
 
 class CaseReader:
-    def __init__(self, case_filepath):
+    """Class to read a Fluent case file.
+
+    Methods
+    -------
+    input_parameters
+        Get a list of input parameter objects
+    output_parameters
+        Get a list of output parameter objects
+    """
+
+    def __init__(self, case_filepath: str):
         file = h5py.File(case_filepath)
         settings = file["settings"]
         rpvars = settings["Rampant Variables"][0]
         rp_vars_str = rpvars.decode()
         self._rp_vars = lispy.parse(rp_vars_str)[1]
 
-    def input_parameters(self):
+    def input_parameters(self) -> List[InputParameter]:
         exprs = self._named_expressions()
         input_params = []
         for expr in exprs:
@@ -45,12 +87,9 @@ class CaseReader:
                     input_params.append(InputParameter(expr))
         return input_params
 
-    def output_parameters(self):
+    def output_parameters(self) -> List[OutputParameter]:
         parameters = self._find_rp_var("parameters/output-parameters")
         return [OutputParameter(param) for param in parameters]
-
-    def named_expressions(self):
-        return self._named_expressions()
 
     def _named_expressions(self):
         return self._find_rp_var("named-expressions")
