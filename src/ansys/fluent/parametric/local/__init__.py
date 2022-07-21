@@ -150,23 +150,14 @@ class LocalParametricStudy:
         case_reader = CaseReader(case_file_path=case_filepath)
 
         def input_parameter_info(parameter):
-            name, value = None, None
-            for k, v in parameter:
-                if k == "name":
-                    name = v
-                elif k == "definition":
-                    value = v
-            return name, value
+            return parameter.name, parameter.value
 
         def set_input_parameter_info(source, target):
             for parameter in source:
                 target.update((input_parameter_info(parameter),))
 
         def output_parameter_info(parameter):
-            parameter = parameter[1]
-            for elem in parameter:
-                if len(elem) and elem[0] == "name":
-                    return elem[1][1], None
+            return parameter.name, parameter.value
 
         def set_output_parameter_info(source, target):
             for parameter in source:
