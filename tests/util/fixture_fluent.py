@@ -1,9 +1,9 @@
-import pytest
-
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core.examples import download_file
+import pytest
 
 _static_mixer_parameters_filename = None
+
 
 @pytest.fixture
 def load_static_mixer_parameter(with_launching_container):

@@ -1,7 +1,10 @@
-import ansys.fluent.core as pyfluent
-from ansys.fluent.parametric import ParametricProject, ParametricStudy
 from pathlib import Path
+
+import ansys.fluent.core as pyfluent
 import pytest
+
+from ansys.fluent.parametric import ParametricStudy
+
 
 @pytest.mark.integration
 @pytest.mark.setup
@@ -55,7 +58,10 @@ def test_param_static_mixer(load_static_mixer_parameter):
     assert dp2_input_tested == dp1_input_expected
     assert len(study_1.design_points) == 3
     study_1.update_all_design_points()
-    base_dp_output_expected = {"outlet-temp-avg-op": 333.3487, "outlet-vel-avg-op": 1.506855}
+    base_dp_output_expected = {
+        "outlet-temp-avg-op": 333.3487,
+        "outlet-vel-avg-op": 1.506855,
+    }
     dp1_output_expected = {"outlet-temp-avg-op": 425.004, "outlet-vel-avg-op": 2.029791}
     dp2_output_expected = {"outlet-temp-avg-op": 425.004, "outlet-vel-avg-op": 2.029791}
     base_dp_output_tested = study_1.design_points["Base DP"].output_parameters
