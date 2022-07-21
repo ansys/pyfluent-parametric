@@ -656,6 +656,7 @@ class ParametricSession(ParametricStudyRegistry):
             Whether to start streaming of Fluent transcript, by default
             False.
         """
+        super().__init__()
         self.studies = {}
         self.project = None
         self._session = launcher()
