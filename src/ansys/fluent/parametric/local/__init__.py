@@ -154,7 +154,7 @@ class LocalParametricStudy:
 
         def set_input_parameter_info(source, target):
             for parameter in source:
-                target.update((input_parameter_info(parameter),))
+                target.update(((input_parameter_info(parameter)),))
 
         def output_parameter_info(parameter):
             return parameter.name, None
