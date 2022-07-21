@@ -77,6 +77,7 @@ class CaseReader:
         rpvars = settings["Rampant Variables"][0]
         rp_vars_str = rpvars.decode()
         self._rp_vars = lispy.parse(rp_vars_str)[1]
+        self._rp_var_cache = {}
 
     def input_parameters(self) -> List[InputParameter]:
         exprs = self._named_expressions()
@@ -91,10 +92,27 @@ class CaseReader:
         parameters = self._find_rp_var("parameters/output-parameters")
         return [OutputParameter(param) for param in parameters]
 
+    def num_dimensions(self) -> int:
+        for attr in self._case_config():
+            if attr[0] == "rp-3d?":
+                return 3 if attr[1] is True else 2
+
+    def precision(self) -> int:
+        for attr in self._case_config():
+            if attr[0] == "rp-double?":
+                return 2 if attr[1] is True else 1
+
     def _named_expressions(self):
         return self._find_rp_var("named-expressions")
 
+    def _case_config(self):
+        return self._find_rp_var("case-config")
+
     def _find_rp_var(self, name: str):
-        for var in self._rp_vars:
-            if type(var) == list and len(var) and var[0] == name:
-                return var[1]
+        try:
+            return self._rp_var_cache[name]
+        except KeyError:
+            for var in self._rp_vars:
+                if type(var) == list and len(var) and var[0] == name:
+                    self._rp_var_cache[name] = var[1]
+                    return var[1]

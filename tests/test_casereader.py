@@ -13,6 +13,10 @@ def test_casereader():
 
     input_parameters = reader.input_parameters()
 
+    assert reader.precision() == 2
+
+    assert reader.num_dimensions() == 3
+
     assert len(input_parameters) == 4
 
     input_parameter_dict = {p.name: p.value for p in input_parameters}
