@@ -664,8 +664,8 @@ class ParametricSession(ParametricStudyRegistry):
         self.scheme_eval(
             "(set parametric-study-dependents-manager " "save-project-at-exit? #f)"
         )
-        if start_transcript:
-            self.start_transcript()
+        if not start_transcript:
+            self.stop_transcript()
         self._root = self._session.solver.root
         if case_filepath is not None:
             self._root.file.read(file_name=case_filepath, file_type="case")

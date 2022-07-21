@@ -32,11 +32,15 @@ Display results
 """
 
 from math import ceil
-from typing import Dict, Union
+from typing import Any, Dict, Union
 
 from ansys.fluent.core.utils.async_execution import asynchronous
 
-from ansys.fluent.parametric import BASE_DP_NAME, ParametricSession
+from ansys.fluent.parametric import (
+    BASE_DP_NAME,
+    ParametricSession,
+    ParametricSessionLauncher,
+)
 
 from .filereader.casereader import CaseReader
 
@@ -148,7 +152,13 @@ class LocalDesignPointTable(list):
         self.remove(self.find_design_point(idx_or_name))
 
 
-def _run_local_study_in_fluent(local_study, num_servers, capture_report_data):
+def _run_local_study_in_fluent(
+    local_study,
+    num_servers: int,
+    launcher: Any,
+    start_transcript: bool,
+    capture_report_data: bool,
+):
 
     source_table_size = len(local_study.design_point_table)
 
@@ -176,7 +186,11 @@ def _run_local_study_in_fluent(local_study, num_servers, capture_report_data):
 
     @asynchronous
     def make_parametric_session(case_filepath):
-        return ParametricSession(case_filepath=case_filepath)
+        return ParametricSession(
+            case_filepath=case_filepath,
+            launcher=launcher,
+            start_transcript=start_transcript,
+        )
 
     @asynchronous
     def apply_to_study(study, inputs):
@@ -277,9 +291,17 @@ class LocalParametricStudy:
     def design_point(self, idx_or_name) -> LocalDesignPoint:
         return self.design_point_table.find_design_point(idx_or_name)
 
-    def run_in_fluent(self, num_servers, capture_report_data=False):
+    def run_in_fluent(
+        self,
+        num_servers: int,
+        launcher: Any = ParametricSessionLauncher(),
+        start_transcript: bool = False,
+        capture_report_data: bool = False,
+    ):
         _run_local_study_in_fluent(
             local_study=self,
             num_servers=num_servers,
+            launcher=launcher,
+            start_transcript=start_transcript,
             capture_report_data=capture_report_data,
         )
