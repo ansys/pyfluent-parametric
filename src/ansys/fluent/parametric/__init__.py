@@ -70,22 +70,6 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 BASE_DP_NAME = "Base DP"
 
 
-def convert_units_for_design_point_parameters(
-    value: Dict[str, Union[float, str]]
-) -> Dict[str, float]:
-    def conv(val):
-        if type(val) in (float, int):
-            return val
-        if type(val) is not str:
-            raise RuntimeError("Invalid value type for input parameter", val, type(val))
-        pos = val.find(" [")
-        if pos == -1:
-            return float(val)
-        return float(val[:pos])
-
-    return dict(map(lambda x: (x[0], conv(x[1])), value.items()))
-
-
 class DesignPoint:
     """Design point in a parametric study.
 

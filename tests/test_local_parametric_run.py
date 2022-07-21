@@ -10,7 +10,7 @@ from math import inf
 
 from ansys.fluent.core import examples
 
-from ansys.fluent.parametric import convert_units_for_design_point_parameters
+from ansys.fluent.parametric import convert_design_point_parameter_units
 from ansys.fluent.parametric.local import LocalParametricStudy
 
 
@@ -39,7 +39,7 @@ def test_local_parametric_setup():
     inlet_velocity = 0.0
 
     for point in table:
-        ins = convert_units_for_design_point_parameters(point.input_parameters)
+        ins = convert_design_point_parameter_units(point.input_parameters)
         outs = point.output_parameters
         new_inlet_velocity = ins["inlet1_vel"]
         new_outlet_velocity = outs["outlet-vel-avg-op"]

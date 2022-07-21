@@ -32,12 +32,29 @@ Display results
 """
 
 from math import ceil
+from typing import Dict, Union
 
 from ansys.fluent.core.utils.async_execution import asynchronous
 
 from ansys.fluent.parametric import BASE_DP_NAME, ParametricSession
 
 from .filereader.casereader import CaseReader
+
+
+def convert_design_point_parameter_units(
+    value: Dict[str, Union[float, str]]
+) -> Dict[str, float]:
+    def conv(val):
+        if type(val) in (float, int):
+            return val
+        if type(val) is not str:
+            raise RuntimeError("Invalid value type for input parameter", val, type(val))
+        pos = val.find(" [")
+        if pos == -1:
+            return float(val)
+        return float(val[:pos])
+
+    return dict(map(lambda x: (x[0], conv(x[1])), value.items()))
 
 
 class LocalDesignPoint:
@@ -175,7 +192,9 @@ def _run_local_study_in_fluent(local_study, num_servers, capture_report_data):
                 design_point = study.add_design_point(
                     capture_simulation_report_data=capture_report_data
                 )
-            design_point.input_parameters = inpt.copy()
+            design_point.input_parameters = convert_design_point_parameter_units(
+                inpt.copy()
+            )
 
     @asynchronous
     def update_design_point(study):
