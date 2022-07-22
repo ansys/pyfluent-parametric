@@ -17,7 +17,7 @@ def test_param_static_mixer(load_static_mixer_parameter):
     assert (Path(pyfluent.EXAMPLES_PATH) / "save_1.cas.h5").exists() == True
     study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
     parametric_studies_exp = 1
-    parametric_studies_test = len(ParametricStudy._all_studies.keys())
+    parametric_studies_test = len(study_1.get_all_studies().keys())
     assert parametric_studies_test == parametric_studies_exp
     input_parameters_update = study_1.design_points["Base DP"].input_parameters
     input_parameters_update["inlet1_vel"] = 0.5
