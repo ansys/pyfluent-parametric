@@ -49,8 +49,8 @@ except ImportError:
 
 
 def convert_design_point_parameter_units(
-    value: Dict[str, Union[float, str]]
-) -> Dict[str, float]:
+    value: Dict[str, Union[float, int, str]]
+) -> Dict[str, Union[float, int]]:
     def conv(val):
         if type(val) in (float, int):
             return val
@@ -61,7 +61,7 @@ def convert_design_point_parameter_units(
             return float(val)
         return float(val[:pos])
 
-    return dict(map(lambda x: (x[0], conv(x[1])), value.items()))
+    return {k: conv(v) for k, v in value.items()}
 
 
 class LocalDesignPoint:
