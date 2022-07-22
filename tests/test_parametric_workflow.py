@@ -80,12 +80,12 @@ def test_param_static_mixer(load_static_mixer_parameter):
     study_2 = study_1.duplicate()
     assert len(study_2.design_points) == 2
     parametric_studies_exp = 2
-    parametric_studies_test = len(ParametricStudy._all_studies.keys())
+    parametric_studies_test = len(study_1.get_all_studies().keys())
     assert parametric_studies_test == parametric_studies_exp
     study_2.rename("New Study")
     study_1.delete()
     parametric_studies_exp = 1
-    parametric_studies_test = len(ParametricStudy._all_studies.keys())
+    parametric_studies_test = len(study_1.get_all_studies().keys())
     assert parametric_studies_test == parametric_studies_exp
     project_filepath = str(Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study.flprj")
     session.solver.tui.file.parametric_project.save_as(project_filepath)
