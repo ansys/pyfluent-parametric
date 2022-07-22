@@ -276,7 +276,7 @@ class LocalParametricStudy:
     def __init__(self, case_filepath: str, base_design_point_name: str = "Base DP"):
         self.case_filepath = case_filepath
         base_design_point = LocalDesignPoint(base_design_point_name)
-        case_reader = CaseReader(case_filepath=case_filepath)
+        case_reader = CaseReader(hdf5_case_filepath=case_filepath)
 
         base_design_point.input_parameters = {
             p.name: p.value for p in case_reader.input_parameters()
