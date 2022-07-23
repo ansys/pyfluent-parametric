@@ -54,6 +54,7 @@ session.solver.tui.define.parameters.enable_in_TUI("yes")
 session.solver.tui.define.boundary_conditions.set.velocity_inlet(
     "inlet1", (), "vmag", "yes", "inlet1_vel", 1, "quit"
 )
+
 session.solver.tui.define.boundary_conditions.set.velocity_inlet(
     "inlet1", (), "temperature", "yes", "inlet1_temp", 300, "quit"
 )
@@ -61,6 +62,7 @@ session.solver.tui.define.boundary_conditions.set.velocity_inlet(
 session.solver.tui.define.boundary_conditions.set.velocity_inlet(
     "inlet2", (), "vmag", "yes", "no", "inlet2_vel", 1, "quit"
 )
+
 session.solver.tui.define.boundary_conditions.set.velocity_inlet(
     "inlet2", (), "temperature", "yes", "no", "inlet2_temp", 350, "quit"
 )
