@@ -20,7 +20,7 @@ class _InputParametersSettingsImpl(MutableMapping):
         self._unit_label_getter = unit_label_getter
 
     def __setitem__(self, name: str, value: V) -> None:
-        if name not in list(self._impl.keys()):
+        if name not in self._named_expressions:
             raise LookupError(f"Input parameter {name} doesn't exist.")
         if not (
             isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
@@ -36,7 +36,9 @@ class _InputParametersSettingsImpl(MutableMapping):
         raise NotImplementedError()
 
     def __getitem__(self, name: V) -> str:
-        raise NotImplementedError()
+        if name not in self._named_expressions:
+            raise LookupError(f"Parameter {name} doesn't exist.")
+        return self._named_expressions[name].definition()
 
     def __len__(self) -> int:
         return len(self._named_expressions)
@@ -57,7 +59,7 @@ class _InputParametersSchemeImpl(MutableMapping):
 
     def _get_parameter_names(self):
         return self._scheme_eval(
-            "(map (lambda (p) (send p get-name)) (get-all-input-parameters))"
+            "(send (get expressions-package named-expression-manager) get-names)"
         )
 
     def __setitem__(self, name: str, value: V) -> None:
@@ -67,22 +69,23 @@ class _InputParametersSchemeImpl(MutableMapping):
             isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
         ):
             raise TypeError(f"Value {value} should be of type int, float or string.")
-        if isinstance(value, str):
-            value, label = value.split(maxsplit=1)
-            label = label.lstrip("[").rstrip("]")
+        # TODO: Check if the input str is of form "<float> [<valid unit label>]"
+        if isinstance(value, int) or isinstance(value, float):
             unit_label = self._unit_label_getter(name)
-            if unit_label != label:
-                raise RuntimeError(
-                    "Input unit {label} doesn't match with system unit {unit_label}."
-                )
-            value = float(value)
-        self._scheme_eval(f'(set-input-parameter-value "{name}" {value})')
+            value = f"{value} [{unit_label}]" if unit_label else str(value)
+        self._scheme_eval(
+            f'(send (send (get expressions-package named-expression-manager) get-object-by-name "{name}") set-var! \'definition "{value}")'  # noqa: E501
+        )
 
     def __delitem__(self, name: str) -> None:
         raise NotImplementedError()
 
     def __getitem__(self, name: str) -> V:
-        raise NotImplementedError()
+        if name not in self._get_parameter_names():
+            raise LookupError(f"Input parameter {name} doesn't exist.")
+        return self._scheme_eval(
+            f'(send (send (get expressions-package named-expression-manager) get-object-by-name "{name}") get-var \'definition)'  # noqa: E501
+        )
 
     def __len__(self) -> int:
         return len(self._get_parameter_names())
@@ -161,21 +164,12 @@ class InputParameters(MutableMapping):
             Fluent's unit label
 
         """
-        if name not in list(self._impl.keys()):
-            raise LookupError(f"Input parameter {name} doesn't exist.")
-        unit_label = ""
-        units = self._session.scheme_eval.scheme_eval(
-            f'(send (get-input-parameter "{name}") get-units)'
-        )
-        if units:
-            unit = units[0]
-            if isinstance(unit, Symbol):
-                unit = unit.str
-            if isinstance(unit, str):
-                unit_label = self._session.scheme_eval.scheme_eval(
-                    f'(units/inquire-unit-label-string-for-quantity "{unit}")'
-                )
-        return unit_label
+        value = self[name]
+        value_split = value.split(maxsplit=1)
+        if len(value_split) == 1:
+            return ""
+        else:
+            return value_split[1].lstrip("[").rstrip("]")
 
     def __setitem__(self, name: str, value: V) -> None:
         """Set value of an input parameter.
@@ -217,13 +211,11 @@ class InputParameters(MutableMapping):
             If the parameter doesn't have units, a real number is returned.
 
         """
-        if name not in list(self._impl.keys()):
-            raise LookupError(f"Parameter {name} doesn't exist.")
-        value = self._session.scheme_eval.scheme_eval(
-            f'(get-input-parameter-value "{name}")'
-        )
-        unit_label = self.get_unit_label(name)
-        return f"{value} [{unit_label}]" if unit_label else value
+        value = self._impl[name]
+        try:
+            return float(value)
+        except ValueError:
+            return value
 
     def __len__(self) -> int:
         """Get the number of input parameters.
