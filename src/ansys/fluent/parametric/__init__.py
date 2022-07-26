@@ -676,14 +676,14 @@ class ParametricSession(ParametricStudyRegistry):
                 parametric_studies=self._root.parametric_studies,
                 project_filepath=str(study.project_filepath),
                 open_project=False,
-                session=self._session,
+                session=self,
             )
         elif project_filepath is not None:
             self.project = ParametricProject(
                 parametric_project=self._root.file.parametric_project,
                 parametric_studies=self._root.parametric_studies,
                 project_filepath=project_filepath,
-                session=self._session,
+                session=self,
             )
             studies_settings = self._root.parametric_studies
             for study_name in studies_settings.get_object_names():
