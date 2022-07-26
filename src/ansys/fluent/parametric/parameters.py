@@ -7,7 +7,7 @@ from typing import Iterator, Union
 from ansys.fluent.core.services.scheme_eval import Symbol
 from ansys.fluent.core.session import Session
 
-V = Union[str, float]
+V = Union[int, float, str]
 
 
 class _InputParametersSettingsImpl(MutableMapping):
@@ -81,7 +81,7 @@ class _InputParametersSchemeImpl(MutableMapping):
     def __delitem__(self, name: str) -> None:
         raise NotImplementedError()
 
-    def __getitem__(self, name: str) -> str:
+    def __getitem__(self, name: str) -> V:
         raise NotImplementedError()
 
     def __len__(self) -> int:
@@ -115,7 +115,10 @@ class InputParameters(MutableMapping):
     [('parameter-1', '0.3 [m/s]'), ('parameter-2', '1.2 [m/s]')]
     >>> inp['parameter-1']
     '0.3 [m/s]'
-    >>> inp['parameter-1'] = '40 [cm/s]'
+    >>> inp['parameter-1'] = '0.5 [m/s]'
+    >>> inp['parameter-1']
+    '0.5 [m/s]'
+    >>> inp['parameter-1'] = '40 [cm/s]'  # only in Fluent 23.1
     >>> inp['parameter-1']
     '0.4 [m/s]'
     >>> inp.get_unit_label('parameter-1')
@@ -181,12 +184,14 @@ class InputParameters(MutableMapping):
         ----------
         name : str
             Name of the input parameter
-        value: Union[str, float]
-            Value in either string or float format.
-            Strings are accepted in the form "<value> [<unit-label>]", e.g., "5 [m/s]".
-            The unit-label should be a valid unit-label in Fluent.
-            Float values are set in Fluent with unit-label returned by
+        value: Union[int, float, str]
+            Value in either integer, float or string format.
+            Integer or float values are set in Fluent with unit-label returned by
             ``get_unit_label`` method.
+            Strings are accepted in the form "<value> [<unit-label>]", e.g., "5 [m/s]".
+            For Fluent 22.2, The unit-label should be same as unit-label returned by
+            ``get_unit_label`` method
+            For Fluent 23,1, the unit-label should be a valid unit-label in Fluent.
 
         """
         self._impl[name] = value
@@ -205,7 +210,7 @@ class InputParameters(MutableMapping):
 
         Returns
         -------
-        Union[str, float]
+        Union[int, float, str]
             Value of the input parameter
             If the parameter has units, a string in the form
             "<value> [<unit-label>]", e.g., "5 [m/s]" is returned.
@@ -308,7 +313,7 @@ class OutputParameters(Mapping):
 
         Returns
         -------
-        Union[str, float]
+        Union[int, float, str]
             Value of the output parameter
             If the parameter has units, a string in the form
             "<value> [<unit-label>]", e.g., "5 [m/s]" is returned.
@@ -318,7 +323,7 @@ class OutputParameters(Mapping):
         if name not in self._get_parameter_names():
             raise LookupError(f"Parameter {name} doesn't exist.")
         value = self._session.scheme_eval.scheme_eval(
-            f'(send (get-output-parameter "{name}") get-parameter-value)'
+            f'(get-output-parameter-value "{name}")'
         )
         unit_label = self._get_unit_label(name)
         return f"{value} [{unit_label}]" if unit_label else value
