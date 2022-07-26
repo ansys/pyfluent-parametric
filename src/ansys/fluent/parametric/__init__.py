@@ -185,25 +185,25 @@ class ParametricStudy:
         Update a list of design points.
     """
 
-    _all_studies: Dict[int, "ParametricStudy"] = {}
-    current_study_name = None
-
     def __init__(
         self,
         parametric_studies,
+        session=None,
         name: Optional[str] = None,
         design_points: Dict[str, DesignPoint] = None,
     ):
         self._parametric_studies = parametric_studies
+        self.session = (
+            session if session is not None else (_shared_parametric_study_registry())
+        )
         self.name = name
         self.design_points = {}
         if design_points is not None:
             self.design_points = design_points
         self.project_filepath = None
-        ParametricStudy._all_studies[id(self)] = self
+        self.session.register_study(self)
 
-    @classmethod
-    def get_all_studies(cls) -> Dict[str, "ParametricStudy"]:
+    def get_all_studies(self) -> Dict[str, "ParametricStudy"]:
         """Get all currently active studies.
 
         Returns
@@ -211,7 +211,7 @@ class ParametricStudy:
         Dict[str, "ParametricStudy"]
             currently active studies
         """
-        return {v.name: v for _, v in cls._all_studies.items()}
+        return {v.name: v for _, v in self.session._all_studies.items()}
 
     def initialize(self) -> "ParametricStudy":
         """Initialize parametric study."""
@@ -235,7 +235,7 @@ class ParametricStudy:
                 self._parametric_studies[self.name].design_points[BASE_DP_NAME],
             )
             self.design_points = {BASE_DP_NAME: base_design_point}
-            ParametricStudy.current_study_name = self.name
+            self.session.current_study_name = self.name
             return self
         else:
             LOG.error("initialize is not available")
@@ -258,13 +258,13 @@ class ParametricStudy:
     @property
     def is_current(self) -> bool:
         """Whether the parametric study is the current parametric study."""
-        return ParametricStudy.current_study_name == self.name
+        return self.session.current_study_name == self.name
 
     def set_as_current(self) -> None:
         """Set the parametric study as the current parametric study."""
         if not self.is_current:
             self._parametric_studies.set_as_current(self.name)
-            ParametricStudy.current_study_name = self.name
+            self.session.current_study_name = self.name
 
     def duplicate(self, copy_design_points: bool = True) -> "ParametricStudy":
         """Duplicate the current study.
@@ -283,9 +283,7 @@ class ParametricStudy:
         self._parametric_studies.duplicate(copy_design_points=copy_design_points)
         new_study_names = self._parametric_studies.get_object_names()
         clone_name = set(new_study_names).difference(set(old_study_names)).pop()
-        current_study = ParametricStudy.get_all_studies()[
-            ParametricStudy.current_study_name
-        ]
+        current_study = self.get_all_studies()[self.session.current_study_name]
         if copy_design_points:
             clone_design_points = {
                 k: DesignPoint(k, self._parametric_studies[clone_name].design_points[k])
@@ -298,9 +296,9 @@ class ParametricStudy:
             )
             clone_design_points = {BASE_DP_NAME: base_design_point}
         clone = ParametricStudy(
-            self._parametric_studies, clone_name, clone_design_points
+            self._parametric_studies, self.session, clone_name, clone_design_points
         )
-        ParametricStudy.current_study_name = clone.name
+        self.session.current_study_name = clone.name
         return clone
 
     def delete(self) -> None:
@@ -309,7 +307,7 @@ class ParametricStudy:
             LOG.error("Cannot delete the current study %s", self.name)
         else:
             del self._parametric_studies[self.name]
-            ParametricStudy._all_studies.pop(id(self))
+            self.session._all_studies.pop(id(self))
             del self
 
     def use_base_data(self) -> None:
@@ -508,11 +506,15 @@ class ParametricProject:
         parametric_project,
         parametric_studies,
         project_filepath: str,
+        session=None,
         open_project: bool = True,
     ):
         self._parametric_project = parametric_project
         self._parametric_studies = parametric_studies
         self.project_filepath = project_filepath
+        self.session = (
+            session if session is not None else (_shared_parametric_study_registry())
+        )
         if open_project:
             self.open(project_filepath=project_filepath)
 
@@ -534,7 +536,7 @@ class ParametricProject:
         )
         self.project_filepath = project_filepath
         for study_name in self._parametric_studies.get_object_names():
-            study = ParametricStudy(self._parametric_studies, study_name)
+            study = ParametricStudy(self._parametric_studies, self.session, study_name)
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
                 study.design_points[dp_name] = DesignPoint(
@@ -600,7 +602,16 @@ class ParametricSessionLauncher:
         return pyfluent.launch_fluent(*self._args, **self._kwargs)
 
 
-class ParametricSession:
+class ParametricStudyRegistry:
+    def __init__(self):
+        self._all_studies: Dict[int, "ParametricStudy"] = {}
+        self.current_study_name = None
+
+    def register_study(self, study):
+        self._all_studies[id(study)] = study
+
+
+class ParametricSession(ParametricStudyRegistry):
     """ParametricSession class which encapsulates studies and project.
 
     Attributes
@@ -645,6 +656,7 @@ class ParametricSession:
             Whether to start streaming of Fluent transcript, by default
             False.
         """
+        super().__init__()
         self.studies = {}
         self.project = None
         self._session = launcher()
@@ -652,35 +664,37 @@ class ParametricSession:
         self.scheme_eval(
             "(set parametric-study-dependents-manager " "save-project-at-exit? #f)"
         )
-        if start_transcript:
-            self.start_transcript()
+        if not start_transcript:
+            self.stop_transcript()
         self._root = self._session.solver.root
         if case_filepath is not None:
             self._root.file.read(file_name=case_filepath, file_type="case")
-            study = ParametricStudy(self._root.parametric_studies).initialize()
+            study = ParametricStudy(self._root.parametric_studies, self).initialize()
             self.studies[study.name] = study
             self.project = ParametricProject(
                 parametric_project=self._root.file.parametric_project,
                 parametric_studies=self._root.parametric_studies,
                 project_filepath=str(study.project_filepath),
                 open_project=False,
+                session=self._session,
             )
         elif project_filepath is not None:
             self.project = ParametricProject(
                 parametric_project=self._root.file.parametric_project,
                 parametric_studies=self._root.parametric_studies,
                 project_filepath=project_filepath,
+                session=self._session,
             )
             studies_settings = self._root.parametric_studies
             for study_name in studies_settings.get_object_names():
-                study = ParametricStudy(studies_settings, study_name)
+                study = ParametricStudy(studies_settings, self, study_name)
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
                     study.design_points[dp_name] = DesignPoint(
                         dp_name, dps_settings[dp_name]
                     )
                 self.studies[study_name] = study
-            ParametricStudy.current_study_name = self._root.current_parametric_study()
+            self.current_study_name = self._root.current_parametric_study()
 
     def new_study(self) -> ParametricStudy:
         """Create new study.
@@ -690,7 +704,7 @@ class ParametricSession:
         ParametricStudy
             New study.
         """
-        study = self.studies[ParametricStudy.current_study_name].duplicate()
+        study = self.studies[self.current_study_name].duplicate()
         self.studies[study.name] = study
         return study
 
@@ -739,6 +753,15 @@ class ParametricSession:
     def stop_transcript(self) -> None:
         """Stop streaming of Fluent transcript."""
         self._session.stop_transcript()
+
+
+def _shared_parametric_study_registry():
+    if _shared_parametric_study_registry.instance is None:
+        _shared_parametric_study_registry.instance = ParametricStudyRegistry()
+    return _shared_parametric_study_registry.instance
+
+
+_shared_parametric_study_registry.instance = None
 
 
 from ansys.fluent.parametric.parameters import InputParameters, OutputParameters
