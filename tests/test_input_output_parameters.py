@@ -25,7 +25,7 @@ def test_input_output_parameters():
     assert inp["inlet_pressure"] == "90000 [Pa]"
     assert inp.get_unit_label("inlet_pressure") == "Pa"
 
-    inp["inlet_pressure"] = "90001 [Pa]"
+    inp["inlet_pressure"] = 90001
     assert inp["inlet_pressure"] == "90001 [Pa]"
     assert inp.get_unit_label("inlet_pressure") == "Pa"
 

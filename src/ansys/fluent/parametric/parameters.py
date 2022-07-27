@@ -121,14 +121,16 @@ class InputParameters(MutableMapping):
     >>> inp['parameter-1'] = '0.5 [m/s]'
     >>> inp['parameter-1']
     '0.5 [m/s]'
-    >>> inp['parameter-1'] = '40 [cm/s]'  # only in Fluent 23.1
-    >>> inp['parameter-1']
-    '0.4 [m/s]'
     >>> inp.get_unit_label('parameter-1')
     'm/s'
-    >>> inp['parameter-1'] = 0.5
+    >>> inp['parameter-1'] = '40 [cm/s]'
     >>> inp['parameter-1']
-    '0.5 [m/s]'
+    '40 [cm/s]'
+    >>> inp.get_unit_label('parameter-1')
+    'cm/s'
+    >>> inp['parameter-1'] = 50
+    >>> inp['parameter-1']
+    '50 [cm/s]'
 
     """
 
