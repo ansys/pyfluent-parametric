@@ -9,7 +9,7 @@ install:
 
 docker-pull:
 	@pip install docker
-	@python .ci/pull_fluent_image.py
+	@bash .ci/pull_fluent_image.sh
 
 unittest:
 	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
