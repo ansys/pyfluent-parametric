@@ -1,10 +1,10 @@
 .. _getting_started:
 
 ===============
-Getting Started
+Getting started
 ===============
-To run pyfluent-parametric, you must have a local licensed copy of Ansys Fluent. 
-pyfluent-parametric supports Ansys Fluent versions 2022 R2 or newer.
+To run PyFluent-Parametric, you must have a local licensed copy of Ansys Fluent. 
+PyFluent-Parametric supports Ansys Fluent versions 2022 R2 or newer.
 
 Visit `Ansys <https://www.ansys.com/>`_ for more information on
 getting a licensed copy of Ansys Fluent.
@@ -13,7 +13,7 @@ getting a licensed copy of Ansys Fluent.
 Installation
 ************
 
-Python Module
+Python module
 ~~~~~~~~~~~~~
 The ``ansys-fluent-parametric`` package currently supports Python 3.7 through
 Python 3.10 on Windows and Linux.
@@ -25,7 +25,7 @@ Install the latest release from `PyPi
 
    pip install ansys-fluent-parametric
 
-Alternatively, install the latest from `pyfluent-parametric GitHub
+Alternatively, install the latest version from `GitHub
 <https://github.com/pyansys/pyfluent-parametric/issues>`_ via:
 
 .. code::
@@ -41,11 +41,9 @@ For a local "development" version, install with:
    cd pyfluent-parametric
    pip install -e .
 
-Follow `README.rst. <https://github.com/pyansys/pyfluent-parametric/blob/main/README.rst>`_ This will allow you to install the PyFluent Parametric ``ansys-fluent-parametric`` module
-and modify it locally and have the changes reflected in your setup
-after restarting the Python kernel.
+Follow `README.rst. <https://github.com/pyansys/pyfluent-parametric/blob/main/README.rst>`_.
 
-This will allow you to install the PyFluent ``ansys-fluent-parametric`` module
+This allows you to install the PyFluent Parametric ``ansys-fluent-parametric`` module
 and modify it locally and have the changes reflected in your setup
 after restarting the Python kernel.
 

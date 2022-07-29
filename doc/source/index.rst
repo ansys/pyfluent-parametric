@@ -1,4 +1,4 @@
-pyfluent-parametric Documentation |version|
+PyFluent-Parametric documentation |version|
 ===========================================
 
 .. toctree::
@@ -38,7 +38,7 @@ lets you use Ansys Fluent within or alongside any other Python environment,
 whether it is in conjunction with other Ansys Python libraries and packages or
 with other external Python products.
 
-PyFluent implements a client-server architecture.  PyFluent launches or connects
+PyFluent implements a client-server architecture. PyFluent launches or connects
 with a running Fluent process as a server using Google remote procedure calls, 
 or gRPC interfaces, but all you need to interact with is the Python interface.
 
@@ -53,7 +53,7 @@ The package, ``ansys-fluent-parametric``, provides features such as:
 
 - Scripting of a parametric study using Fluent.
 
-Documentation and Issues
+Documentation and issues
 ------------------------
 
 In addition to installation, usage, and contribution information, the PyFluent
@@ -74,7 +74,7 @@ software. The use of the interactive control of PyFluent requires a legally
 licensed local copy of Ansys Fluent. For more information about Ansys Fluent,
 visit the Ansys Fluent page on the Ansys website.
 
-Project Index
+Project index
 -------------
 
 * :ref:`genindex`

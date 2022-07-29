@@ -12,7 +12,7 @@ contribute to PyFluent.
  
 The following contribution information is specific to PyFluent Parametric.
 
-Cloning the PyFluent Parametric Repository
+Cloning the PyFluent-Parametric repository
 ------------------------------------------
 Run this code to clone and install the latest version of PyFluent Parametric in
 development mode:
@@ -24,7 +24,7 @@ development mode:
    pip install pip -U
    pip install -e .
 
-Building Documentation
+Building documentation
 ----------------------
 To build the documentation locally you need to follow these steps at the root
 directory of the repository:
@@ -35,21 +35,21 @@ directory of the repository:
     cd doc
     make html
 
-After the build completes the html documentation is located in the
+After the build completes the HTML documentation is located in the
 ``_builds/html`` directory and you can load the ``index.html`` into a web
-browser.  To clean the documentation you can execute this command:
+browser. To clean the documentation you can execute this command:
 
 .. code::
 
     make clean
 
-Posting Issues
+Posting issues
 --------------
 Use the `PyFluent Parametric Issues <https://github.com/pyansys/pyfluent-parametric/issues>`_
 page to submit questions, report bugs, and request new features.
 
 
-Code Style
+Code style
 ----------
 PyFluent is compliant with `PyAnsys Development Code Style Guide
 <https://dev.docs.pyansys.com/coding_style/index.html>`_.  Code style is checked
