@@ -95,6 +95,7 @@ jobs:
 
   docs:
     name: Documentation
+    needs: [docs-style]
     runs-on: [self-hosted, pyfluent]
     strategy:
       matrix:
