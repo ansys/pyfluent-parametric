@@ -1,15 +1,15 @@
-Defining Parametric Workflows
+Defining parametric workflows
 =============================
 PyFluent supports parametric workflows in Fluent.
 
-Parametric Study
+Parametric study
 ----------------
 Here is a simple example:
 
-Creating Input Parameters
+Creating input parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can create input parameters:
-inlet1_vel, inlet1_temp, inlet2_vel and inlet2_temp
+``inlet1_vel``, ``inlet1_temp``, ``inlet2_vel``, and ``inlet2_temp``.
 
 .. code:: python
 
@@ -38,10 +38,10 @@ inlet1_vel, inlet1_temp, inlet2_vel and inlet2_temp
         "inlet2", (), "temperature", "yes", "no", "inlet2_temp", 350, "quit"
     )
 
-Creating Output Parameters
+Creating output parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can create output parameters:
-outlet-temp-avg and outlet-vel-avg
+``outlet-temp-avg`` and ``outlet-vel-avg``.
 
 .. code:: python
 
@@ -81,7 +81,7 @@ The following example demonstrates how you can instantiate a parametric study:
 
     study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
 
-Accessing and Modifying Input Parameters of the Base Design Point
+Accessing and modifying input parameters of the base design point
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can access and modify input parameters of the base design point:
 
@@ -91,7 +91,7 @@ The following example demonstrates how you can access and modify input parameter
     input_parameters_update["inlet1_vel"] = 0.5
     study_1.design_points["Base DP"].input_parameters = input_parameters_update
 
-Updating the Current Design Point
+Updating the current design point
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can update the current design point:
 
@@ -99,7 +99,7 @@ The following example demonstrates how you can update the current design point:
 
     study_1.update_current_design_point()
 
-Adding New Design Points
+Adding new design points
 ~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how to add new design points:
 
@@ -112,7 +112,7 @@ The following example demonstrates how to add new design points:
     design_point_1_input_parameters["inlet2_vel"] = 1
     study_1.design_points["DP1"].input_parameters = design_point_1_input_parameters
 
-Duplicating Design Points
+Duplicating design points
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can duplicate a design point:
 
@@ -120,7 +120,7 @@ The following example demonstrates how you can duplicate a design point:
 
     design_point_2 = study_1.duplicate_design_point(design_point_1)
 
-Updating All Design Points
+Updating all design points
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can update all design points in your study:
 
@@ -128,7 +128,7 @@ The following example demonstrates how you can update all design points in your 
 
     study_1.update_all_design_points()
 
-Exporting the Design Point Table
+Exporting the design point table
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can export the design point table as a comma separated value (CSV) table:
 
@@ -139,7 +139,7 @@ The following example demonstrates how you can export the design point table as 
     )
     study_1.export_design_table(design_point_table)
 
-Deleting Design Points
+Deleting design points
 ~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can remove design points:
 
@@ -147,7 +147,7 @@ The following example demonstrates how you can remove design points:
 
     study_1.delete_design_points([design_point_1])
 
-Duplicating Design Points
+Duplicating design points
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can copy design points:
 
@@ -155,7 +155,7 @@ The following example demonstrates how you can copy design points:
 
     study_2 = study_1.duplicate()
 
-Renaming Studies
+Renaming studies
 ~~~~~~~~~~~~~~~~
 The following example demonstrates how you can change the name of your study:
 
@@ -163,7 +163,7 @@ The following example demonstrates how you can change the name of your study:
 
     study_2.rename("New Study")
 
-Deleting Studies
+Deleting studies
 ~~~~~~~~~~~~~~~~
 The following example demonstrates how you can remove old parametric studies:
 
@@ -171,7 +171,7 @@ The following example demonstrates how you can remove old parametric studies:
 
     study_1.delete()
 
-Saving Your Study and Closing Fluent
+Saving Your study and closing Fluent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can save your work and close the Fluent instance:
 
@@ -181,7 +181,7 @@ The following example demonstrates how you can save your work and close the Flue
     session.solver.tui.file.parametric_project.save_as(project_filepath)
     session.exit()
 
-Resuming Your Work
+Resuming your work
 ~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can re-start Fluent and read in a previously saved project:
 
@@ -195,7 +195,7 @@ The following example demonstrates how you can re-start Fluent and read in a pre
         project_filepath_read,
     )
 
-Saving Your Work
+Saving your work
 ~~~~~~~~~~~~~~~~
 The following example demonstrates how you can save your current project:
 
@@ -203,7 +203,7 @@ The following example demonstrates how you can save your current project:
 
     proj.save()
 
-Saving Your Work With a Different Name
+Saving your work with a different name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can save your current project to a different file name:
 
@@ -214,7 +214,7 @@ The following example demonstrates how you can save your current project to a di
     )
     proj.save_as(project_filepath=project_filepath_save_as)
 
-Exporting Your Work
+Exporting your work
 ~~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can export the current project:
 
@@ -225,7 +225,7 @@ The following example demonstrates how you can export the current project:
     )
     proj.export(project_filepath=project_filepath_export)
 
-Archiving Projects
+Archiving projects
 ~~~~~~~~~~~~~~~~~~
 The following example demonstrates how you can archive your current project:
 

@@ -1,7 +1,7 @@
 .. _ref_user_guide:
 
 ==========
-User Guide
+User guide
 ==========
 This guide provides information regarding using Ansys PyFluent and its
 constituent modules and components.
@@ -18,7 +18,7 @@ constituent modules and components.
    parametric_workflows
 
 
-PyFluent Basic Overview
+PyFluent basic overview
 =======================
 Session objects are the main entry point when using the PyFluent library, where
 one or more Fluent server sessions can be launched simultaneously from the
@@ -35,7 +35,7 @@ or
    meshing_session = pyfluent.launch_fluent(meshing_mode=True)
 
 Each session object provides access to multiple services, such as boundary
-contitions, meshing workflows, field data properties, and so forth.
+conditions, meshing workflows, field data properties, and so forth.
 
 PyFluent contains several basic service modules that provide access to core
 Fluent capabilities. 
@@ -65,15 +65,15 @@ Fluent capabilities.
 
          import_geometry.arguments.update_dict({'AppendMesh':True})
 
-   - Surface field and mesh data services are available using the 'field_data'
+   - Surface field and mesh data services are available using the ``field_data``
      module, such as obtaining surface data for a specified surface.
 
    .. code:: 
 
       surface_data = field_data.get_surfaces(surface_ids)​
 
-   - There are general modules available, such as 'health_check', 'transcript',
-     and 'events' that provide access to generic features that are useful to
+   - There are general modules available, such as ``health_check``, ``transcript``,
+     and ``events`` that provide access to generic features that are useful to
      running your simulation. For instance,
 
    .. code:: 
@@ -92,7 +92,7 @@ Fluent capabilities.
 
       events_service.begin_streaming()
 
-   - Finally, there is a 'scheme_eval' module that provides access to Scheme
+   - Finally, there is a ``scheme_eval`` module that provides access to Scheme
      function evaluation. For instance,
 
    .. code:: 
