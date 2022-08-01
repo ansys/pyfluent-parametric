@@ -9,7 +9,7 @@
 ========
 Examples
 ========
-Add examples here for pyfluent-parametric ``ansys-fluent-parametric``.
+Add more examples here for PyFluent-Parametric.
 
 ..
    This toctree must be a top level index to get it to show up in

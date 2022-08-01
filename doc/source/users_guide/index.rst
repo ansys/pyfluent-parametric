@@ -3,6 +3,6 @@
 ==========
 User guide
 ==========
-PyFluent-Parametric provides for scripting of parametric studies using Ansys Fluent.
+PyFluent-Parametric provides for scripting parametric studies using Ansys Fluent.
 For more information, see :ref:`Examples`.
 
