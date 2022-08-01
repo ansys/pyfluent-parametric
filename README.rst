@@ -1,4 +1,4 @@
-PyFluent Parametric
+PyFluent-Parametric
 ===================
 |pyansys| |pypi| |GH-CI| |MIT| |black|
 
@@ -24,17 +24,17 @@ PyFluent Parametric
 
 Overview
 --------
-The PyFluent Parametric project provides Pythonic access to Ansys Fluent's parametric
+PyFluent-Parametric provides Pythonic access to Ansys Fluent's parametric
 workflows.
 
-Documentation and Issues
+Documentation and issues
 ------------------------
-Please see the latest release `documentation <https://fluentparametric.docs.pyansys.com>`_
-page for more details.
+For comprehensive informaton on PyFluent-Parametric, see the latest
+release `documentation <https://fluentparametric.docs.pyansys.com>`_.
 
-Please feel free to post issues and other questions at `PyFluent Parametric Issues
-<https://github.com/pyansys/pyfluent-parametric/issues>`_.  This is the best place
-to post questions and code.
+On the `PyFluent-Parametric Issues <https://github.com/pyansys/pyfluent-parametric/issues>`_,
+you can create issues to submit questions, report bugs, and request new features. To reach
+the PyAnsys support team, email `pyansys.support@ansys.com <pyansys.support@ansys.com>`_.
 
 Installation
 ------------
@@ -48,14 +48,14 @@ Install the latest release from `PyPI
 
    pip install ansys-fluent-parametric
 
-Alternatively, install the latest from `pyfluent-parametric GitHub
-<https://github.com/pyansys/pyfluent-parametric>`_ via:
+Alternatively, install the latest from `GitHub
+<https://github.com/pyansys/pyfluent-parametric>`_ with:
 
 .. code:: console
 
    pip install git+https://github.com/pyansys/pyfluent-parametric.git
 
-If you plan on doing local "development" of PyFluent with Git, then install
+If you plan on doing local *development* of PyFluent with Git, install
 with:
 
 .. code:: console
@@ -67,14 +67,18 @@ with:
 
 Dependencies
 ------------
-You will need a locally installed licensed copy of ANSYS to run Fluent, with the
-first supported version being Ansys 2022 R2.
+You must have a locally-installed, licensed copy of Ansys to run Fluent. The
+first supported version is 2022 R2.
 
-Getting Started
+Getting started
 ---------------
 
-Basic Usage
+Basic usage
 ~~~~~~~~~~~
+The following code assumes that a PyFluent session has already been created and a Fluent case
+with input parameters has been set up. For a full example, see `Defining Parametric Workflows
+<https://fluentparametric.docs.pyansys.com/users_guide/parametric_workflows.html>`_ in
+the PyFluent-Parametric documentation.
 
 .. code:: python
 
@@ -86,19 +90,15 @@ Basic Usage
    study_1.update_current_design_point()
    print(study_1.design_points["Base DP"].output_parameters)
 
-Above code assumes that a PyFluent session has already been created and a Fluent case
-with input parameters has been set up. The `Defining Parametric Workflows
-<https://fluentparametric.docs.pyansys.com/users_guide/parametric_workflows.html>`_ in
-the user guide has a complete example.
-
-License and Acknowledgments
+License and acknowledgments
 ---------------------------
-``PyFluent Parametric`` is licensed under the MIT license.
+PyFluent-Parametric is licensed under the MIT license.
 
-This module, ``ansys-fluent-parametric`` makes no commercial claim over Ansys
-whatsoever. This tool extends the functionality of ``Fluent`` by adding a Python
-interface to the Fluent without changing the core behavior or license of the original
-software.  The use of the interactive Fluent control of ``PyFluent Parametric`` requires
-a legally licensed local copy of Ansys.
+PyFluent-Parametric makes no commercial claim over Ansys whatsoever. This library
+extends the functionality of Fluent by adding a Python interface to Fluent without
+changing the core behavior or license of the original software. The use of the
+interactive Fluent control of PyFluent-Parametric requires a legally licensed
+local copy of Fluent.
 
-To get a copy of Ansys, please visit `Ansys <https://www.ansys.com/>`_.
+For more information, see the `Ansys Fluent <https://www.ansys.com/products/fluids/ansys-fluent>`
+page on the Ansys website.

@@ -96,20 +96,12 @@ class _InputParametersSchemeImpl(MutableMapping):
 
 
 class InputParameters(MutableMapping):
-    """Class to access and modify input parameter values in Fluent.
+    """Provides for accessing and modifying input parameter values in Fluent.
 
     Methods
     -------
     get_unit_label(name)
         Get Fluent's unit label of an input parameter.
-    __setitem__(name, value)
-        Set value of an input parameter.
-    __getitem__(name)
-        Get value of an input parameter.
-    __len__()
-        Get the number of input parameters.
-    __iter__()
-        Get an iterator over input parameters.
 
     Examples
     --------
@@ -153,17 +145,17 @@ class InputParameters(MutableMapping):
             )
 
     def get_unit_label(self, name: str) -> str:
-        """Get Fluent's unit label of an input parameter.
+        """Get the unit label of a Fluent input parameter.
 
         Parameters
         ----------
         name : str
-            Name of the input parameter
+            Name of the Fluent input parameter.
 
         Returns
         -------
         str
-            Fluent's unit label
+            Unit label of the Fluent input parameter.
 
         """
         value = self[name]
@@ -244,16 +236,11 @@ class InputParameters(MutableMapping):
 
 
 class OutputParameters(Mapping):
-    """Class to access output parameter values in Fluent.
+    """Provides for accessing output parameter values in Fluent.
 
-    Methods
-    -------
-    __getitem__(name)
-        Get value of an output parameter.
-    __len__()
-        Get the number of output parameters.
-    __iter__()
-        Get an iterator over output parameters.
+    Parameters
+    -----------
+    session :
 
     Examples
     --------
@@ -271,7 +258,7 @@ class OutputParameters(Mapping):
         Parameters
         ----------
         session : Session
-        The connected Fluent session
+        Connected Fluent session.
         """
         self._session = session
 
@@ -298,7 +285,7 @@ class OutputParameters(Mapping):
         return unit_label
 
     def __getitem__(self, name: str) -> V:
-        """Get value of an output parameter.
+        """Get the value of an output parameter.
 
         Parameters
         ----------
@@ -308,10 +295,10 @@ class OutputParameters(Mapping):
         Returns
         -------
         Union[int, float, str]
-            Value of the output parameter
+            Value of the output parameter.
             If the parameter has units, a string in the form
-            "<value> [<unit-label>]", e.g., "5 [m/s]" is returned.
-            If the parameter doesn't have units, a real number is returned.
+            "<value> [<unit-label>]". For example ``"5 [m/s]"``.
+            If the parameter does not have units, a real number is returned.
 
         """
         if name not in self._get_parameter_names():
@@ -328,7 +315,7 @@ class OutputParameters(Mapping):
         Returns
         -------
         int
-            The number of output parameters.
+            Number of output parameters.
 
         """
         return len(self._get_parameter_names())
@@ -339,7 +326,7 @@ class OutputParameters(Mapping):
         Returns
         -------
         Iterator[str]
-            Iterator over output parameters
+            Iterator over output parameters.
 
         """
         for name in self._get_parameter_names():

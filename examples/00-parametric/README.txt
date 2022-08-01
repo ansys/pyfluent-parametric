@@ -1,4 +1,4 @@
-Parametric Examples
+Parametric examples
 ===================
-These examples demonstrate how to use the the parametric package to perform
+These examples show how you can use PyFluent-Parameteric to perform
 parametric studies with Fluent.
