@@ -339,7 +339,7 @@ Initialize a parametric design point study from a Fluent session.
     Traceback (most recent call last):
       File "C:\AnsysDev\GitRepos\PyAnsys\pyfluent-parametric\examples\00-parametric\parametric_static_mixer_1.py", line 130, in <module>
         study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
-      File "C:\AnsysDev\GitRepos\PyAnsys\pyfluent-parametric\src\ansys\fluent\parametric\__init__.py", line 186, in initialize
+      File "C:\AnsysDev\GitRepos\PyAnsys\pyfluent-parametric\src\ansys\fluent\parametric\__init__.py", line 188, in initialize
         self._parametric_studies.initialize(
       File "C:\ProgramData\Anaconda3\lib\site-packages\ansys\fluent\core\solver\flobject.py", line 638, in __call__
         return self.flproxy.execute_cmd(self._parent.path, self.obj_name, **newkwds)
@@ -634,7 +634,7 @@ Close Fluent.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  24.658 seconds)
+   **Total running time of the script:** ( 0 minutes  26.040 seconds)
 
 
 .. _sphx_glr_download_examples_00-parametric_parametric_static_mixer_1.py:

@@ -98,10 +98,10 @@ class _InputParametersSchemeImpl(MutableMapping):
 class InputParameters(MutableMapping):
     """Provides for accessing and modifying input parameter values in Fluent.
 
-    Methods
-    -------
-    get_unit_label(name)
-        Get Fluent's unit label of an input parameter.
+    Parameters
+    ----------
+    session : Session
+        Connected Fluent session.
 
     Examples
     --------
@@ -127,12 +127,12 @@ class InputParameters(MutableMapping):
     """
 
     def __init__(self, session: Session):
-        """Initialize InputParameters.
+        """Initialize input parameters.
 
         Parameters
         ----------
         session : Session
-        The connected Fluent session
+        Connected Fluent session.
         """
         self._session = session
         try:
@@ -240,7 +240,8 @@ class OutputParameters(Mapping):
 
     Parameters
     -----------
-    session :
+    session : Session
+        Connected Fluent session.
 
     Examples
     --------

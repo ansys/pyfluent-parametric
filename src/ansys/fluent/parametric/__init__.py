@@ -77,14 +77,8 @@ class DesignPoint:
     ----------
     name : str
         Name of the design point.
-    input_parameters : Dict[str, float]
-        Dictionary of input parameter values by name.
-    output_parameters : Dict[str, float]
-        Dictionary of output parameter values by name.
-    write_data_enabled : bool
-        Whether to write data for the design point.
-    capture_simulation_report_data_enabled : bool
-        Whether to capture simulation report data for the design point.
+    dp_settings
+
     """
 
     def __init__(self, name: str, dp_settings: Any):
@@ -93,7 +87,7 @@ class DesignPoint:
 
     @property
     def input_parameters(self) -> Dict[str, float]:
-        """Input parameter values by name."""
+        """Dictionary of input parameter values by name."""
         return self._dp_settings.input_parameters()
 
     @input_parameters.setter
@@ -102,7 +96,7 @@ class DesignPoint:
 
     @property
     def output_parameters(self) -> Dict[str, float]:
-        """Output parameter values by name."""
+        """Dictionary of output parameter values by name."""
         return self._dp_settings.output_parameters()
 
     @property
@@ -135,9 +129,8 @@ class ParametricStudy:
     ----------
     parametric_studies :
 
-    session : optional
-        The default is ``None``.
-
+    session : Session, optional
+        Connected Fluent session. The default is ``None``.
     name : str, optional
         Name of the parametric study. The default is ``None``.
     design_points : Dict[str, DesignPoint], optional
