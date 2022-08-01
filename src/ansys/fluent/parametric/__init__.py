@@ -134,11 +134,11 @@ class ParametricStudy:
     Parameters
     ----------
     parametric_studies :
-    
+
     session : optional
         The default is ``None``.
-    
-    name : str, optinal
+
+    name : str, optional
         Name of the parametric study. The default is ``None``.
     design_points : Dict[str, DesignPoint], optional
         Dictionary of design points under the parametric study by name.
