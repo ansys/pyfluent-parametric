@@ -29,7 +29,7 @@ workflows.
 
 Documentation and issues
 ------------------------
-For comprehensive informaton on PyFluent-Parametric, see the latest
+For comprehensive information on PyFluent-Parametric, see the latest
 release `documentation <https://fluentparametric.docs.pyansys.com>`_.
 
 On the `PyFluent-Parametric Issues <https://github.com/pyansys/pyfluent-parametric/issues>`_,

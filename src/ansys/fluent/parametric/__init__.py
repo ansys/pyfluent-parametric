@@ -135,12 +135,14 @@ class ParametricStudy:
     ----------
     parametric_studies :
     
-    session :
+    session : optional
+        The default is ``None``.
     
-    name : str
+    name : str, optinal
         Name of the parametric study. The default is ``None``.
-    design_points : Dict[str, DesignPoint]
+    design_points : Dict[str, DesignPoint], optional
         Dictionary of design points under the parametric study by name.
+        The default is ``None``.
     """
 
     def __init__(
