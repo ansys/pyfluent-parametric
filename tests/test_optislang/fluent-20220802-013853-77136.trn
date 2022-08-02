@@ -1,0 +1,51 @@
+Auto-Transcript Start Time:  01:38:53, 02 Aug 2022 Eastern Daylight Time 
+Current Directory: "E:\PyFluent\pyfluent-parametric\tests\test_optislang"
+
+              Welcome to ANSYS Fluent 2022 R2
+
+              Copyright 1987-2022 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: May 27 2022 08:52:58 EDT  Build Id: 10212  
+Information: The server has started and is running.
+ 
+Connected License Server List:	1055@lebfluintwin103.win.ansys.com
+
+*********************************************
+Info: Your license enables 4-way parallel execution.
+For faster simulations, please start the application with the appropriate parallel options.
+*********************************************
+
+Host spawning Node 0 on machine "AAPptk4XW10hcrV" (win64).
+
+*********************************************
+Info: Your license enables 4-way parallel execution.
+For faster simulations, please start the application with the appropriate parallel options.
+*********************************************
+
+
+----------------------------------------------------------------------------------
+ID    Hostname         Core  O.S.         PID     Vendor                         
+----------------------------------------------------------------------------------
+n1    AAPptk4XW10hcrV  2/12  Windows-x64  118384  Intel(R) Xeon(R) Gold 6136     
+n0*   AAPptk4XW10hcrV  1/12  Windows-x64  123548  Intel(R) Xeon(R) Gold 6136     
+host  AAPptk4XW10hcrV        Windows-x64  159308  Intel(R) Xeon(R) Gold 6136     
+
+MPI Option Selected: intel
+Selected system interconnect: default
+----------------------------------------------------------------------------------
+
+Cleanup script file is E:\\PyFluent\\pyfluent-parametric\\tests\\test_optislang\\cleanup-fluent-AAPptk4XW10hcrV-159308.bat
+
+> File C:\Users\egravenh\AppData\Local\ansys_fluent_core\ansys_fluent_core\examples\project-elbow-param.flprz does not exists.
+Error: api-get-var: the object is not active
+Error Object: "current-parametric-study"
+Shutting down Server...
+Services Shutdown...Done.
+Server Shutdown...Done.
+Queue Cleared...Done.
+Shutdown Complete.
+Auto-Transcript Stop Time:  01:39:06, 02 Aug 2022 Eastern Daylight Time 
+Total Transcript Time: 0 Minute 13 Second.

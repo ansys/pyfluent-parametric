@@ -1,0 +1,112 @@
+Auto-Transcript Start Time:  01:41:32, 02 Aug 2022 Eastern Daylight Time 
+Current Directory: "E:\PyFluent\pyfluent-parametric\tests\test_optislang"
+
+              Welcome to ANSYS Fluent 2022 R2
+
+              Copyright 1987-2022 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: May 27 2022 08:52:58 EDT  Build Id: 10212  
+Information: The server has started and is running.
+ 
+Connected License Server List:	1055@lebfluintwin103.win.ansys.com
+
+*********************************************
+Info: Your license enables 4-way parallel execution.
+For faster simulations, please start the application with the appropriate parallel options.
+*********************************************
+
+Host spawning Node 0 on machine "AAPptk4XW10hcrV" (win64).
+
+*********************************************
+Info: Your license enables 4-way parallel execution.
+For faster simulations, please start the application with the appropriate parallel options.
+*********************************************
+
+
+---------------------------------------------------------------------------------
+ID    Hostname         Core  O.S.         PID    Vendor                         
+---------------------------------------------------------------------------------
+n1    AAPptk4XW10hcrV  2/12  Windows-x64  76244  Intel(R) Xeon(R) Gold 6136     
+n0*   AAPptk4XW10hcrV  1/12  Windows-x64  79156  Intel(R) Xeon(R) Gold 6136     
+host  AAPptk4XW10hcrV        Windows-x64  75212  Intel(R) Xeon(R) Gold 6136     
+
+MPI Option Selected: intel
+Selected system interconnect: default
+---------------------------------------------------------------------------------
+
+Cleanup script file is E:\\PyFluent\\pyfluent-parametric\\tests\\test_optislang\\cleanup-fluent-AAPptk4XW10hcrV-75212.bat
+
+> (cx-gui-do cx-activate-item "Question*OK")
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 0)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 1)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 0)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 2)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 0)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 3)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 0)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 0)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 0)
+(cx-gui-do cx-activate-tab-index "Parametric Study*Table1*Frame1*Table2*Frame1" 0)
+(syncdir "C:/Users/egravenh/AppData/Local/ansys_fluent_core/ansys_fluent_core/examples/project-phufu5f6.cffdb\Static_Mixer_main-Solve\BaseCases")()
+---- Info:--- "DP2" is marked as current but it does not have output case and data, so making "Base DP" as a current design point
+(syncdir "C:/Users/egravenh/AppData/Local/ansys_fluent_core/ansys_fluent_core/examples/project-phufu5f6.cffdb\Static_Mixer_main-Solve\BaseCases")()
+Fast-loading "E:\Program Files\ANSYS Inc\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
+Done.
+Multicore processors detected. Processor affinity set!
+
+Reading from AAPptk4XW10hcrV:"C:/Users/egravenh/AppData/Local/ansys_fluent_core/ansys_fluent_core/examples/project-phufu5f6.cffdb\Static_Mixer_main-Solve\Base DP\Static_Mixer_main.cas.h5" in NODE0 mode ...
+  Reading mesh ...
+       22771 cells,     1 cell zone  ...
+          22771 polyhedra cells,  zone id: 97
+      119140 faces,     5 face zones ...
+         114959 polygonal interior faces,  zone id: 96
+           3873 polygonal wall faces,  zone id: 20
+            104 polygonal pressure-outlet faces,  zone id: 19
+            103 polygonal velocity-inlet faces,  zone id: 18
+            101 polygonal velocity-inlet faces,  zone id: 17
+       82247 nodes,     1 node zone  ...
+  Done.
+
+
+Building...
+     mesh
+	distributing mesh
+		parts..,
+		faces..,
+		nodes..,
+		cells..,
+        bandwidth reduction using Reverse Cuthill-McKee: 11383/862 = 13.2053
+     materials,
+     interface,
+     domains,
+	mixture
+     zones,
+	interior--fluid
+	wall
+	outlet
+	inlet2
+	inlet1
+	fluid
+     parallel,
+Done.
+
+Reading from AAPptk4XW10hcrV:"C:/Users/egravenh/AppData/Local/ansys_fluent_core/ansys_fluent_core/examples/project-phufu5f6.cffdb\Static_Mixer_main-Solve\Base DP\Static_Mixer_main.dat.h5" in NODE0 mode ...
+
+
+  Reading results.
+Parallel variables...
+Done.
+(syncdir "C:/Users/egravenh/AppData/Local/ansys_fluent_core/ansys_fluent_core/examples/project-phufu5f6.cffdb/Static_Mixer_main-Solve/Base DP")()
+(syncdir "C:/Users/egravenh/AppData/Local/ansys_fluent_core/ansys_fluent_core/examples/project-phufu5f6.cffdb/Static_Mixer_main-Solve/Base DP")()
+(("inlet1_temp" . 300.) ("inlet1_vel" . 0.5) ("inlet2_temp" . 350.) ("inlet2_vel" . 1.))
+(("outlet-temp-avg-op" . 333.3487) ("outlet-vel-avg-op" . 1.506855))
+Shutting down Server...
+Services Shutdown...Done.
+Server Shutdown...Done.
+Queue Cleared...Done.
+Shutdown Complete.
+Auto-Transcript Stop Time:  01:43:24, 02 Aug 2022 Eastern Daylight Time 
+Total Transcript Time: 1 Minute 52 Second.
