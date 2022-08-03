@@ -59,30 +59,18 @@ def test_parametric_project():
     # Step 4: Solve
     study.update_selected_design_points([dp])
     project.save_as(project_filepath="test.flprj")
-    session.exit()
-
-    # Step 5: Repeat 1 and 2
-    # Step1: Read flprj or flprz
-    # Launch Fluent in 3D and double precision
-    session = ParametricSession(
-        project_filepath=flprz_filename,
-        launcher=ParametricSessionLauncher(precision="double", processor_count=2),
-    )
-
-    # Step 2: Get input and output parameters and create a dictionary
-    studies = session.studies
 
     for key in list(studies.keys()):
         study = studies[key]
         if study.is_current:  # save this study
             dp = study.current_design_point  # -> save this dp
             assert dp.input_parameters == {
-                "inlet1_vel": 0.5,
-                "inlet2_temp": 350.0,
-                "inlet1_temp": 300.0,
-                "inlet2_vel": 1.0,
+                "inlet2_vel": 2.0,
+                "inlet1_vel": 1.5,
+                "inlet2_temp": 400.0,
+                "inlet1_temp": 350.0,
             }
             assert dp.output_parameters == {
-                "outlet-temp-avg-op": 333.3487,
-                "outlet-vel-avg-op": 1.506855,
+                "outlet-temp-avg-op": 378.51169999999996,
+                "outlet-vel-avg-op": 3.69182,
             }
