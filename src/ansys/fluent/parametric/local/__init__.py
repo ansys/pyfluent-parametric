@@ -62,18 +62,16 @@ def convert_design_point_parameter_units(
 
 class LocalDesignPoint:
     """
-    Purely local version of design point in a parametric study.
+    Purely local version of a design point in a parametric study.
 
     Attributes
     ----------
     name : str
-        Name of the design point as a str.
+        Name of the design point.
     output_parameters : dict
-        Dict of output parameters
-        (name of parameter to value).
+        Dictionary of output parameters (name of parameter to value).
     input_parameters : dict
-        Dict of input parameters
-        (name of parameter to value).
+        Dictionary of input parameters (name of parameter to value).
     status : DesignPointStatus
         Current status of the design point.
     """
@@ -106,7 +104,7 @@ class LocalDesignPoint:
 
 class LocalDesignPointTable(list):
     """
-    Local version of Design point table in a parametric study
+    Local version of the design point table in a parametric study.
 
     Methods
     -------
@@ -142,12 +140,12 @@ class LocalDesignPointTable(list):
         for design_point in self:
             if idx_or_name == design_point.name:
                 return design_point
-        raise RuntimeError(f"Design point not found: {idx_or_name}")
+        raise RuntimeError(f"This design point is not found: {idx_or_name}")
 
     def remove_design_point(self, idx_or_name):
         design_point = self.find_design_point(idx_or_name)
         if design_point is self[0]:
-            raise RuntimeError("Cannot remove base design point")
+            raise RuntimeError("You cannot remove the base design point.")
         self.remove(self.find_design_point(idx_or_name))
 
 
@@ -251,13 +249,13 @@ def _run_local_study_in_fluent(
 
 class LocalParametricStudy:
     """
-    Local version of parametric study that manages design points to parametrize a
-    Fluent solver set-up.
+    Local version of a parametric study that manages design points to parametrize a
+    Fluent solver setup.
 
     Methods
     -------
     add_design_point(design_point_name: str) -> LocalDesignPoint
-        Add a design point
+        Add a design point.
     design_point(idx_or_name)
         Get a design point, either by name (str) or an index
         indicating the position in the table (by order of insertion).

@@ -1,22 +1,17 @@
 """.. _ref_parametric_static_mixer_1:
 
-Parametric Study Workflow
-------------------------------
+Parametric study workflow
+-------------------------
+This example shows how you can use the parametric study workflow to analyze a
+static mixer.
 
-This parametric study workflow example performs these steps
-
-- Reads a case file and data file
-- Creates input and output parameters
-- Instantiates a design point study
-- Accesses and modifies the input parameters of
-  the base design point (DP)
-- Updates design points
-- Creates, updates, and deletes more DPs
-- Creates, renames, duplicates and deletes parametric studies
 """
 # sphinx_gallery_thumbnail_path = '_static/DP_table.png'
-
 ############################################################################
+# Perform required imports
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+# Perform the required imports.
+
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
@@ -25,12 +20,16 @@ from ansys.fluent.core import examples
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
 
 ############################################################################
-# Launch Fluent in 3D and double precision
+# Launch Fluent
+# ~~~~~~~~~~~~~
+# Launch Fluent in 3D and double precision.
 
 session = pyfluent.launch_fluent(precision="double", processor_count=2)
 
 ############################################################################
-# Read the hopper/mixer case
+# Download and read files
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# Download the files for this example and read the case for the static mixer.
 
 import_filename = examples.download_file(
     "Static_Mixer_main.cas.h5", "pyfluent/static_mixer"
@@ -39,12 +38,17 @@ import_filename = examples.download_file(
 session.solver.tui.file.read_case(case_file_name=import_filename)
 
 ############################################################################
-# Set number of iterations to 100
+# Set iterations
+# ~~~~~~~~~~~~~~
+# Set the number of iterations to 100.
 
 session.solver.tui.solve.set.number_of_iterations("100")
 
 ############################################################################
-# Create input parameters after enabling parameter creation in the TUI:
+# Create input parameters
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# Enable parameter creation in the TUI and then create input parameters for
+# the velocity and temperatures of inlets 1 and 2:
 # Parameter values:
 # Inlet1: velocity (inlet1_vel) 0.5 m/s and temperature (inlet1_temp) at 300 K
 # Inlet2: velocity (inlet2_vel) 0.5 m/s and temperature (inlet2_temp) at 350 K
@@ -68,7 +72,10 @@ session.solver.tui.define.boundary_conditions.set.velocity_inlet(
 )
 
 ###########################################################################
-# Create output parameters using report definitions
+# Create output parameters
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+# Create output parameters named ``outlet-temp-avg`` and ``outlet-vel-avg``
+# using report definitions.
 
 session.solver.root.solution.report_definitions.surface["outlet-temp-avg"] = {}
 session.solver.root.solution.report_definitions.surface[
@@ -102,16 +109,23 @@ session.solver.tui.define.parameters.output_parameters.create(
 
 ###########################################################################
 # Enable convergence condition check
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Enable the convergence condition check.
 
 session.solver.tui.solve.monitors.residual.criterion_type("0")
 
 ###########################################################################
-# Write case with all the settings in place
+# Write case
+# ~~~~~~~~~~
+# Write the case with all settings in place.
+
 case_path = str(Path(pyfluent.EXAMPLES_PATH) / "Static_Mixer_Parameters.cas.h5")
 session.solver.tui.file.write_case(case_path)
 
 ###########################################################################
-# Instantiate a parametric study from a Fluent session
+# Initialize parametric study
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Initialize a parametric design point study from a Fluent session.
 
 study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
 
@@ -121,7 +135,9 @@ study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
 #   :align: center
 
 ###########################################################################
-# Access and modify input parameters of base DP
+# Access and modify input parameters
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Access and modify the input parameters of the base design point.
 
 input_parameters_update = study_1.design_points["Base DP"].input_parameters
 input_parameters_update["inlet1_vel"] = 0.5
@@ -129,11 +145,15 @@ study_1.design_points["Base DP"].input_parameters = input_parameters_update
 
 ###########################################################################
 # Update current design point
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Update the current design point.
 
 study_1.update_current_design_point()
 
 ###########################################################################
-# Add a new design point
+# Add design point
+# ~~~~~~~~~~~~~~~~
+# Add a design point.
 
 design_point_1 = study_1.add_design_point()
 design_point_1_input_parameters = study_1.design_points["DP1"].input_parameters
@@ -143,12 +163,16 @@ design_point_1_input_parameters["inlet2_vel"] = 1
 study_1.design_points["DP1"].input_parameters = design_point_1_input_parameters
 
 ##########################################################################
-# Duplicate design points
+# Duplicate design point
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# Duplicate design point 1 to create design point 2.
 
 design_point_2 = study_1.duplicate_design_point(design_point_1)
 
 #########################################################################
-# Update all design points for study 1
+# Update all design points
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+# Update all design points for study 1.
 
 study_1.update_all_design_points()
 
@@ -158,7 +182,9 @@ study_1.update_all_design_points()
 #   :align: center
 
 ###############################################################################
-# Export design point table as a CSV table
+# Export design point table
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Export the design point table to a CSV file.
 
 design_point_table = str(
     Path(pyfluent.EXAMPLES_PATH) / "design_point_table_study_1.csv"
@@ -166,27 +192,37 @@ design_point_table = str(
 study_1.export_design_table(design_point_table)
 
 ##########################################################################
-# Delete design points
+# Delete design point
+# ~~~~~~~~~~~~~~~~~~~
+# Delete design point 1.
 
 study_1.delete_design_points([design_point_1])
 
 ##########################################################################
-# Create a new parametric study by duplicating the current one
+# Create parametric study
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# Create another parametric study by duplicating the current one.
 
 study_2 = study_1.duplicate()
 
 #########################################################################
-# Rename the newly created parametric study
+# Rename new parametric study
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Rename the newly created parametric study.
 
 study_2.rename("New Study")
 
 #########################################################################
-# Delete the old parametric study
+# Delete old parametric study
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Delete the old parametric study.
 
 study_1.delete()
 
 #########################################################################
-# Save the parametric project and close Fluent
+# Save parametric project and close Fluent
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Save the parametric project and close Fluent.
 
 project_filepath = str(Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study.flprj")
 
@@ -195,7 +231,9 @@ session.solver.tui.file.parametric_project.save_as(project_filepath)
 session.exit()
 
 #########################################################################
-# Launch Fluent again and read the previously saved project
+# Launch Fluent and read saved project
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Launch Fluent once again and read the previously saved project.
 
 session = pyfluent.launch_fluent(precision="double", processor_count=2)
 project_filepath_read = str(Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study.flprj")
@@ -207,12 +245,16 @@ proj = ParametricProject(
 )
 
 #########################################################################
-# Save the current project
+# Save current project
+# ~~~~~~~~~~~~~~~~~~~~
+# Save the current project.
 
 proj.save()
 
 #########################################################################
-# Save the current project to a different file name
+# Save current project as a different project
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Save the current project as a different project.
 
 project_filepath_save_as = str(
     Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study_save_as.flprj"
@@ -220,7 +262,9 @@ project_filepath_save_as = str(
 proj.save_as(project_filepath=project_filepath_save_as)
 
 #########################################################################
-# Export the current project
+# Export current project
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Export the current project.
 
 project_filepath_export = str(
     Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study_export.flprj"
@@ -228,11 +272,15 @@ project_filepath_export = str(
 proj.export(project_filepath=project_filepath_export)
 
 #########################################################################
-# Archive the current project
+# Archive current project
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# Archive the current project.
 
 proj.archive()
 
 #########################################################################
 # Close Fluent
+# ~~~~~~~~~~~~
+# Close Fluent.
 
 session.exit()
