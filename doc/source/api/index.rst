@@ -3,16 +3,15 @@
 =============
 API reference
 =============
-Here discuss the different API modules at a high level.
+The API for PyFluent-Parametrics consists of these classes:
 
-.. currentmodule:: ansys.fluent
+.. currentmodule:: ansys.fluent.parametric
 
 .. autosummary::
    :toctree: _autosummary
+   
+   DesignPoint
+   ParametricStudy
+   InputParameters
+   OutputParameters
 
-.. toctree::
-   :maxdepth: 4
-   :hidden:
-   
-   parametric
-   
