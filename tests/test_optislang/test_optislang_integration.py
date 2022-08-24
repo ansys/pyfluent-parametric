@@ -1,4 +1,5 @@
 from ansys.fluent.core import examples
+import pytest
 
 from ansys.fluent.parametric import ParametricSession, ParametricSessionLauncher
 
@@ -70,7 +71,5 @@ def test_parametric_project():
                 "inlet2_temp": 400.0,
                 "inlet1_temp": 350.0,
             }
-            assert dp.output_parameters == {
-                "outlet-temp-avg-op": 378.51169999999996,
-                "outlet-vel-avg-op": 3.69182,
-            }
+            assert pytest.approx(dp.output_parameters["outlet-temp-avg-op"]) == 378.5117
+            assert pytest.approx(dp.output_parameters["outlet-vel-avg-op"]) == 3.69182
