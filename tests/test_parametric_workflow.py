@@ -28,9 +28,7 @@ from ansys.fluent.parametric import ParametricProject, ParametricStudy
 ############################################################################
 # Launch Fluent in 3D and double precision
 
-session = pyfluent.launch_fluent(
-    precision="double", processor_count=2, start_transcript=False
-)
+session = pyfluent.launch_fluent(precision="double", processor_count=2)
 
 ############################################################################
 # Read the hopper/mixer case
