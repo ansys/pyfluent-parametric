@@ -1,12 +1,11 @@
-import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 
 from ansys.fluent.parametric.parameters import InputParameters, OutputParameters
 
 
-def test_input_output_parameters():
+def test_input_output_parameters(new_session):
     case_filepath = examples.download_file("nozzle-2D-WB.cas.h5", "pyfluent/optislang")
-    session = pyfluent.launch_fluent(version="2d")
+    session = new_session
     session.solver.root.file.read(file_name=case_filepath, file_type="case")
     inp = InputParameters(session)
     assert len(inp) == 1
