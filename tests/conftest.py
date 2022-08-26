@@ -9,6 +9,6 @@ def with_launching_container(monkeypatch: pytest.MonkeyPatch) -> None:
 
 @pytest.fixture
 def new_session(with_launching_container):
-    session = pyfluent.launch_fluent(version="2d")
+    session = pyfluent.launch_fluent(version="2d", mode="solver")
     yield session
     session.exit()
