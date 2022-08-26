@@ -553,6 +553,7 @@ class ParametricSessionLauncher:
         self._kwargs = kwargs
 
     def __call__(self):
+        self._kwargs["mode"] = "solver"
         return pyfluent.launch_fluent(*self._args, **self._kwargs)
 
 
