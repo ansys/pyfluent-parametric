@@ -553,6 +553,7 @@ class ParametricSessionLauncher:
         self._kwargs = kwargs
 
     def __call__(self):
+        self._kwargs["mode"] = "solver"
         return pyfluent.launch_fluent(*self._args, **self._kwargs)
 
 
@@ -613,7 +614,7 @@ class ParametricSession(ParametricStudyRegistry):
         super().__init__()
         self.studies = {}
         self.project = None
-        self._session = launcher(mode="solver")
+        self._session = launcher()
         self.scheme_eval = self._session.scheme_eval.scheme_eval
         self.scheme_eval(
             "(set parametric-study-dependents-manager " "save-project-at-exit? #f)"
