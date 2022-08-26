@@ -70,28 +70,31 @@ def test_parametric_workflow():
 
     ###########################################################################
     # Create output parameters using report definitions
+    # TODO: Remove the if condition after a stable version of 23.1 is available
+    #  and update the commands as required.
+    if float(solver_session.get_fluent_version()[:-2]) < 23.0:
 
-    solver_session.solution.report_definitions.surface["outlet-temp-avg"] = {}
-    solver_session.solution.report_definitions.surface[
-        "outlet-temp-avg"
-    ].report_type = "surface-areaavg"
-    solver_session.solution.report_definitions.surface[
-        "outlet-temp-avg"
-    ].field = "temperature"
-    solver_session.solution.report_definitions.surface[
-        "outlet-temp-avg"
-    ].surface_names = ["outlet"]
+        solver_session.solution.report_definitions.surface["outlet-temp-avg"] = {}
+        solver_session.solution.report_definitions.surface[
+            "outlet-temp-avg"
+        ].report_type = "surface-areaavg"
+        solver_session.solution.report_definitions.surface[
+            "outlet-temp-avg"
+        ].field = "temperature"
+        solver_session.solution.report_definitions.surface[
+            "outlet-temp-avg"
+        ].surface_names = ["outlet"]
 
-    solver_session.solution.report_definitions.surface["outlet-vel-avg"] = {}
-    solver_session.solution.report_definitions.surface[
-        "outlet-vel-avg"
-    ].report_type = "surface-areaavg"
-    solver_session.solution.report_definitions.surface[
-        "outlet-vel-avg"
-    ].field = "velocity-magnitude"
-    solver_session.solution.report_definitions.surface[
-        "outlet-vel-avg"
-    ].surface_names = ["outlet"]
+        solver_session.solution.report_definitions.surface["outlet-vel-avg"] = {}
+        solver_session.solution.report_definitions.surface[
+            "outlet-vel-avg"
+        ].report_type = "surface-areaavg"
+        solver_session.solution.report_definitions.surface[
+            "outlet-vel-avg"
+        ].field = "velocity-magnitude"
+        solver_session.solution.report_definitions.surface[
+            "outlet-vel-avg"
+        ].surface_names = ["outlet"]
 
     solver_session.tui.define.parameters.enable_in_TUI("yes")
     solver_session.tui.define.parameters.output_parameters.create(
