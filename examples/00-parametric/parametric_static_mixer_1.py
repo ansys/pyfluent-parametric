@@ -6,13 +6,14 @@ This example shows how you can use the parametric study workflow to analyze a
 static mixer.
 
 """
+from pathlib import Path
+
 # sphinx_gallery_thumbnail_path = '_static/DP_table.png'
 ############################################################################
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # Perform the required imports.
-
-from pathlib import Path
+import time
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
@@ -231,6 +232,7 @@ project_filepath = str(Path(pyfluent.EXAMPLES_PATH) / "static_mixer_study.flprj"
 solver_session.tui.file.parametric_project.save_as(project_filepath)
 
 solver_session.exit()
+time.sleep(5.0)
 
 #########################################################################
 # Launch Fluent and read saved project
@@ -288,3 +290,4 @@ proj.archive()
 # Close Fluent.
 
 solver_session.exit()
+time.sleep(5.0)
