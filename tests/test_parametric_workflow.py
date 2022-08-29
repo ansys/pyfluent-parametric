@@ -28,13 +28,20 @@ import pytest
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
 
 
-def test_parametric_workflow():
+@pytest.fixture
+def new_solver_session(with_launching_container):
+    solver = pyfluent.launch_fluent(
+        mode="solver", precision="double", processor_count=2
+    )
+    yield solver
+    solver.exit()
+
+
+def test_parametric_workflow(new_solver_session):
     ############################################################################
     # Launch Fluent in 3D and double precision
 
-    solver_session = pyfluent.launch_fluent(
-        precision="double", processor_count=2, start_transcript=False, mode="solver"
-    )
+    solver_session = new_solver_session
 
     ############################################################################
     # Create a directory structure to store the temporarily created files in this test.
@@ -279,14 +286,10 @@ def test_parametric_workflow():
 
     assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists() == True
 
-    solver_session.exit()
-
     #########################################################################
     # Launch Fluent again and read the previously saved project
 
-    solver_session = pyfluent.launch_fluent(
-        precision="double", processor_count=2, mode="solver"
-    )
+    solver_session = solver_session
     project_filepath_read = str(
         Path(temporary_resource_path) / "static_mixer_study.flprj"
     )
