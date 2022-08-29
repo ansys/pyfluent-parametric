@@ -54,7 +54,6 @@ Use a parametric session:
 """
 from pathlib import Path
 import tempfile
-import time
 from typing import Any, Dict, List, Optional
 
 import ansys.fluent.core as pyfluent
@@ -693,14 +692,12 @@ class ParametricSession(ParametricStudyRegistry):
 
     def exit(self) -> None:
         self._session.exit()
-        time.sleep(5.0)
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
         self._session.exit()
-        time.sleep(5.0)
 
     def start_transcript(self) -> None:
         """Start streaming of a Fluent transcript."""

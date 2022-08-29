@@ -20,7 +20,6 @@ This test queries the following using PyTest:
 import os
 from pathlib import Path
 import shutil
-import time
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
@@ -282,7 +281,6 @@ def test_parametric_workflow():
     assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists() == True
 
     solver_session.exit()
-    time.sleep(5.0)
 
     #########################################################################
     # Launch Fluent again and read the previously saved project
@@ -340,5 +338,4 @@ def test_parametric_workflow():
     # Close Fluent
 
     solver_session.exit()
-    time.sleep(5.0)
     shutil.rmtree(temporary_resource_path, ignore_errors=True)
