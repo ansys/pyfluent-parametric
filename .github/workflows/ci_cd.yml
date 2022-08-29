@@ -55,7 +55,8 @@ jobs:
 
   tests:
     name: Tests and coverage
-    runs-on: [self-hosted, pyfluent]
+    # runs-on: [self-hosted, pyfluent]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -95,6 +96,7 @@ jobs:
 
   docs:
     name: Documentation
+    if: false
     needs: [docs-style]
     runs-on: [self-hosted, pyfluent]
     strategy:
@@ -175,6 +177,7 @@ jobs:
 
   build:
     name: Build library
+    if: false
     needs: [style, tests, docs]
     runs-on: ubuntu-latest
     steps:
