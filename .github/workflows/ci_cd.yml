@@ -25,6 +25,7 @@ jobs:
 
   style:
     name: Code style
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -37,6 +38,7 @@ jobs:
 
   docs-style:
     name: Documentation Style Check
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,8 +57,8 @@ jobs:
 
   tests:
     name: Tests and coverage
-    # runs-on: [self-hosted, pyfluent]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, pyfluent]
+    # runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
