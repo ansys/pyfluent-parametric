@@ -75,7 +75,6 @@ def test_parametric_workflow():
     if float(solver_session.get_fluent_version()[:-2]) < 23.0:
 
         solver_session.solution.report_definitions.surface["outlet-temp-avg"] = {}
-        print(solver_session.solution.report_definitions())
         solver_session.solution.report_definitions.surface[
             "outlet-temp-avg"
         ].report_type = "surface-areaavg"
