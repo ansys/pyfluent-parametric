@@ -95,7 +95,6 @@ jobs:
 
   docs:
     name: Documentation
-    if: false
     needs: [docs-style]
     runs-on: [self-hosted, pyfluent]
     strategy:
