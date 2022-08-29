@@ -289,7 +289,9 @@ def test_parametric_workflow(new_solver_session):
     #########################################################################
     # Launch Fluent again and read the previously saved project
 
+
     solver_session = solver_session
+
     project_filepath_read = str(
         Path(temporary_resource_path) / "static_mixer_study.flprj"
     )
