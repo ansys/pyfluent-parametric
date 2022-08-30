@@ -6,13 +6,11 @@ TODO
 
 from ansys.fluent.core import examples
 
-############################################################################
-import pytest
-
 from ansys.fluent.parametric.local import LocalParametricStudy
 
+############################################################################
 
-@pytest.mark.skip()
+
 def test_local_parametric_setup():
 
     ############################################################################

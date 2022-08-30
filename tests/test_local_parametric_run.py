@@ -9,6 +9,7 @@ TODO
 from math import inf
 
 from ansys.fluent.core import examples
+import pytest
 
 from ansys.fluent.parametric.local import (
     LocalParametricStudy,
@@ -16,6 +17,7 @@ from ansys.fluent.parametric.local import (
 )
 
 
+@pytest.mark.skip()
 def test_local_parametric_setup():
 
     ############################################################################
