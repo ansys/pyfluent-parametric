@@ -8,8 +8,8 @@ TODO
 
 from math import inf
 
-import pytest
 from ansys.fluent.core import examples
+import pytest
 
 from ansys.fluent.parametric.local import (
     LocalParametricStudy,
