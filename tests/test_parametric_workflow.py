@@ -42,9 +42,8 @@ def test_parametric_workflow():
     temporary_resource_path = os.path.join(
         pyfluent.EXAMPLES_PATH, "parametric_workflow_resources"
     )
-    if os.path.exists(pyfluent.EXAMPLES_PATH):
-        shutil.rmtree(pyfluent.EXAMPLES_PATH)
-    os.mkdir(pyfluent.EXAMPLES_PATH)
+    if os.path.exists(temporary_resource_path):
+        shutil.rmtree(temporary_resource_path)
     os.mkdir(temporary_resource_path)
 
     ############################################################################
