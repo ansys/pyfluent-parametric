@@ -43,8 +43,9 @@ def test_parametric_workflow():
         pyfluent.EXAMPLES_PATH, "parametric_workflow_resources"
     )
     if os.path.exists(temporary_resource_path):
-        shutil.rmtree(temporary_resource_path)
-    os.mkdir(temporary_resource_path)
+        shutil.rmtree(temporary_resource_path, ignore_errors=True)
+    if not os.path.exists(temporary_resource_path):
+        os.mkdir(temporary_resource_path)
 
     ############################################################################
     # Read the hopper/mixer case
