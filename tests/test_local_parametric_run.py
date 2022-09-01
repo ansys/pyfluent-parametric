@@ -16,6 +16,7 @@ from ansys.fluent.parametric.local import (
 )
 
 
+@pytest.mark.skip()
 def test_local_parametric_setup():
 
     ############################################################################
