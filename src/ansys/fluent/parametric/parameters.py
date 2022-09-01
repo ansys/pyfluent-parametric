@@ -19,8 +19,15 @@ class _InputParametersSettingsImpl(MutableMapping):
         self._named_expressions = named_expressions
         self._unit_label_getter = unit_label_getter
 
+    def _get_input_parameter_names(self):
+        return [
+            k
+            for k, v in self._named_expressions().items()
+            if v.get("input_parameter", True) and not v.get("output_parameter")
+        ]
+
     def __setitem__(self, name: str, value: V) -> None:
-        if name not in self._named_expressions:
+        if name not in self._get_input_parameter_names():
             raise LookupError(f"Input parameter {name} doesn't exist.")
         if not (
             isinstance(value, int) or isinstance(value, float) or isinstance(value, str)
@@ -36,15 +43,15 @@ class _InputParametersSettingsImpl(MutableMapping):
         raise NotImplementedError()
 
     def __getitem__(self, name: V) -> str:
-        if name not in self._named_expressions:
+        if name not in self._get_input_parameter_names():
             raise LookupError(f"Parameter {name} doesn't exist.")
         return self._named_expressions[name].definition()
 
     def __len__(self) -> int:
-        return len(self._named_expressions)
+        return len(self._get_input_parameter_names())
 
     def __iter__(self) -> Iterator[str]:
-        for name in self._named_expressions:
+        for name in self._get_input_parameter_names():
             yield name
 
 
