@@ -32,3 +32,5 @@ def test_input_output_parameters():
     outp = OutputParameters(solver_session)
     assert len(outp) == 1
     assert outp["mass-outlet-op"] == "0.0 [kg/s]"
+
+    solver_session.exit()

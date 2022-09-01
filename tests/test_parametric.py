@@ -90,6 +90,7 @@ def fixture_parametric_project() -> ParametricProject:
     )
 
 
+@pytest.mark.skip()
 class TestParamtericProject:
     def test_open(
         self,
