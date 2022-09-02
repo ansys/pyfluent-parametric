@@ -3,12 +3,11 @@ This local parametric study workflow test performs these steps
 
 TODO
 """
-
-############################################################################
-
 from ansys.fluent.core import examples
 
 from ansys.fluent.parametric.local import LocalParametricStudy
+
+############################################################################
 
 
 def test_local_parametric_setup():
