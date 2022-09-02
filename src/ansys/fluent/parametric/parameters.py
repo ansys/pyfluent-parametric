@@ -144,7 +144,7 @@ class InputParameters(MutableMapping):
         self._session = session
         try:
             self._impl = _InputParametersSettingsImpl(
-                self._session.solver.root.setup.named_expressions, self.get_unit_label
+                self._session.setup.named_expressions, self.get_unit_label
             )
         except AttributeError:
             self._impl = _InputParametersSchemeImpl(
