@@ -52,7 +52,6 @@ Use a parametric session:
 >>> study2 = session1.new_study()
 >>> session2 = ParametricSession(project_filepath="nozzle_para_named.flprj")
 """
-
 from pathlib import Path
 import tempfile
 from typing import Any, Dict, List, Optional
@@ -553,6 +552,7 @@ class ParametricSessionLauncher:
         self._kwargs = kwargs
 
     def __call__(self):
+        self._kwargs["mode"] = "solver"
         return pyfluent.launch_fluent(*self._args, **self._kwargs)
 
 
@@ -620,26 +620,25 @@ class ParametricSession(ParametricStudyRegistry):
         )
         if not start_transcript:
             self.stop_transcript()
-        self._root = self._session.solver.root
         if case_filepath is not None:
-            self._root.file.read(file_name=case_filepath, file_type="case")
-            study = ParametricStudy(self._root.parametric_studies, self).initialize()
+            self._session.file.read(file_name=case_filepath, file_type="case")
+            study = ParametricStudy(self._session.parametric_studies, self).initialize()
             self.studies[study.name] = study
             self.project = ParametricProject(
-                parametric_project=self._root.file.parametric_project,
-                parametric_studies=self._root.parametric_studies,
+                parametric_project=self._session.file.parametric_project,
+                parametric_studies=self._session.parametric_studies,
                 project_filepath=str(study.project_filepath),
                 open_project=False,
                 session=self,
             )
         elif project_filepath is not None:
             self.project = ParametricProject(
-                parametric_project=self._root.file.parametric_project,
-                parametric_studies=self._root.parametric_studies,
+                parametric_project=self._session.file.parametric_project,
+                parametric_studies=self._session.parametric_studies,
                 project_filepath=project_filepath,
                 session=self,
             )
-            studies_settings = self._root.parametric_studies
+            studies_settings = self._session.parametric_studies
             for study_name in studies_settings.get_object_names():
                 study = ParametricStudy(studies_settings, self, study_name)
                 dps_settings = studies_settings[study_name].design_points
@@ -648,7 +647,7 @@ class ParametricSession(ParametricStudyRegistry):
                         dp_name, dps_settings[dp_name]
                     )
                 self.studies[study_name] = study
-            self.current_study_name = self._root.current_parametric_study()
+            self.current_study_name = self._session.current_parametric_study()
 
     def new_study(self) -> ParametricStudy:
         """Create a new study.
