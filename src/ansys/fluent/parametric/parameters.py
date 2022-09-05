@@ -246,7 +246,7 @@ class OutputParameters(Mapping):
     """Provides for accessing output parameter values in Fluent.
 
     Parameters
-    -----------
+    ----------
     session : Session
         Connected Fluent session.
 
