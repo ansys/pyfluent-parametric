@@ -1,0 +1,46 @@
+name: Nightly Test Run
+
+on:
+  schedule:  # UTC at 0400
+    - cron:  '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Unit Testing
+    runs-on: [self-hosted, pyfluent]
+    strategy:
+      fail-fast: false
+      matrix:
+        image-tag: [v22.2.0, v23.1.0]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+
+      - name: Install pyfluent-parametric
+        run: make install
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GH_USERNAME }}
+          password: ${{ secrets.REPO_DOWNLOAD_PAT }}
+
+      - name: Pull Fluent docker image
+        run: make docker-pull
+        env:
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
+
+      - name: Test with pytest
+        run: make unittest
+        env:
+          ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
+          PYFLUENT_START_INSTANCE: 0
+          PYFLUENT_LAUNCH_CONTAINER: 1
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
