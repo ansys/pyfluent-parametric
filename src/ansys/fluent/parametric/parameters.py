@@ -21,9 +21,7 @@ class _InputParametersSettingsImpl(MutableMapping):
 
     def _get_input_parameter_names(self):
         return [
-            k
-            for k, v in self._named_expressions().items()
-            if v.get("input_parameter", True) and not v.get("output_parameter")
+            k for k, v in self._named_expressions().items() if v.get("input_parameter")
         ]
 
     def __setitem__(self, name: str, value: V) -> None:
