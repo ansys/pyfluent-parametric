@@ -82,8 +82,10 @@ the PyFluent-Parametric documentation.
 
 .. code:: python
 
+   import ansys.fluent.core as pyfluent
    from ansys.fluent.parametric import ParametricStudy
-   study_1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
+   solver_session = pyfluent.launch_fluent(precision="double", processor_count=2, mode="solver")
+   study_1 = ParametricStudy(solver_session.parametric_studies).initialize()
    input_parameters_update = study_1.design_points["Base DP"].input_parameters
    input_parameters_update["inlet1_vel"] = 0.5
    study_1.design_points["Base DP"].input_parameters = input_parameters_update
