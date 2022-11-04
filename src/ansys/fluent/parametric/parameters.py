@@ -21,9 +21,7 @@ class _InputParametersSettingsImpl(MutableMapping):
 
     def _get_input_parameter_names(self):
         return [
-            k
-            for k, v in self._named_expressions().items()
-            if v.get("input_parameter", True) and not v.get("output_parameter")
+            k for k, v in self._named_expressions().items() if v.get("input_parameter")
         ]
 
     def __setitem__(self, name: str, value: V) -> None:
@@ -144,7 +142,7 @@ class InputParameters(MutableMapping):
         self._session = session
         try:
             self._impl = _InputParametersSettingsImpl(
-                self._session.solver.root.setup.named_expressions, self.get_unit_label
+                self._session.setup.named_expressions, self.get_unit_label
             )
         except AttributeError:
             self._impl = _InputParametersSchemeImpl(
@@ -246,7 +244,7 @@ class OutputParameters(Mapping):
     """Provides for accessing output parameter values in Fluent.
 
     Parameters
-    -----------
+    ----------
     session : Session
         Connected Fluent session.
 

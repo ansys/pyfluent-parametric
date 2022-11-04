@@ -54,7 +54,7 @@ def test_parametric_workflow():
         "Static_Mixer_main.cas.h5", "pyfluent/static_mixer"
     )
 
-    solver_session.tui.file.read_case(case_file_name=import_filename)
+    solver_session.tui.file.read_case(import_filename)
 
     ############################################################################
     # Set number of iterations to 100

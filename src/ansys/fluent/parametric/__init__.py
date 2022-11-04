@@ -6,7 +6,7 @@ Example
 
 Instantiate the study from a Fluent session that has already read a case:
 
->>> study1 = ParametricStudy(session.solver.root.parametric_studies).initialize()
+>>> study1 = ParametricStudy(session.parametric_studies).initialize()
 
 Access and modify the input parameters of the base design point:
 
@@ -38,7 +38,7 @@ Create, rename, and delete parametric studies:
 Project workflow
 
 >>> from ansys.fluent.parametric import ParametricProject
->>> proj = ParametricProject(session.solver.root.file.parametric_project, session.solver.root.parametric_studies, "nozzle_para_named.flprj")  # noqa: E501
+>>> proj = ParametricProject(session.file.parametric_project, session.parametric_studies, "nozzle_para_named.flprj")  # noqa: E501
 >>> proj.save()
 >>> proj.save_as(project_filepath="nozzle_para_named1.flprj")
 >>> proj.export(project_filepath="nozzle_para_named2.flprj")
@@ -64,7 +64,24 @@ try:
 except ModuleNotFoundError:
     import importlib_metadata
 
+_VERSION_INFO = None
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
+
+
+def version_info() -> str:
+    """Method returning the version of PyFluent being used.
+
+    Returns
+    -------
+    str
+        The PyFluent version being used.
+
+    Notes
+    -------
+    Only available in packaged versions. Otherwise it will return __version__.
+    """
+    return _VERSION_INFO if _VERSION_INFO is not None else __version__
+
 
 BASE_DP_NAME = "Base DP"
 
