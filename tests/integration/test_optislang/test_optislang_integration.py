@@ -90,7 +90,7 @@ def test_parametric_project():
                 "inlet1_temp": 350.0,
             }
             assert pytest.approx(dp.output_parameters["outlet-temp-avg-op"]) == 378.5117
-            assert pytest.approx(dp.output_parameters["outlet-vel-avg-op"]) == 3.6918
+            assert pytest.approx(dp.output_parameters["outlet-vel-avg-op"]) == 3.69182
 
     # Save and exit
     project.save()
