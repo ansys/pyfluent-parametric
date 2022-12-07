@@ -63,8 +63,11 @@ class _InputParametersSchemeImpl(MutableMapping):
         self._unit_label_getter = unit_label_getter
 
     def _get_parameter_names(self):
-        parameter_names = self._scheme_eval(
-            "(send (get expressions-package named-expression-manager) get-names)"
+        parameter_names = (
+            self._scheme_eval(
+                "(send (get expressions-package named-expression-manager) get-names)"
+            )
+            or []
         )
         return parameter_names if parameter_names else []
 
@@ -270,8 +273,11 @@ class OutputParameters(Mapping):
         self._session = session
 
     def _get_parameter_names(self):
-        parameter_names = self._session.scheme_eval.scheme_eval(
-            "(map (lambda (p) (send p get-name)) (get-all-output-parameters))"
+        parameter_names = (
+            self._session.scheme_eval.scheme_eval(
+                "(map (lambda (p) (send p get-name)) (get-all-output-parameters))"
+            )
+            or []
         )
         return parameter_names if parameter_names else []
 
