@@ -63,10 +63,9 @@ class _InputParametersSchemeImpl(MutableMapping):
         self._unit_label_getter = unit_label_getter
 
     def _get_parameter_names(self):
-        parameter_names = self._scheme_eval(
+        return self._scheme_eval(
             "(send (get expressions-package named-expression-manager) get-names)"
-        )
-        return parameter_names if parameter_names else []
+        ) or []
 
     def __setitem__(self, name: str, value: V) -> None:
         if name not in self._get_parameter_names():
