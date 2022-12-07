@@ -269,10 +269,9 @@ class OutputParameters(Mapping):
         self._session = session
 
     def _get_parameter_names(self):
-        parameter_names = self._session.scheme_eval.scheme_eval(
+        return self._session.scheme_eval.scheme_eval(
             "(map (lambda (p) (send p get-name)) (get-all-output-parameters))"
-        )
-        return parameter_names if parameter_names else []
+        ) or []
 
     def _get_unit_label(self, name: str) -> str:
         if name not in self._get_parameter_names():
