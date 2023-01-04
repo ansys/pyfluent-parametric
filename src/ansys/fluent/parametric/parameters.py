@@ -5,7 +5,6 @@ from collections.abc import Mapping, MutableMapping
 from typing import Iterator, Union
 
 from ansys.fluent.core.services.scheme_eval import Symbol
-from ansys.fluent.core.session import Session
 
 V = Union[int, float, str]
 
@@ -108,7 +107,7 @@ class InputParameters(MutableMapping):
 
     Parameters
     ----------
-    session : Session
+    session :
         Connected Fluent session.
 
     Examples
@@ -134,12 +133,12 @@ class InputParameters(MutableMapping):
 
     """
 
-    def __init__(self, session: Session):
+    def __init__(self, session):
         """Initialize input parameters.
 
         Parameters
         ----------
-        session : Session
+        session :
         Connected Fluent session.
         """
         self._session = session
@@ -248,7 +247,7 @@ class OutputParameters(Mapping):
 
     Parameters
     ----------
-    session : Session
+    session :
         Connected Fluent session.
 
     Examples
@@ -261,12 +260,12 @@ class OutputParameters(Mapping):
 
     """
 
-    def __init__(self, session: Session):
+    def __init__(self, session):
         """Initialize InputParameters.
 
         Parameters
         ----------
-        session : Session
+        session :
         Connected Fluent session.
         """
         self._session = session
