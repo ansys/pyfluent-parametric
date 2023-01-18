@@ -87,6 +87,7 @@ jobs:
     runs-on: [self-hosted, pyfluent]
     env:
       DOC_DEPLOYMENT_IMAGE_TAG: v23.1.0
+      DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
     steps:
       - uses: actions/checkout@v3
 
@@ -139,7 +140,6 @@ jobs:
           ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
           PYFLUENT_START_INSTANCE: 0
           PYFLUENT_LAUNCH_CONTAINER: 1
-          DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
           FLUENT_IMAGE_TAG: ${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
 
       - name: Upload HTML Documentation
