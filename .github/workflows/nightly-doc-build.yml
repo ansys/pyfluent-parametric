@@ -5,6 +5,10 @@ on:
     - cron:  '0 4 * * *'
   workflow_dispatch:
 
+env:
+  DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
+  DOC_DEPLOYMENT_IMAGE_TAG: v23.1.0
+
 jobs:
   nightly_docs_build:
     runs-on: ubuntu-20.04
@@ -49,15 +53,20 @@ jobs:
           ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
           PYFLUENT_START_INSTANCE: 0
           PYFLUENT_LAUNCH_CONTAINER: 1
-          DOCS_CNAME: dev.fluentparametric.docs.pyansys.com
           FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
-      - name: Deploy
-        if: ${{ matrix.image-tag == 'latest'}}
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+      - name: Upload HTML Documentation
+        uses: actions/upload-artifact@v3
         with:
-          repository-name: pyansys/pyfluent-parametric-dev-docs
-          token: ${{ steps.get_workflow_token.outputs.token }}
-          BRANCH: gh-pages
-          FOLDER: doc/_build/html
-          CLEAN: true
+          name: HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
+          path: doc/_build/html
+
+          retention-days: 7
+
+      - name: Deploy
+        if: matrix.image-tag == 'v23.1.0'
+        uses: pyansys/actions/doc-deploy-dev@v3
+        with:
+          doc-artifact-name: 'HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}'
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
