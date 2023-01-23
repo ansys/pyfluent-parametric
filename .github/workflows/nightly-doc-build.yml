@@ -66,8 +66,8 @@ jobs:
 
       - name: Deploy
         if: matrix.image-tag == 'v23.1.0'
-        uses: pyansys/actions/doc-deploy-dev@v3
+        uses: pyansys/actions/doc-deploy-dev@v3.0.1
         with:
-          doc-artifact-name: HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
+          doc-artifact-name: dev/HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
