@@ -97,9 +97,10 @@ class DesignPoint:
 
     """
 
-    def __init__(self, name: str, dp_settings: Any):
+    def __init__(self, name: str, study: Any):
         self.name = name
-        self._dp_settings = dp_settings
+        self._study = study
+        self._dp_settings = study.design_points[name]
 
     @property
     def input_parameters(self) -> Dict[str, float]:
@@ -132,6 +133,10 @@ class DesignPoint:
     @capture_simulation_report_data_enabled.setter
     def capture_simulation_report_data_enabled(self, value: bool) -> None:
         self._dp_settings.capture_simulation_report_data = value
+
+    def set_as_current(self) -> None:
+        """Set the design point as the current design point."""
+        self._study.design_points.set_as_current(design_point=self.name)
 
 
 class ParametricStudy:
@@ -201,7 +206,7 @@ class ParametricStudy:
             self.name = set(new_study_names).difference(set(old_study_names)).pop()
             base_design_point = DesignPoint(
                 BASE_DP_NAME,
-                self._parametric_studies[self.name].design_points[BASE_DP_NAME],
+                self._parametric_studies[self.name],
             )
             self.design_points = {BASE_DP_NAME: base_design_point}
             self.session.current_study_name = self.name
@@ -220,7 +225,7 @@ class ParametricStudy:
         self._parametric_studies.rename(new_name, self.name)
         self.name = new_name
         self.design_points = {
-            k: DesignPoint(k, self._parametric_studies[self.name].design_points[k])
+            k: DesignPoint(k, self._parametric_studies[self.name])
             for k, _ in self.design_points.items()
         }
 
@@ -256,13 +261,13 @@ class ParametricStudy:
         current_study = self.get_all_studies()[self.session.current_study_name]
         if copy_design_points:
             clone_design_points = {
-                k: DesignPoint(k, self._parametric_studies[clone_name].design_points[k])
+                k: DesignPoint(k, self._parametric_studies[clone_name])
                 for k, _ in current_study.design_points.items()
             }
         else:
             base_design_point = DesignPoint(
                 BASE_DP_NAME,
-                self._parametric_studies[clone_name].design_points[BASE_DP_NAME],
+                self._parametric_studies[clone_name],
             )
             clone_design_points = {BASE_DP_NAME: base_design_point}
         clone = ParametricStudy(
@@ -346,7 +351,7 @@ class ParametricStudy:
         dp_name = set(dps_after).difference(set(dps_before)).pop()
         design_point = DesignPoint(
             dp_name,
-            self._parametric_studies[self.name].design_points[dp_name],
+            self._parametric_studies[self.name],
         )
         self.design_points[dp_name] = design_point
         return design_point
@@ -393,7 +398,7 @@ class ParametricStudy:
         new_dp_name = set(dps_after).difference(set(dps_before)).pop()
         new_dp = DesignPoint(
             new_dp_name,
-            self._parametric_studies[self.name].design_points[new_dp_name],
+            self._parametric_studies[self.name],
         )
         self.design_points[new_dp_name] = new_dp
         return new_dp
