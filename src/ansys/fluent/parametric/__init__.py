@@ -515,7 +515,7 @@ class ParametricProject:
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
                 study.design_points[dp_name] = DesignPoint(
-                    dp_name, dps_settings[dp_name]
+                    dp_name, self._parametric_studies[study_name]
                 )
 
     def save(self) -> None:
