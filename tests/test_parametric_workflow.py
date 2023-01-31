@@ -209,6 +209,16 @@ def test_parametric_workflow():
 
     assert len(study_1.design_points) == 3
 
+    ###########################################################################
+    # Set current design point to DP2
+
+    assert study_1.current_design_point.name == "Base DP"
+    try:
+        study_1.design_points["DP2"].set_as_current()
+        assert study_1.current_design_point.name == "DP2"
+    except AttributeError:
+        pass
+
     #########################################################################
     # Update all design points for study 1
 
