@@ -85,9 +85,6 @@ jobs:
     name: Documentation
     needs: [docs-style]
     runs-on: [self-hosted, pyfluent]
-    strategy:
-      matrix:
-        image-tag: [v23.1.0]
     env:
       DOC_DEPLOYMENT_IMAGE_TAG: v23.1.0
       DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
@@ -121,7 +118,7 @@ jobs:
       - name: Pull Fluent docker image
         run: make docker-pull
         env:
-          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
+          FLUENT_IMAGE_TAG: ${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
 
       - name: Retrieve pyfluent-parametric version
         run: |
@@ -133,25 +130,20 @@ jobs:
         uses: actions/cache@v3
         with:
           path: doc/source/examples
-          key: Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ matrix.image-tag }}-${{ hashFiles('examples/**') }}-${{ github.sha }}
+          key: Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}-${{ hashFiles('examples/**') }}-${{ github.sha }}
           restore-keys: |
-            Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ matrix.image-tag }}-${{ hashFiles('examples/**') }}
-
+            Examples-v${{ env.RESET_EXAMPLES_CACHE }}-${{ steps.version.outputs.PYFLUENT_PARAMETRIC_VERSION }}-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}-${{ hashFiles('examples/**') }}
       - name: Generate the documentation
         run: make build-doc
         env:
           ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
           PYFLUENT_START_INSTANCE: 0
           PYFLUENT_LAUNCH_CONTAINER: 1
-          DOCS_CNAME: fluentparametric.docs.pyansys.com
-          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
           FLUENT_IMAGE_TAG: ${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
 
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
         with:
-          name: HTML-Documentation-tag-${{ matrix.image-tag }}
-          path: doc.zip
           name: HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
           path: doc/_build/html
           retention-days: 7
@@ -186,7 +178,6 @@ jobs:
           python -m pip install -r requirements/requirements_build.txt
           python -m build
           python -m twine check dist/*
-
       - name: Upload package
         uses: actions/upload-artifact@v3
         with:
