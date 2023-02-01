@@ -19,7 +19,9 @@ env:
   # You should go up in number, if you go down (or repeat a previous value)
   # you might end up reusing a previous cache if it haven't been deleted already.
   # It applies 7 days retention policy by default.
-  RESET_EXAMPLES_CACHE: 0
+  RESET_EXAMPLES_CACHE: 0  
+  DOC_DEPLOYMENT_IMAGE_TAG: v23.1.0
+  DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
 
 jobs:
 
@@ -88,9 +90,6 @@ jobs:
     strategy:
       matrix:
         image-tag: [latest]
-    env:
-      DOC_DEPLOYMENT_IMAGE_TAG: v23.1.0
-      DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
     steps:
       - uses: actions/checkout@v3
 
