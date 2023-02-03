@@ -25,18 +25,6 @@ env:
 
 jobs:
 
-  style:
-    name: Code style
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: 3.7
-      - name: Run code style
-        run: make style
-
 
   tests:
     name: Tests and coverage
@@ -52,7 +40,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.8
+          python-version: 3.7
 
       - name: Install pyfluent-parametric
         run: make install
