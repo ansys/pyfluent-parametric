@@ -156,7 +156,6 @@ def _run_local_study_in_fluent(
     start_transcript: bool,
     capture_report_data: bool,
 ):
-
     source_table_size = len(local_study.design_point_table)
 
     def make_input_for_study(design_point_range) -> None:

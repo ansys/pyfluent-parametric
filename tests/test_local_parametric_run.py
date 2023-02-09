@@ -17,7 +17,6 @@ from ansys.fluent.parametric.local import (
 
 
 def test_local_parametric_setup():
-
     ############################################################################
     # Read the hopper/mixer case
 
