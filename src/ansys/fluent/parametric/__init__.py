@@ -666,7 +666,7 @@ class ParametricSession(ParametricStudyRegistry):
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
                     study.design_points[dp_name] = DesignPoint(
-                        dp_name, dps_settings[dp_name]
+                        dp_name, studies_settings[study_name]
                     )
                 self.studies[study_name] = study
             self.current_study_name = self._session.current_parametric_study()
