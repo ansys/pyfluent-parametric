@@ -52,12 +52,14 @@ Use a parametric session:
 >>> study2 = session1.new_study()
 >>> session2 = ParametricSession(project_filepath="nozzle_para_named.flprj")
 """
+import logging
 from pathlib import Path
 import tempfile
 from typing import Any, Dict, List, Optional
 
 import ansys.fluent.core as pyfluent
-from ansys.fluent.core import LOG
+
+logger = logging.getLogger("ansys.fluent")
 
 try:
     import importlib.metadata as importlib_metadata
@@ -212,7 +214,7 @@ class ParametricStudy:
             self.session.current_study_name = self.name
             return self
         else:
-            LOG.error("Initialize is not available.")
+            logging.error("Initialize is not available.")
 
     def rename(self, new_name: str) -> None:
         """Rename the parametric study.
@@ -279,7 +281,7 @@ class ParametricStudy:
     def delete(self) -> None:
         """Delete the parametric study."""
         if self.is_current:
-            LOG.error("Cannot delete the current study %s", self.name)
+            logging.error("Cannot delete the current study %s", self.name)
         else:
             del self._parametric_studies[self.name]
             self.session._all_studies.pop(id(self))
@@ -365,7 +367,7 @@ class ParametricStudy:
             List of design points to delete.
         """
         if self.current_design_point in design_points:
-            LOG.error(
+            logging.error(
                 "Cannot delete the current design point %s",
                 self.current_design_point.name,
             )
@@ -693,7 +695,7 @@ class ParametricSession(ParametricStudyRegistry):
         """
         study = self.studies[study_name]
         if study.is_current:
-            LOG.error("Cannot delete the current study %s", study_name)
+            logging.error("Cannot delete the current study %s", study_name)
         else:
             study.delete()
             self.studies.pop(study_name)
