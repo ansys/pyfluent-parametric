@@ -38,7 +38,7 @@ release `documentation <https://fluentparametric.docs.pyansys.com>`_.
 
 On the `PyFluent-Parametric Issues <https://github.com/pyansys/pyfluent-parametric/issues>`_,
 you can create issues to submit questions, report bugs, and request new features. To reach
-the PyAnsys support team, email `pyansys.support@ansys.com <pyansys.support@ansys.com>`_.
+the PyAnsys support team, email `pyansys.core@ansys.com <pyansys.core@ansys.com>`_.
 
 Installation
 ------------
