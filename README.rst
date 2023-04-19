@@ -34,7 +34,7 @@ workflows.
 Documentation and issues
 ------------------------
 For comprehensive information on PyFluent-Parametric, see the latest
-release `documentation <https://fluentparametric.docs.pyansys.com>`_.
+release `documentation <https://parametric.fluent.docs.pyansys.com>`_.
 
 On the `PyFluent-Parametric Issues <https://github.com/pyansys/pyfluent-parametric/issues>`_,
 you can create issues to submit questions, report bugs, and request new features. To reach
