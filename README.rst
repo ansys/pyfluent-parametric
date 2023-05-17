@@ -10,8 +10,8 @@ PyFluent-Parametric
    :target: https://pypi.org/project/ansys-fluent-parametric
    :alt: PyPI
 
-.. |GH-CI| image:: https://github.com/pyansys/pyfluent-parametric/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/pyansys/pyfluent-parametric/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys/pyfluent-parametric/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys/pyfluent-parametric/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -22,8 +22,8 @@ PyFluent-Parametric
    :target: https://github.com/psf/black
    :alt: Black
 
-.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/pyansys/pyfluent-parametric/main.svg
-   :target: https://results.pre-commit.ci/latest/github/pyansys/pyfluent-parametric/main
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/ansys/pyfluent-parametric/main.svg
+   :target: https://results.pre-commit.ci/latest/github/ansys/pyfluent-parametric/main
    :alt: pre-commit.ci status
 
 Overview
@@ -36,7 +36,7 @@ Documentation and issues
 For comprehensive information on PyFluent-Parametric, see the latest
 release `documentation <https://parametric.fluent.docs.pyansys.com>`_.
 
-On the `PyFluent-Parametric Issues <https://github.com/pyansys/pyfluent-parametric/issues>`_,
+On the `PyFluent-Parametric Issues <https://github.com/ansys/pyfluent-parametric/issues>`_,
 you can create issues to submit questions, report bugs, and request new features. To reach
 the project support team, email `pyansys.core@ansys.com <pyansys.core@ansys.com>`_.
 
@@ -53,18 +53,18 @@ Install the latest release from `PyPI
    pip install ansys-fluent-parametric
 
 Alternatively, install the latest from `GitHub
-<https://github.com/pyansys/pyfluent-parametric>`_ with:
+<https://github.com/ansys/pyfluent-parametric>`_ with:
 
 .. code:: console
 
-   pip install git+https://github.com/pyansys/pyfluent-parametric.git
+   pip install git+https://github.com/ansys/pyfluent-parametric.git
 
 If you plan on doing local *development* of PyFluent with Git, install
 with:
 
 .. code:: console
 
-   git clone https://github.com/pyansys/pyfluent-parametric.git
+   git clone https://github.com/ansys/pyfluent-parametric.git
    cd pyfluent-parametric
    pip install pip -U
    pip install -e .
