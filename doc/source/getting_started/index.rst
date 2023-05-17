@@ -14,7 +14,7 @@ page on the Ansys website.
 ***************
 Install package
 ***************
-The ``ansys-fluent-parametric`` package supports Python 3.7 through Python 3.10
+The ``ansys-fluent-parametric`` package supports Python 3.8 through Python 3.11
 on Windows and Linux.
 
 Install the latest release from `PyPi
