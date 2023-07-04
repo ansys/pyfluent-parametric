@@ -725,11 +725,11 @@ class ParametricSession(ParametricStudyRegistry):
 
     def start_transcript(self) -> None:
         """Start streaming of a Fluent transcript."""
-        self._session.start_transcript()
+        self._session.transcript.start()
 
     def stop_transcript(self) -> None:
         """Stop streaming of a Fluent transcript."""
-        self._session.stop_transcript()
+        self._session.transcript.stop()
 
 
 def _shared_parametric_study_registry():
