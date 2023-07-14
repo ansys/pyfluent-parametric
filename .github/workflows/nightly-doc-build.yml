@@ -7,7 +7,7 @@ on:
 
 env:
   DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
-  DOC_DEPLOYMENT_IMAGE_TAG: v23.1.0
+  DOC_DEPLOYMENT_IMAGE_TAG: v23.2.0
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
   PYFLUENT_TIMEOUT_FORCE_EXIT: 5
   PYFLUENT_LAUNCH_CONTAINER: 1
@@ -22,14 +22,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      # used for documentation deployment
-      - name: Get Bot Application Token
-        id: get_workflow_token
-        uses: peter-murray/workflow-application-token-action@v2
-        with:
-          application_id: ${{ secrets.BOT_APPLICATION_ID }}
-          application_private_key: ${{ secrets.BOT_APPLICATION_PRIVATE_KEY }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -65,7 +57,7 @@ jobs:
           retention-days: 7
 
       - name: Deploy
-        if: matrix.image-tag == 'v23.1.0'
+        if: matrix.image-tag == ${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
         uses: ansys/actions/doc-deploy-dev@v4
         with:
           doc-artifact-name: HTML-Documentation-tag-${{ env.DOC_DEPLOYMENT_IMAGE_TAG }}
