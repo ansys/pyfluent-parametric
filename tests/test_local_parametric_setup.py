@@ -3,19 +3,24 @@ This local parametric study workflow test performs these steps
 
 TODO
 """
+import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+import pytest
 
 from ansys.fluent.parametric.local import LocalParametricStudy
 
 ############################################################################
 
 
-def test_local_parametric_setup():
+def test_local_parametric_setup(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Read the hopper/mixer case
 
     case_filename = examples.download_file(
-        "Static_Mixer_Parameters.cas.h5", "pyfluent/static_mixer"
+        "Static_Mixer_Parameters.cas.h5",
+        "pyfluent/static_mixer",
+        return_only_filename=False,
     )
 
     local_study = LocalParametricStudy(case_filepath=case_filename)
