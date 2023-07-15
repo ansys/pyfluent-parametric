@@ -28,7 +28,8 @@ import pytest
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
 
 
-def test_parametric_workflow():
+def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Launch Fluent in 3D and double precision
 
@@ -51,7 +52,7 @@ def test_parametric_workflow():
     # Read the hopper/mixer case
 
     import_filename = examples.download_file(
-        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer"
+        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_only_filename=False
     )
 
     solver_session.tui.file.read_case(import_filename)
