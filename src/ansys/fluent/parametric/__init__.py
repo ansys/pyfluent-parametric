@@ -53,7 +53,7 @@ Use a parametric session:
 >>> session2 = ParametricSession(project_filepath="nozzle_para_named.flprj")
 """
 import logging
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 import tempfile
 from typing import Any, Dict, List, Optional
 
@@ -507,6 +507,11 @@ class ParametricProject:
         load_case : bool, optional
             Whether to load the current case. The default ``True``.
         """
+        if (
+            not PureWindowsPath(project_filepath).is_absolute()
+            or not PurePosixPath(project_filepath).is_absolute()
+        ):
+            project_filepath = str(Path(project_filepath).resolve())
         self._parametric_project.open(
             project_filename=project_filepath,
             load_case=load_case,
