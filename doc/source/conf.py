@@ -28,7 +28,6 @@ if not os.path.exists(pyvista.FIGURE_PATH):
 
 # necessary when building the sphinx gallery
 pyvista.BUILDING_GALLERY = True
-pyfluent.launcher.fluent_container.DEFAULT_CONTAINER_MOUNT_PATH = pyfluent.EXAMPLES_PATH
 
 # -- Project information -----------------------------------------------------
 
