@@ -507,6 +507,10 @@ class ParametricProject:
         load_case : bool, optional
             Whether to load the current case. The default ``True``.
         """
+        self._parametric_project.open(
+            project_filename=project_filepath,
+            load_case=load_case,
+        )
         self.project_filepath = project_filepath
         for study_name in self._parametric_studies.get_object_names():
             study = ParametricStudy(self._parametric_studies, self.session, study_name)
