@@ -51,11 +51,11 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     ############################################################################
     # Read the hopper/mixer case
 
-    import_filename = examples.download_file(
+    import_filepath = examples.download_file(
         "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_only_filename=False
     )
 
-    solver_session.tui.file.read_case(import_filename)
+    solver_session.tui.file.read_case(import_filepath)
 
     ############################################################################
     # Set number of iterations to 100

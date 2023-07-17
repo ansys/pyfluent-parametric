@@ -236,7 +236,7 @@ solver_session.exit()
 solver_session = pyfluent.launch_fluent(
     precision="double", processor_count=2, mode="solver"
 )
-project_filepath_read = "static_mixer_study.flprj"
+project_filepath_read = "/tmpdir/static_mixer_study.flprj"
 proj = ParametricProject(
     solver_session.file.parametric_project,
     solver_session.parametric_studies,

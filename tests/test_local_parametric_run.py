@@ -23,13 +23,13 @@ def test_local_parametric_setup(monkeypatch: pytest.MonkeyPatch):
     ############################################################################
     # Read the hopper/mixer case
 
-    case_filename = examples.download_file(
+    case_filepath = examples.download_file(
         "Static_Mixer_Parameters.cas.h5",
         "pyfluent/static_mixer",
         return_only_filename=False,
     )
 
-    local_study = LocalParametricStudy(case_filepath=case_filename)
+    local_study = LocalParametricStudy(case_filepath=case_filepath)
 
     for idx in range(20):
         design_point = local_study.add_design_point("dp_" + str(idx))
