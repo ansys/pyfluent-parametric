@@ -4,6 +4,7 @@ import os
 import platform
 import subprocess
 
+import ansys.fluent.core as pyfluent
 from ansys_sphinx_theme import ansys_favicon, get_version_match, pyansys_logo_black
 import numpy as np
 import pyvista
@@ -27,6 +28,7 @@ if not os.path.exists(pyvista.FIGURE_PATH):
 
 # necessary when building the sphinx gallery
 pyvista.BUILDING_GALLERY = True
+pyfluent.launcher.fluent_container.DEFAULT_CONTAINER_MOUNT_PATH = pyfluent.EXAMPLES_PATH
 
 # -- Project information -----------------------------------------------------
 
