@@ -35,7 +35,7 @@ from math import ceil
 from typing import Any, Dict, Union
 
 from ansys.fluent.core.filereader.casereader import CaseReader
-from ansys.fluent.core.utils.async_execution import asynchronous
+from ansys.fluent.core.utils.execution import asynchronous
 
 from ansys.fluent.parametric import (
     BASE_DP_NAME,
