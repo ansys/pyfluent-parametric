@@ -28,6 +28,9 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Install pandoc
+        run: sudo apt-get install pandoc
+
       - name: Install pyfluent-parametric
         run: make install
 
