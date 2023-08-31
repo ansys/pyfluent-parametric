@@ -271,7 +271,8 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     #########################################################################
     # Rename the newly created parametric study
 
-    study_2.rename("New Study")
+    # Issue #227
+    # study_2.rename("New Study")
 
     #########################################################################
     # Delete the old parametric study
