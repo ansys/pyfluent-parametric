@@ -30,7 +30,7 @@ jobs:
     name: Documentation Style Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
   
       - name: Running Vale
         uses: errata-ai/vale-action@reviewdog
@@ -53,7 +53,7 @@ jobs:
         image-tag: [v22.2.0, v23.1.0, v23.2.0, v24.1.0]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -89,7 +89,7 @@ jobs:
       DOC_DEPLOYMENT_IMAGE_TAG: v23.2.0
       DOCUMENTATION_CNAME: 'parametric.fluent.docs.pyansys.com'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -151,7 +151,7 @@ jobs:
     needs: [tests, docs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
