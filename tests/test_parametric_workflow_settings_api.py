@@ -28,13 +28,18 @@ import pytest
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
 
 
-def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
+@pytest.mark.fluent_version(">=24.1")
+def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Launch Fluent in 3D and double precision
 
     solver_session = pyfluent.launch_fluent(
-        precision="double", processor_count=2, start_transcript=False, mode="solver"
+        show_gui=True,
+        precision="double",
+        processor_count=2,
+        start_transcript=False,
+        mode="solver",
     )
 
     ############################################################################
@@ -55,74 +60,81 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
         "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_only_filename=False
     )
 
-    solver_session.tui.file.read_case(import_filepath)
+    solver_session.file.read_case(file_name=import_filepath)
 
     ############################################################################
     # Set number of iterations to 100
-    solver_session.tui.solve.set.number_of_iterations("100")
+
+    solver_session.solution.run_calculation.iter_count = 100
 
     ############################################################################
-    # Create input parameters after enabling parameter creation in the TUI:
+    # Create input parameters
     # Parameter values:
-    # Inlet1: velocity (inlet1_vel) 0.5 m/s and temperature (inlet1_temp) at 300 K
-    # Inlet2: velocity (inlet2_vel) 0.5 m/s and temperature (inlet2_temp) at 350 K
+    # Inlet1: velocity (inlet1_vel) 1 m/s and temperature (inlet1_temp) at 300 K
+    # Inlet2: velocity (inlet2_vel) 1 m/s and temperature (inlet2_temp) at 350 K
 
-    solver_session.tui.define.parameters.enable_in_TUI("yes")
+    solver_session.setup.named_expressions["inlet1_vel"] = {
+        "input_parameter": True,
+        "definition": "1 [m/s]",
+        "name": "inlet1_vel",
+    }
+    solver_session.setup.named_expressions["inlet1_temp"] = {
+        "input_parameter": True,
+        "definition": "300 [K]",
+        "name": "inlet1_temp",
+    }
+    solver_session.setup.boundary_conditions.velocity_inlet["inlet1"] = {
+        "momentum": {"velocity": {"value": "inlet1_vel"}},
+        "thermal": {"t": {"value": "inlet1_temp"}},
+    }
 
-    solver_session.tui.define.boundary_conditions.set.velocity_inlet(
-        "inlet1", (), "vmag", "yes", "inlet1_vel", 1, "quit"
-    )
-    solver_session.tui.define.boundary_conditions.set.velocity_inlet(
-        "inlet1", (), "temperature", "yes", "inlet1_temp", 300, "quit"
-    )
-    solver_session.tui.define.boundary_conditions.set.velocity_inlet(
-        "inlet2", (), "vmag", "yes", "no", "inlet2_vel", 1, "quit"
-    )
-    solver_session.tui.define.boundary_conditions.set.velocity_inlet(
-        "inlet2", (), "temperature", "yes", "no", "inlet2_temp", 350, "quit"
-    )
+    solver_session.setup.named_expressions["inlet2_vel"] = {
+        "input_parameter": True,
+        "definition": "1 [m/s]",
+        "name": "inlet2_vel",
+    }
+    solver_session.setup.named_expressions["inlet2_temp"] = {
+        "input_parameter": True,
+        "definition": "350 [K]",
+        "name": "inlet2_temp",
+    }
+    solver_session.setup.boundary_conditions.velocity_inlet["inlet2"] = {
+        "momentum": {"velocity": {"value": "inlet2_vel"}},
+        "thermal": {"t": {"value": "inlet2_temp"}},
+    }
 
     ###########################################################################
     # Create output parameters using report definitions
-    solver_session.solution.report_definitions.surface["outlet-temp-avg"] = {}
-    solver_session.solution.report_definitions.surface[
-        "outlet-temp-avg"
-    ].report_type = "surface-areaavg"
-    solver_session.solution.report_definitions.surface[
-        "outlet-temp-avg"
-    ].field = "temperature"
-    solver_session.solution.report_definitions.surface[
-        "outlet-temp-avg"
-    ].surface_names = ["outlet"]
 
-    solver_session.solution.report_definitions.surface["outlet-vel-avg"] = {}
-    solver_session.solution.report_definitions.surface[
-        "outlet-vel-avg"
-    ].report_type = "surface-areaavg"
-    solver_session.solution.report_definitions.surface[
-        "outlet-vel-avg"
-    ].field = "velocity-magnitude"
-    solver_session.solution.report_definitions.surface[
-        "outlet-vel-avg"
-    ].surface_names = ["outlet"]
+    solver_session.solution.report_definitions.surface["outlet-temp-avg"] = {
+        "report_type": "surface-areaavg",
+        "field": "temperature",
+        "surface_names": "outlet",
+    }
 
-    solver_session.tui.define.parameters.enable_in_TUI("yes")
-    solver_session.tui.define.parameters.output_parameters.create(
-        "report-definition", "outlet-temp-avg"
-    )
-    solver_session.tui.define.parameters.output_parameters.create(
-        "report-definition", "outlet-vel-avg"
-    )
+    solver_session.solution.report_definitions.surface["outlet-vel-avg"] = {
+        "report_type": "surface-areaavg",
+        "field": "velocity-magnitude",
+        "surface_names": "outlet",
+    }
+
+    solver_session.parameters.output_parameters.report_definitions["report-def-1"] = {
+        "report_definition": "outlet-temp-avg"
+    }
+    solver_session.parameters.output_parameters.report_definitions["report-def-2"] = {
+        "report_definition": "outlet-vel-avg"
+    }
 
     ###########################################################################
     # Enable convergence condition check
 
-    solver_session.tui.solve.monitors.residual.criterion_type("0")
+    solver_session.solution.monitor.residual.options.criterion_type = "absolute"
 
     ###########################################################################
     # Write case with all the settings in place
+
     case_path = str(Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5")
-    solver_session.tui.file.write_case(case_path)
+    solver_session.file.write(file_type="case", file_name=case_path)
 
     assert (
         Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5"
@@ -131,7 +143,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     ###########################################################################
     # Instantiate a parametric study from a Fluent session
 
-    study_1 = ParametricStudy(solver_session.parametric_studies).initialize()
+    study_1 = ParametricStudy(solver_session.parametric_studies)
 
     parametricStudies_exp = 1
     parametricStudies_test = len(study_1.get_all_studies().keys())
@@ -287,7 +299,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
 
     project_filepath = str(Path(temporary_resource_path) / "static_mixer_study.flprj")
 
-    solver_session.tui.file.parametric_project.save_as(project_filepath)
+    solver_session.file.parametric_project.save_as(project_filename=project_filepath)
 
     assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists() == True
 

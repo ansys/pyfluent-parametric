@@ -17,7 +17,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image-tag: [v22.2.0, v23.1.0, v23.2.0, v24.1.0]
+        include:
+          - image-tag: v22.2.0
+            version: 222
+          - image-tag: v23.1.0
+            version: 231
+          - image-tag: v23.2.0
+            version: 232
+          - image-tag: v24.1.0
+            version: 241
 
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +51,6 @@ jobs:
           FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
       - name: Test with pytest
-        run: make unittest
+        run: make unittest-${{ matrix.version }}
         env:
           FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}

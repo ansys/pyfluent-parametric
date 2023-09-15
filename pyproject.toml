@@ -43,3 +43,15 @@ source = ["ansys.fluent"]
 
 [tool.coverage.report]
 show_missing = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = """
+-v
+--cov=ansys.fluent
+--cov-report html:cov_html
+--cov-config=.coveragerc
+"""
+markers = [
+    "fluent_version(version): Run tests based on Fluent version specification",
+]
