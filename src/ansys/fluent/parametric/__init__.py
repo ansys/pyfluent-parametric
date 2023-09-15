@@ -6,7 +6,7 @@ Example
 
 Instantiate the study from a Fluent session that has already read a case:
 
->>> study1 = ParametricStudy(session.parametric_studies).initialize()
+>>> study1 = ParametricStudy(session.parametric_studies)
 
 Access and modify the input parameters of the base design point:
 
@@ -150,8 +150,8 @@ class ParametricStudy:
 
     Parameters
     ----------
-    parametric_studies :
-
+    parametric_studies : Session.parametric_studies
+        ``parametric_studies`` object of a Fluent session.
     session : Session, optional
         Connected Fluent session. The default is ``None``.
     name : str, optional
@@ -178,19 +178,6 @@ class ParametricStudy:
             self.design_points = design_points
         self.project_filepath = None
         self.session.register_study(self)
-
-    def get_all_studies(self) -> Dict[str, "ParametricStudy"]:
-        """Get all currently active studies.
-
-        Returns
-        -------
-        Dict[str, "ParametricStudy"]
-            Dictionary of all currently active studies.
-        """
-        return {v.name: v for _, v in self.session._all_studies.items()}
-
-    def initialize(self) -> "ParametricStudy":
-        """Initialize the parametric study."""
         if self._parametric_studies.initialize.is_active():
             self.project_filepath = Path(
                 tempfile.mkdtemp(
@@ -212,9 +199,18 @@ class ParametricStudy:
             )
             self.design_points = {BASE_DP_NAME: base_design_point}
             self.session.current_study_name = self.name
-            return self
         else:
             logging.error("Initialize is not available.")
+
+    def get_all_studies(self) -> Dict[str, "ParametricStudy"]:
+        """Get all currently active studies.
+
+        Returns
+        -------
+        Dict[str, "ParametricStudy"]
+            Dictionary of all currently active studies.
+        """
+        return {v.name: v for _, v in self.session._all_studies.items()}
 
     def rename(self, new_name: str) -> None:
         """Rename the parametric study.
@@ -651,7 +647,7 @@ class ParametricSession(ParametricStudyRegistry):
             self.stop_transcript()
         if case_filepath is not None:
             self._session.file.read(file_name=case_filepath, file_type="case")
-            study = ParametricStudy(self._session.parametric_studies, self).initialize()
+            study = ParametricStudy(self._session.parametric_studies, self)
             self.studies[study.name] = study
             self.project = ParametricProject(
                 parametric_project=self._session.file.parametric_project,
