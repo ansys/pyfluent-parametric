@@ -2,7 +2,6 @@ import functools
 import operator
 
 from ansys.fluent.core.launcher.launcher import FluentVersion
-from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 import pytest
 
@@ -17,23 +16,32 @@ def pytest_addoption(parser):
         metavar="VERSION",
         help="only run tests supported by Fluent version VERSION.",
     )
+    parser.addoption(
+        "--self-hosted",
+        action="store_true",
+        default=False,
+        help="only run tests that require self-hosted runners",
+    )
 
 
 def pytest_runtest_setup(item):
     version_specs = []
-    for mark in item.iter_markers(name="fluent_version"):
-        spec = mark.args[0]
-        # if a test is marked as fluent_version("latest")
-        # run with dev and release Fluent versions in nightly
-        # run with release Fluent versions in PRs
-        if spec == "latest":
-            spec = f"=={_fluent_release_version}"
-        version_specs.append(SpecifierSet(spec))
     if version_specs:
         combined_spec = functools.reduce(operator.and_, version_specs)
         version = item.config.getoption("--fluent-version")
         if version and Version(version) not in combined_spec:
             pytest.skip()
+
+    self_hosted = item.config.getoption("--self-hosted")
+    if not self_hosted and any(
+        mark.name == "self_hosted" for mark in item.iter_markers()
+    ):
+        pytest.skip()
+
+    if self_hosted and not any(
+        mark.name == "self_hosted" for mark in item.iter_markers()
+    ):
+        pytest.skip()
 
 
 @pytest.fixture(autouse=True)

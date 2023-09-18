@@ -36,6 +36,26 @@ unittest-241:
 	@pip install -r requirements/requirements_tests.txt
 	@pytest --fluent-version=24.1
 
+unittest-self-hosted-222:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=22.2 --self-hosted
+
+unittest-self-hosted-231:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=23.1 --self-hosted
+
+unittest-self-hosted-232:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=23.2 --self-hosted
+
+unittest-self-hosted-241:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=24.1 --self-hosted
+
 build-doc:
 	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
 	@pip install -r requirements/requirements_doc.txt

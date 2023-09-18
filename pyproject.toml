@@ -54,4 +54,5 @@ addopts = """
 """
 markers = [
     "fluent_version(version): Run tests based on Fluent version specification",
+    "self_hosted: Tests that will run on self-hosted machines"
 ]

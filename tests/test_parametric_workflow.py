@@ -131,7 +131,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     ###########################################################################
     # Instantiate a parametric study from a Fluent session
 
-    study_1 = ParametricStudy(solver_session.parametric_studies).initialize()
+    study_1 = ParametricStudy(solver_session.parametric_studies)
 
     parametricStudies_exp = 1
     parametricStudies_test = len(study_1.get_all_studies().keys())
