@@ -145,9 +145,7 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     study_1 = ParametricStudy(solver_session.parametric_studies)
 
-    parametricStudies_exp = 1
-    parametricStudies_test = len(study_1.get_all_studies().keys())
-    assert parametricStudies_test == parametricStudies_exp
+    assert len(study_1.get_all_studies().keys()) == 1
 
     ###########################################################################
     # Access and modify input parameters of base DP
@@ -276,9 +274,7 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     study_2 = study_1.duplicate()
     assert len(study_2.design_points) == 2
 
-    parametricStudies_exp = 2
-    parametricStudies_test = len(study_1.get_all_studies().keys())
-    assert parametricStudies_test == parametricStudies_exp
+    assert len(study_1.get_all_studies().keys()) == 2
 
     #########################################################################
     # Rename the newly created parametric study
@@ -290,9 +286,7 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     study_1.delete()
 
-    parametricStudies_exp = 1
-    parametricStudies_test = len(study_1.get_all_studies().keys())
-    assert parametricStudies_test == parametricStudies_exp
+    assert len(study_1.get_all_studies().keys()) == 1
 
     #########################################################################
     # Save the parametric project and close Fluent

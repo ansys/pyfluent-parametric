@@ -199,7 +199,7 @@ jobs:
 
   build:
     name: Build library
-    needs: [tests, docs]
+    needs: [tests, tests-self-hosted, docs]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
