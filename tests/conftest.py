@@ -1,12 +1,9 @@
 import functools
 import operator
 
-from ansys.fluent.core.launcher.launcher import FluentVersion
+from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 import pytest
-
-_fluent_versions = list(FluentVersion)
-_fluent_release_version = _fluent_versions[1]
 
 
 def pytest_addoption(parser):
@@ -26,10 +23,12 @@ def pytest_addoption(parser):
 
 def pytest_runtest_setup(item):
     version_specs = []
+    for mark in item.iter_markers(name="fluent_version"):
+        version_specs.append(SpecifierSet(mark.args[0]))
     if version_specs:
         combined_spec = functools.reduce(operator.and_, version_specs)
-        version = item.config.getoption("--fluent-version")
-        if version and Version(version) not in combined_spec:
+        run_version = item.config.getoption("--fluent-version")
+        if run_version and Version(run_version) not in combined_spec:
             pytest.skip()
 
     self_hosted = item.config.getoption("--self-hosted")
