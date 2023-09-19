@@ -167,7 +167,7 @@ class ParametricStudy:
     def __init__(
         self,
         parametric_studies,
-        session = None,
+        session=None,
         name: Optional[str] = None,
         design_points: Dict[str, DesignPoint] = None,
         initialize: Optional[bool] = True,
