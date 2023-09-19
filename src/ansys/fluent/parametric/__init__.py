@@ -160,12 +160,14 @@ class ParametricStudy:
     design_points : Dict[str, DesignPoint], optional
         Dictionary of design points under the parametric study by name.
         The default is ``None``.
+    initialize : bool, optional
+        Whether to initialize the parametric study. The default is ``True``.
     """
 
     def __init__(
         self,
         parametric_studies,
-        session=None,
+        session = None,
         name: Optional[str] = None,
         design_points: Dict[str, DesignPoint] = None,
         initialize: Optional[bool] = True,
@@ -637,6 +639,7 @@ class ParametricSession(ParametricStudyRegistry):
         project_filepath: str = None,
         launcher: Any = ParametricSessionLauncher(),
         start_transcript: bool = False,
+        initialize: bool = True,
     ):
         """Instantiate a ParametricSession.
 
@@ -651,6 +654,8 @@ class ParametricSession(ParametricStudyRegistry):
         start_transcript : bool, optional
             Whether to start streaming of a Fluent transcript. The default
             is ``False``.
+        initialize : bool, optional
+            Whether to initialize the ParametricStudy instances created. Default is ``True``.
         """
         super().__init__()
         self.studies = {}
@@ -665,7 +670,7 @@ class ParametricSession(ParametricStudyRegistry):
         if case_filepath is not None:
             self._session.file.read(file_name=case_filepath, file_type="case")
             study = ParametricStudy(
-                self._session.parametric_studies, self, initialize=True
+                self._session.parametric_studies, self, initialize=initialize
             )
             self.studies[study.name] = study
             self.project = ParametricProject(
@@ -685,7 +690,7 @@ class ParametricSession(ParametricStudyRegistry):
             studies_settings = self._session.parametric_studies
             for study_name in studies_settings.get_object_names():
                 study = ParametricStudy(
-                    studies_settings, self, study_name, initialize=True
+                    studies_settings, self, study_name, initialize=initialize
                 )
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
