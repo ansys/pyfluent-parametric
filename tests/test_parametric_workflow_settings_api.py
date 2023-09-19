@@ -23,6 +23,7 @@ import shutil
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+from ansys.fluent.core.utils.execution import timeout_loop
 import pytest
 
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
@@ -290,10 +291,15 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     project_filepath = str(Path(temporary_resource_path) / "static_mixer_study.flprj")
 
+    # Settings API save_as command is not working correctly,
+    #   see comments in issue #121 pyfluent-parametric
     # solver_session.file.parametric_project.save_as(project_filename=project_filepath)
     solver_session.tui.file.parametric_project.save_as(project_filepath)
 
-    assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists()
+    path_exists = timeout_loop(
+        (Path(temporary_resource_path) / "static_mixer_study.flprj").exists(), 10
+    )
+    assert path_exists
 
     solver_session.exit()
 
