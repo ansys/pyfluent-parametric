@@ -29,6 +29,9 @@ import pytest
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
 
 
+@pytest.mark.self_hosted
+# test not working correctly on GitHub runners, see issue #121
+# method that fails: .file.parametric_project.save_as
 @pytest.mark.fluent_version(">=24.1")
 def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
@@ -291,15 +294,9 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     project_filepath = str(Path(temporary_resource_path) / "static_mixer_study.flprj")
 
-    # Settings API save_as command is not working correctly,
-    #   see comments in issue #121 pyfluent-parametric
-    # solver_session.file.parametric_project.save_as(project_filename=project_filepath)
-    solver_session.tui.file.parametric_project.save_as(project_filepath)
+    solver_session.file.parametric_project.save_as(project_filename=project_filepath)
 
-    path_exists = timeout_loop(
-        (Path(temporary_resource_path) / "static_mixer_study.flprj").exists(), 10
-    )
-    assert path_exists
+    assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists()
 
     solver_session.exit()
 
