@@ -73,32 +73,34 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     # Inlet1: velocity (inlet1_vel) 1 m/s and temperature (inlet1_temp) at 300 K
     # Inlet2: velocity (inlet2_vel) 1 m/s and temperature (inlet2_temp) at 350 K
 
-    solver_session.setup.named_expressions["inlet1_vel"] = {
+    expressions = solver_session.setup.named_expressions
+    velocity_inlet = solver_session.setup.boundary_conditions.velocity_inlet
+
+    expressions["inlet1_vel"] = {
         "input_parameter": True,
         "definition": "1 [m/s]",
         "name": "inlet1_vel",
     }
-    solver_session.setup.named_expressions["inlet1_temp"] = {
+    expressions["inlet1_temp"] = {
         "input_parameter": True,
         "definition": "300 [K]",
         "name": "inlet1_temp",
     }
-    solver_session.setup.boundary_conditions.velocity_inlet["inlet1"] = {
+    velocity_inlet["inlet1"] = {
         "momentum": {"velocity": {"value": "inlet1_vel"}},
         "thermal": {"t": {"value": "inlet1_temp"}},
     }
-
-    solver_session.setup.named_expressions["inlet2_vel"] = {
+    expressions["inlet2_vel"] = {
         "input_parameter": True,
         "definition": "1 [m/s]",
         "name": "inlet2_vel",
     }
-    solver_session.setup.named_expressions["inlet2_temp"] = {
+    expressions["inlet2_temp"] = {
         "input_parameter": True,
         "definition": "350 [K]",
         "name": "inlet2_temp",
     }
-    solver_session.setup.boundary_conditions.velocity_inlet["inlet2"] = {
+    velocity_inlet["inlet2"] = {
         "momentum": {"velocity": {"value": "inlet2_vel"}},
         "thermal": {"t": {"value": "inlet2_temp"}},
     }
@@ -106,22 +108,23 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     ###########################################################################
     # Create output parameters using report definitions
 
-    solver_session.solution.report_definitions.surface["outlet-temp-avg"] = {
+    surface = solver_session.solution.report_definitions.surface
+    surface["outlet-temp-avg"] = {
         "report_type": "surface-areaavg",
         "field": "temperature",
         "surface_names": "outlet",
     }
-
-    solver_session.solution.report_definitions.surface["outlet-vel-avg"] = {
+    surface["outlet-vel-avg"] = {
         "report_type": "surface-areaavg",
         "field": "velocity-magnitude",
         "surface_names": "outlet",
     }
 
-    solver_session.parameters.output_parameters.report_definitions["report-def-1"] = {
+    report_definitions = solver_session.parameters.output_parameters.report_definitions
+    report_definitions["report-def-1"] = {
         "report_definition": "outlet-temp-avg"
     }
-    solver_session.parameters.output_parameters.report_definitions["report-def-2"] = {
+    report_definitions["report-def-2"] = {
         "report_definition": "outlet-vel-avg"
     }
 
@@ -138,12 +141,15 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     assert (
         Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5"
-    ).exists() == True
+    ).exists()
 
     ###########################################################################
     # Instantiate a parametric study from a Fluent session
 
     study_1 = ParametricStudy(solver_session.parametric_studies)
+
+    # remove registered studies from previous parametric runs in the current interpreter
+    study_1.reset_study_registry()
 
     assert len(study_1.get_all_studies().keys()) == 1
 
@@ -224,11 +230,9 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     # Set current design point to DP2
 
     assert study_1.current_design_point.name == "Base DP"
-    try:
-        study_1.design_points["DP2"].set_as_current()
-        assert study_1.current_design_point.name == "DP2"
-    except AttributeError:
-        pass
+
+    study_1.design_points["DP2"].set_as_current()
+    assert study_1.current_design_point.name == "DP2"
 
     #########################################################################
     # Update all design points for study 1
@@ -295,7 +299,7 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     solver_session.file.parametric_project.save_as(project_filename=project_filepath)
 
-    assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists() == True
+    assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists()
 
     solver_session.exit()
 
@@ -330,7 +334,7 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     assert (
         Path(temporary_resource_path) / "static_mixer_study_save_as.flprj"
-    ).exists() == True
+    ).exists()
 
     #########################################################################
     # Export the current project
@@ -342,14 +346,14 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     assert (
         Path(temporary_resource_path) / "static_mixer_study_export.flprj"
-    ).exists() == True
+    ).exists()
 
     #########################################################################
     # Archive the current project
 
     proj.archive()
 
-    assert (Path(temporary_resource_path) / "static_mixer_study.flprz").exists() == True
+    assert (Path(temporary_resource_path) / "static_mixer_study.flprz").exists()
 
     #########################################################################
     # Close Fluent

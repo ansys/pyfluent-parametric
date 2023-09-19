@@ -126,12 +126,15 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
 
     assert (
         Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5"
-    ).exists() == True
+    ).exists()
 
     ###########################################################################
     # Instantiate a parametric study from a Fluent session
 
     study_1 = ParametricStudy(solver_session.parametric_studies)
+
+    # remove registered studies from previous parametric runs in the current interpreter
+    study_1.reset_study_registry()
 
     parametricStudies_exp = 1
     parametricStudies_test = len(study_1.get_all_studies().keys())
@@ -289,7 +292,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
 
     solver_session.tui.file.parametric_project.save_as(project_filepath)
 
-    assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists() == True
+    assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists()
 
     solver_session.exit()
 
@@ -324,7 +327,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
 
     assert (
         Path(temporary_resource_path) / "static_mixer_study_save_as.flprj"
-    ).exists() == True
+    ).exists()
 
     #########################################################################
     # Export the current project
@@ -336,14 +339,14 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
 
     assert (
         Path(temporary_resource_path) / "static_mixer_study_export.flprj"
-    ).exists() == True
+    ).exists()
 
     #########################################################################
     # Archive the current project
 
     proj.archive()
 
-    assert (Path(temporary_resource_path) / "static_mixer_study.flprz").exists() == True
+    assert (Path(temporary_resource_path) / "static_mixer_study.flprz").exists()
 
     #########################################################################
     # Close Fluent

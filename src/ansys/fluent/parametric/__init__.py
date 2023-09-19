@@ -212,6 +212,10 @@ class ParametricStudy:
         """
         return {v.name: v for _, v in self.session._all_studies.items()}
 
+    def reset_study_registry(self):
+        self.session.clear_registry()
+        self.session.register_study(self)
+
     def rename(self, new_name: str) -> None:
         """Rename the parametric study.
 
@@ -588,6 +592,9 @@ class ParametricStudyRegistry:
 
     def register_study(self, study):
         self._all_studies[id(study)] = study
+
+    def clear_registry(self):
+        self._all_studies = {}
 
 
 class ParametricSession(ParametricStudyRegistry):
