@@ -277,7 +277,11 @@ class ParametricStudy:
             )
             clone_design_points = {BASE_DP_NAME: base_design_point}
         clone = ParametricStudy(
-            self._parametric_studies, self.session, clone_name, clone_design_points, initialize=False
+            self._parametric_studies,
+            self.session,
+            clone_name,
+            clone_design_points,
+            initialize=False,
         )
         self.session.current_study_name = clone.name
         return clone
@@ -522,7 +526,9 @@ class ParametricProject:
         )
         self.project_filepath = project_filepath
         for study_name in self._parametric_studies.get_object_names():
-            study = ParametricStudy(self._parametric_studies, self.session, study_name, initialize=False)
+            study = ParametricStudy(
+                self._parametric_studies, self.session, study_name, initialize=False
+            )
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
                 study.design_points[dp_name] = DesignPoint(
@@ -658,7 +664,9 @@ class ParametricSession(ParametricStudyRegistry):
             self.stop_transcript()
         if case_filepath is not None:
             self._session.file.read(file_name=case_filepath, file_type="case")
-            study = ParametricStudy(self._session.parametric_studies, self, initialize=False)
+            study = ParametricStudy(
+                self._session.parametric_studies, self, initialize=False
+            )
             self.studies[study.name] = study
             self.project = ParametricProject(
                 parametric_project=self._session.file.parametric_project,
@@ -676,7 +684,9 @@ class ParametricSession(ParametricStudyRegistry):
             )
             studies_settings = self._session.parametric_studies
             for study_name in studies_settings.get_object_names():
-                study = ParametricStudy(studies_settings, self, study_name, initialize=False)
+                study = ParametricStudy(
+                    studies_settings, self, study_name, initialize=False
+                )
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
                     study.design_points[dp_name] = DesignPoint(
