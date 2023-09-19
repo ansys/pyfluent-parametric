@@ -665,7 +665,7 @@ class ParametricSession(ParametricStudyRegistry):
         if case_filepath is not None:
             self._session.file.read(file_name=case_filepath, file_type="case")
             study = ParametricStudy(
-                self._session.parametric_studies, self, initialize=False
+                self._session.parametric_studies, self, initialize=True
             )
             self.studies[study.name] = study
             self.project = ParametricProject(
@@ -685,7 +685,7 @@ class ParametricSession(ParametricStudyRegistry):
             studies_settings = self._session.parametric_studies
             for study_name in studies_settings.get_object_names():
                 study = ParametricStudy(
-                    studies_settings, self, study_name, initialize=False
+                    studies_settings, self, study_name, initialize=True
                 )
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
