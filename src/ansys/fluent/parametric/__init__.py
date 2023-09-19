@@ -168,6 +168,7 @@ class ParametricStudy:
         session=None,
         name: Optional[str] = None,
         design_points: Dict[str, DesignPoint] = None,
+        initialize: Optional[bool] = True,
     ):
         self._parametric_studies = parametric_studies
         self.session = (
@@ -179,30 +180,31 @@ class ParametricStudy:
             self.design_points = design_points
         self.project_filepath = None
         self.session.register_study(self)
-        is_active = timeout_loop(self._parametric_studies.initialize.is_active, 10)
-        if is_active:
-            self.project_filepath = Path(
-                tempfile.mkdtemp(
-                    prefix="project-",
-                    suffix=".cffdb",
-                    dir=str(Path.cwd()),  # TODO: should be cwd of server
+        if initialize:
+            if self._parametric_studies.initialize.is_active():
+                self.project_filepath = Path(
+                    tempfile.mkdtemp(
+                        prefix="project-",
+                        suffix=".cffdb",
+                        dir=str(Path.cwd()),  # TODO: should be cwd of server
+                    )
                 )
-            )
-            self.project_filepath.rmdir()
-            old_study_names = self._parametric_studies.get_object_names()
-            self._parametric_studies.initialize(
-                project_filename=self.project_filepath.stem
-            )
-            new_study_names = self._parametric_studies.get_object_names()
-            self.name = set(new_study_names).difference(set(old_study_names)).pop()
-            base_design_point = DesignPoint(
-                BASE_DP_NAME,
-                self._parametric_studies[self.name],
-            )
-            self.design_points = {BASE_DP_NAME: base_design_point}
-            self.session.current_study_name = self.name
-        else:
-            logging.error("Initialize is not available.")
+                self.project_filepath.rmdir()
+                old_study_names = self._parametric_studies.get_object_names()
+                self._parametric_studies.initialize(
+                    project_filename=self.project_filepath.stem
+                )
+                new_study_names = self._parametric_studies.get_object_names()
+                self.name = set(new_study_names).difference(set(old_study_names)).pop()
+                base_design_point = DesignPoint(
+                    BASE_DP_NAME,
+                    self._parametric_studies[self.name],
+                )
+                self.design_points = {BASE_DP_NAME: base_design_point}
+                self.session.current_study_name = self.name
+            else:
+                print("ERROR: Initialize is not available.")
+                logging.error("Initialize is not available.")
 
     def get_all_studies(self) -> Dict[str, "ParametricStudy"]:
         """Get all currently active studies.
@@ -276,7 +278,7 @@ class ParametricStudy:
             )
             clone_design_points = {BASE_DP_NAME: base_design_point}
         clone = ParametricStudy(
-            self._parametric_studies, self.session, clone_name, clone_design_points
+            self._parametric_studies, self.session, clone_name, clone_design_points, initialize=False
         )
         self.session.current_study_name = clone.name
         return clone
@@ -521,7 +523,7 @@ class ParametricProject:
         )
         self.project_filepath = project_filepath
         for study_name in self._parametric_studies.get_object_names():
-            study = ParametricStudy(self._parametric_studies, self.session, study_name)
+            study = ParametricStudy(self._parametric_studies, self.session, study_name, initialize=False)
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
                 study.design_points[dp_name] = DesignPoint(
@@ -657,7 +659,7 @@ class ParametricSession(ParametricStudyRegistry):
             self.stop_transcript()
         if case_filepath is not None:
             self._session.file.read(file_name=case_filepath, file_type="case")
-            study = ParametricStudy(self._session.parametric_studies, self)
+            study = ParametricStudy(self._session.parametric_studies, self, initialize=False)
             self.studies[study.name] = study
             self.project = ParametricProject(
                 parametric_project=self._session.file.parametric_project,
@@ -675,7 +677,7 @@ class ParametricSession(ParametricStudyRegistry):
             )
             studies_settings = self._session.parametric_studies
             for study_name in studies_settings.get_object_names():
-                study = ParametricStudy(studies_settings, self, study_name)
+                study = ParametricStudy(studies_settings, self, study_name, initialize=False)
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
                     study.design_points[dp_name] = DesignPoint(
