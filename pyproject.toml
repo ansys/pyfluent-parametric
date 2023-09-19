@@ -51,6 +51,8 @@ addopts = """
 --cov=ansys.fluent
 --cov-report html:cov_html
 --cov-config=.coveragerc
+--durations=0
+--show-capture=all
 """
 markers = [
     "fluent_version(version): Run tests based on Fluent version specification",
