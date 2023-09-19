@@ -58,6 +58,7 @@ import tempfile
 from typing import Any, Dict, List, Optional
 
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core.utils.execution import timeout_loop
 
 logger = logging.getLogger("ansys.fluent")
 
@@ -178,7 +179,8 @@ class ParametricStudy:
             self.design_points = design_points
         self.project_filepath = None
         self.session.register_study(self)
-        if self._parametric_studies.initialize.is_active():
+        is_active = timeout_loop(self._parametric_studies.initialize.is_active, 10)
+        if is_active:
             self.project_filepath = Path(
                 tempfile.mkdtemp(
                     prefix="project-",
@@ -213,6 +215,7 @@ class ParametricStudy:
         return {v.name: v for _, v in self.session._all_studies.items()}
 
     def reset_study_registry(self):
+        """Reset parametric studies registry."""
         self.session.clear_registry()
         self.session.register_study(self)
 

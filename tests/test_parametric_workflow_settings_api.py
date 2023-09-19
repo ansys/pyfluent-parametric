@@ -35,7 +35,6 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     # Launch Fluent in 3D and double precision
 
     solver_session = pyfluent.launch_fluent(
-        show_gui=True,
         precision="double",
         processor_count=2,
         start_transcript=False,
