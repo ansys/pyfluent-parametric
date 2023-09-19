@@ -203,7 +203,6 @@ class ParametricStudy:
                 self.design_points = {BASE_DP_NAME: base_design_point}
                 self.session.current_study_name = self.name
             else:
-                print("ERROR: Initialize is not available.")
                 logging.error("Initialize is not available.")
 
     def get_all_studies(self) -> Dict[str, "ParametricStudy"]:
