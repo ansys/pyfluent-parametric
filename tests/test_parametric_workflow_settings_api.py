@@ -23,7 +23,6 @@ import shutil
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
-from ansys.fluent.core.utils.execution import timeout_loop
 import pytest
 
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
