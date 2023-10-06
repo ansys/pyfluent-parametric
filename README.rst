@@ -42,8 +42,8 @@ the project support team, email `pyansys.core@ansys.com <pyansys.core@ansys.com>
 
 Installation
 ------------
-The ``ansys-fluent-parametric`` package currently supports Python 3.8 through Python
-3.11 on Windows and Linux.
+The ``ansys-fluent-parametric`` package currently supports Python 3.9 through Python
+3.12 on Windows and Linux.
 
 Install the latest release from `PyPI
 <https://pypi.org/project/ansys-fluent-parametric/>`_ with:
