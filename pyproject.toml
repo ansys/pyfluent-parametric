@@ -5,13 +5,13 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
 name = "ansys-fluent-parametric"
-version = "0.7.dev0"
+version = "0.9.dev0"
 description = "A python wrapper for Ansys Fluent parametric workflows"
 license = "MIT"
 authors = ["ANSYS, Inc. <ansys.support@ansys.com>"]
 maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
 readme = "README.rst"
-repository = "https://github.com/pyansys/pyfluent-parametric"
+repository = "https://github.com/ansys/pyfluent-parametric"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
@@ -23,10 +23,15 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4.0"
+python = ">=3.8,<4.0"
 importlib-metadata = {version = "^4.0", python = "<3.8"}
-ansys-fluent-core = "~=0.12.dev0"
+ansys-fluent-core = "~=0.18.dev0"
 h5py = ">=3.7.0"
+
+[tool.poetry.urls]
+"Documentation" = "https://parametric.fluent.docs.pyansys.com/"
+"Source" = "https://github.com/ansys/pyfluent-parametric"
+"Tracker" = "https://github.com/ansys/pyfluent-parametric/issues"
 
 [tool.black]
 line-length = 88
@@ -43,3 +48,18 @@ source = ["ansys.fluent"]
 
 [tool.coverage.report]
 show_missing = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = """
+-v
+--cov=ansys.fluent
+--cov-report html:cov_html
+--cov-config=.coveragerc
+--durations=0
+--show-capture=all
+"""
+markers = [
+    "fluent_version(version): Run tests based on Fluent version specification",
+    "self_hosted: Tests that will run on self-hosted machines"
+]

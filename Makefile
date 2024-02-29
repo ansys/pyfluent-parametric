@@ -16,10 +16,45 @@ docker-pull:
 	@pip install docker
 	@bash .ci/pull_fluent_image.sh
 
-unittest:
+unittest-222:
 	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
 	@pip install -r requirements/requirements_tests.txt
-	@pytest -v --cov=ansys.fluent --cov-report html:cov_html --cov-config=.coveragerc
+	@pytest --fluent-version=22.2
+
+unittest-231:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=23.1
+
+unittest-232:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=23.2
+
+unittest-241:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=24.1
+
+unittest-self-hosted-222:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=22.2 --self-hosted
+
+unittest-self-hosted-231:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=23.1 --self-hosted
+
+unittest-self-hosted-232:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=23.2 --self-hosted
+
+unittest-self-hosted-241:
+	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
+	@pip install -r requirements/requirements_tests.txt
+	@pytest --fluent-version=24.1 --self-hosted
 
 build-doc:
 	@sudo rm -rf /home/ansys/.local/share/ansys_fluent_core/examples/*
