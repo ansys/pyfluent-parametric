@@ -10,7 +10,6 @@ from ansys.fluent.parametric import ParametricSession, ParametricSessionLauncher
 
 
 def test_parametric_project():
-
     """
 
     Use Case 3: Parametric Study Test
