@@ -5,7 +5,6 @@ from collections.abc import Mapping, MutableMapping
 from typing import Iterator, Union
 
 from ansys.fluent.core.services.scheme_eval import Symbol
-from ansys.fluent.core.session import Session
 
 V = Union[int, float, str]
 
@@ -63,8 +62,11 @@ class _InputParametersSchemeImpl(MutableMapping):
         self._unit_label_getter = unit_label_getter
 
     def _get_parameter_names(self):
-        return self._scheme_eval(
-            "(send (get expressions-package named-expression-manager) get-names)"
+        return (
+            self._scheme_eval(
+                "(send (get expressions-package named-expression-manager) get-names)"
+            )
+            or []
         )
 
     def __setitem__(self, name: str, value: V) -> None:
@@ -105,7 +107,7 @@ class InputParameters(MutableMapping):
 
     Parameters
     ----------
-    session : Session
+    session :
         Connected Fluent session.
 
     Examples
@@ -131,12 +133,12 @@ class InputParameters(MutableMapping):
 
     """
 
-    def __init__(self, session: Session):
+    def __init__(self, session):
         """Initialize input parameters.
 
         Parameters
         ----------
-        session : Session
+        session :
         Connected Fluent session.
         """
         self._session = session
@@ -163,12 +165,12 @@ class InputParameters(MutableMapping):
             Unit label of the Fluent input parameter.
 
         """
-        value = self[name]
-        value_split = value.split(maxsplit=1)
+        value = str(self[name])
+        value_split = value.split("[", maxsplit=1)
         if len(value_split) == 1:
             return ""
         else:
-            return value_split[1].lstrip("[").rstrip("]")
+            return value_split[-1].strip().rstrip("]")
 
     def __setitem__(self, name: str, value: V) -> None:
         """Set value of an input parameter.
@@ -245,7 +247,7 @@ class OutputParameters(Mapping):
 
     Parameters
     ----------
-    session : Session
+    session :
         Connected Fluent session.
 
     Examples
@@ -258,19 +260,22 @@ class OutputParameters(Mapping):
 
     """
 
-    def __init__(self, session: Session):
+    def __init__(self, session):
         """Initialize InputParameters.
 
         Parameters
         ----------
-        session : Session
+        session :
         Connected Fluent session.
         """
         self._session = session
 
     def _get_parameter_names(self):
-        return self._session.scheme_eval.scheme_eval(
-            "(map (lambda (p) (send p get-name)) (get-all-output-parameters))"
+        return (
+            self._session.scheme_eval.scheme_eval(
+                "(map (lambda (p) (send p get-name)) (get-all-output-parameters))"
+            )
+            or []
         )
 
     def _get_unit_label(self, name: str) -> str:

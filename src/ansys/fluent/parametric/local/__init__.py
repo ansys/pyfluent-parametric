@@ -35,7 +35,7 @@ from math import ceil
 from typing import Any, Dict, Union
 
 from ansys.fluent.core.filereader.casereader import CaseReader
-from ansys.fluent.core.utils.async_execution import asynchronous
+from ansys.fluent.core.utils.execution import asynchronous
 
 from ansys.fluent.parametric import (
     BASE_DP_NAME,
@@ -156,7 +156,6 @@ def _run_local_study_in_fluent(
     start_transcript: bool,
     capture_report_data: bool,
 ):
-
     source_table_size = len(local_study.design_point_table)
 
     def make_input_for_study(design_point_range) -> None:
