@@ -29,6 +29,14 @@ def test_input_output_parameters():
     assert inp["inlet_pressure"] == "90001 [Pa]"
     assert inp.get_unit_label("inlet_pressure") == "Pa"
 
+    inp["inlet_pressure"] = "90002[Pa]"
+    assert inp["inlet_pressure"] == "90002[Pa]"
+    assert inp.get_unit_label("inlet_pressure") == "Pa"
+
+    inp["inlet_pressure"] = 90003
+    assert inp["inlet_pressure"] == "90003 [Pa]"
+    assert inp.get_unit_label("inlet_pressure") == "Pa"
+
     outp = OutputParameters(solver_session)
     assert len(outp) == 1
     assert outp["mass-outlet-op"] == "0.0 [kg/s]"

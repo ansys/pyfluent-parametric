@@ -8,7 +8,9 @@ TODO
 
 from math import inf
 
+import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+import pytest
 
 from ansys.fluent.parametric.local import (
     LocalParametricStudy,
@@ -16,15 +18,19 @@ from ansys.fluent.parametric.local import (
 )
 
 
-def test_local_parametric_setup():
+@pytest.mark.self_hosted
+def test_local_parametric_run(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Read the hopper/mixer case
 
-    case_filename = examples.download_file(
-        "Static_Mixer_Parameters.cas.h5", "pyfluent/static_mixer"
+    case_filepath = examples.download_file(
+        "Static_Mixer_Parameters.cas.h5",
+        "pyfluent/static_mixer",
+        return_only_filename=False,
     )
 
-    local_study = LocalParametricStudy(case_filepath=case_filename)
+    local_study = LocalParametricStudy(case_filepath=case_filepath)
 
     for idx in range(20):
         design_point = local_study.add_design_point("dp_" + str(idx))

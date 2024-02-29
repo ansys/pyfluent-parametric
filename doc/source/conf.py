@@ -19,7 +19,7 @@ pyvista.set_error_output_file("errors.txt")
 pyvista.OFF_SCREEN = True
 
 # must be less than or equal to the XVFB window size
-pyvista.rcParams["window_size"] = np.array([1024, 768])
+pyvista.global_theme.window_size = np.array([1024, 768])
 
 # Save figures in specified directory
 pyvista.FIGURE_PATH = os.path.join(os.path.abspath("./images/"), "auto-generated/")
@@ -28,7 +28,7 @@ if not os.path.exists(pyvista.FIGURE_PATH):
 
 # necessary when building the sphinx gallery
 pyvista.BUILDING_GALLERY = True
-pyfluent.BUILDING_GALLERY = True
+pyfluent.launcher.fluent_container.DEFAULT_CONTAINER_MOUNT_PATH = pyfluent.EXAMPLES_PATH
 
 # -- Project information -----------------------------------------------------
 
