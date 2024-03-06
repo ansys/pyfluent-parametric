@@ -59,7 +59,7 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     # Read the hopper/mixer case
 
     import_filepath = examples.download_file(
-        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_only_filename=False
+        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer"
     )
 
     solver_session.file.read_case(file_name=import_filepath)
