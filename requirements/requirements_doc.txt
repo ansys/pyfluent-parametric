@@ -1,5 +1,5 @@
 Sphinx==5.1.0
-jupyter_sphinx==0.4.0
+jupyter_sphinx==0.5.3
 numpydoc==1.4.0
 ansys-sphinx-theme==0.8.0
 pypandoc==1.8.1
