@@ -10,6 +10,7 @@ def test_parametric_session(monkeypatch: pytest.MonkeyPatch):
     project_filepath = examples.download_file(
         "project-elbow-param.flprz",
         "pyfluent/mixing_elbow",
+        return_only_filename=False,
     )
     session = ParametricSession(project_filepath=project_filepath, initialize=False)
     assert "Static_Mixer_main-Solve" in session.studies

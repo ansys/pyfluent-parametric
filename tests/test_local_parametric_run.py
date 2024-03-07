@@ -27,6 +27,7 @@ def test_local_parametric_run(monkeypatch: pytest.MonkeyPatch):
     case_filepath = examples.download_file(
         "Static_Mixer_Parameters.cas.h5",
         "pyfluent/static_mixer",
+        return_only_filename=False,
     )
 
     local_study = LocalParametricStudy(case_filepath=case_filepath)
