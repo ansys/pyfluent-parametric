@@ -48,10 +48,3 @@ def run_before_each_test(
     monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
 ) -> None:
     monkeypatch.setenv("PYFLUENT_TEST_NAME", request.node.name)
-
-
-PYTEST_RELATIVE_TOLERANCE = 1e-3
-
-
-def pytest_approx(expected):
-    return pytest.approx(expected=expected, rel=PYTEST_RELATIVE_TOLERANCE)
