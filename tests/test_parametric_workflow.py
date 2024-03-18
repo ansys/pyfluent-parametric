@@ -173,7 +173,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     }
     base_DP_output_tested = study_1.design_points["Base DP"].output_parameters
 
-    assert base_DP_output_tested == pytest.approx(base_DP_output_expected)
+    assert base_DP_output_tested == pytest_approx(base_DP_output_expected)
 
     ###########################################################################
     # Add a new design point
@@ -240,9 +240,9 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     DP1_output_tested = study_1.design_points["DP1"].output_parameters
     DP2_output_tested = study_1.design_points["DP2"].output_parameters
 
-    assert BaseDP_output_tested == pytest.approx(BaseDP_output_expected)
-    assert DP1_output_tested == pytest.approx(DP1_output_expected)
-    assert DP2_output_tested == pytest.approx(DP2_output_expected)
+    assert BaseDP_output_tested == pytest_approx(BaseDP_output_expected)
+    assert DP1_output_tested == pytest_approx(DP1_output_expected)
+    assert DP2_output_tested == pytest_approx(DP2_output_expected)
     assert len(study_1.design_points) == 3
 
     ###############################################################################
