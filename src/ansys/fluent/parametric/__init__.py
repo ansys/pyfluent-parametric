@@ -6,7 +6,7 @@ Example
 
 Instantiate the study from a Fluent session that has already read a case:
 
->>> study1 = ParametricStudy(session.parametric_studies).initialize()
+>>> study1 = ParametricStudy(session.parametric_studies)
 
 Access and modify the input parameters of the base design point:
 
@@ -150,8 +150,8 @@ class ParametricStudy:
 
     Parameters
     ----------
-    parametric_studies :
-
+    parametric_studies : Session.parametric_studies
+        ``parametric_studies`` object of a Fluent session.
     session : Session, optional
         Connected Fluent session. The default is ``None``.
     name : str, optional
@@ -159,6 +159,8 @@ class ParametricStudy:
     design_points : Dict[str, DesignPoint], optional
         Dictionary of design points under the parametric study by name.
         The default is ``None``.
+    initialize : bool, optional
+        Whether to initialize the parametric study. The default is ``True``.
     """
 
     def __init__(
@@ -167,6 +169,7 @@ class ParametricStudy:
         session=None,
         name: Optional[str] = None,
         design_points: Dict[str, DesignPoint] = None,
+        initialize: Optional[bool] = True,
     ):
         self._parametric_studies = parametric_studies
         self.session = (
@@ -178,6 +181,30 @@ class ParametricStudy:
             self.design_points = design_points
         self.project_filepath = None
         self.session.register_study(self)
+        if initialize:
+            if self._parametric_studies.initialize.is_active():
+                self.project_filepath = Path(
+                    tempfile.mkdtemp(
+                        prefix="project-",
+                        suffix=".cffdb",
+                        dir=str(Path.cwd()),  # TODO: should be cwd of server
+                    )
+                )
+                self.project_filepath.rmdir()
+                old_study_names = self._parametric_studies.get_object_names()
+                self._parametric_studies.initialize(
+                    project_filename=self.project_filepath.stem
+                )
+                new_study_names = self._parametric_studies.get_object_names()
+                self.name = set(new_study_names).difference(set(old_study_names)).pop()
+                base_design_point = DesignPoint(
+                    BASE_DP_NAME,
+                    self._parametric_studies[self.name],
+                )
+                self.design_points = {BASE_DP_NAME: base_design_point}
+                self.session.current_study_name = self.name
+            else:
+                logging.error("Initialize is not available.")
 
     def get_all_studies(self) -> Dict[str, "ParametricStudy"]:
         """Get all currently active studies.
@@ -189,32 +216,10 @@ class ParametricStudy:
         """
         return {v.name: v for _, v in self.session._all_studies.items()}
 
-    def initialize(self) -> "ParametricStudy":
-        """Initialize the parametric study."""
-        if self._parametric_studies.initialize.is_active():
-            self.project_filepath = Path(
-                tempfile.mkdtemp(
-                    prefix="project-",
-                    suffix=".cffdb",
-                    dir=str(Path.cwd()),  # TODO: should be cwd of server
-                )
-            )
-            self.project_filepath.rmdir()
-            old_study_names = self._parametric_studies.get_object_names()
-            self._parametric_studies.initialize(
-                project_filename=self.project_filepath.stem
-            )
-            new_study_names = self._parametric_studies.get_object_names()
-            self.name = set(new_study_names).difference(set(old_study_names)).pop()
-            base_design_point = DesignPoint(
-                BASE_DP_NAME,
-                self._parametric_studies[self.name],
-            )
-            self.design_points = {BASE_DP_NAME: base_design_point}
-            self.session.current_study_name = self.name
-            return self
-        else:
-            logging.error("Initialize is not available.")
+    def reset_study_registry(self):
+        """Reset parametric studies registry."""
+        self.session.clear_registry()
+        self.session.register_study(self)
 
     def rename(self, new_name: str) -> None:
         """Rename the parametric study.
@@ -224,7 +229,7 @@ class ParametricStudy:
         new_name : str
             New name.
         """
-        self._parametric_studies.rename(new_name, self.name)
+        self._parametric_studies[self.name].rename(new_name)
         self.name = new_name
         self.design_points = {
             k: DesignPoint(k, self._parametric_studies[self.name])
@@ -273,7 +278,11 @@ class ParametricStudy:
             )
             clone_design_points = {BASE_DP_NAME: base_design_point}
         clone = ParametricStudy(
-            self._parametric_studies, self.session, clone_name, clone_design_points
+            self._parametric_studies,
+            self.session,
+            clone_name,
+            clone_design_points,
+            initialize=False,
         )
         self.session.current_study_name = clone.name
         return clone
@@ -518,7 +527,9 @@ class ParametricProject:
         )
         self.project_filepath = project_filepath
         for study_name in self._parametric_studies.get_object_names():
-            study = ParametricStudy(self._parametric_studies, self.session, study_name)
+            study = ParametricStudy(
+                self._parametric_studies, self.session, study_name, initialize=False
+            )
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
                 study.design_points[dp_name] = DesignPoint(
@@ -593,6 +604,9 @@ class ParametricStudyRegistry:
     def register_study(self, study):
         self._all_studies[id(study)] = study
 
+    def clear_registry(self):
+        self._all_studies = {}
+
 
 class ParametricSession(ParametricStudyRegistry):
     """Provides for encapsulating studies and projects.
@@ -624,6 +638,7 @@ class ParametricSession(ParametricStudyRegistry):
         project_filepath: str = None,
         launcher: Any = ParametricSessionLauncher(),
         start_transcript: bool = False,
+        initialize: bool = True,
     ):
         """Instantiate a ParametricSession.
 
@@ -638,6 +653,8 @@ class ParametricSession(ParametricStudyRegistry):
         start_transcript : bool, optional
             Whether to start streaming of a Fluent transcript. The default
             is ``False``.
+        initialize : bool, optional
+            Whether to initialize the ParametricStudy instances created. Default is ``True``.
         """
         super().__init__()
         self.studies = {}
@@ -651,7 +668,9 @@ class ParametricSession(ParametricStudyRegistry):
             self.stop_transcript()
         if case_filepath is not None:
             self._session.file.read(file_name=case_filepath, file_type="case")
-            study = ParametricStudy(self._session.parametric_studies, self).initialize()
+            study = ParametricStudy(
+                self._session.parametric_studies, self, initialize=initialize
+            )
             self.studies[study.name] = study
             self.project = ParametricProject(
                 parametric_project=self._session.file.parametric_project,
@@ -669,7 +688,9 @@ class ParametricSession(ParametricStudyRegistry):
             )
             studies_settings = self._session.parametric_studies
             for study_name in studies_settings.get_object_names():
-                study = ParametricStudy(studies_settings, self, study_name)
+                study = ParametricStudy(
+                    studies_settings, self, study_name, initialize=initialize
+                )
                 dps_settings = studies_settings[study_name].design_points
                 for dp_name in dps_settings.get_object_names():
                     study.design_points[dp_name] = DesignPoint(

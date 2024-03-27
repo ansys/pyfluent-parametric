@@ -21,8 +21,12 @@ env:
   # It applies 7 days retention policy by default.
   RESET_EXAMPLES_CACHE: 0
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
+  MAIN_PYTHON_VERSION: '3.9'
   PYFLUENT_TIMEOUT_FORCE_EXIT: 5
   PYFLUENT_LAUNCH_CONTAINER: 1
+  PYFLUENT_LOGGING: 'DEBUG'
+  PYFLUENT_WATCHDOG_DEBUG: 'OFF'
+  PYFLUENT_HIDE_LOG_SECRETS: 1
 
 jobs:
 
@@ -46,11 +50,21 @@ jobs:
 
   tests:
     name: Tests and coverage
-    runs-on: [self-hosted, pyfluent]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        image-tag: [v22.2.0, v23.1.0, v23.2.0, v24.1.0]
+        include:
+          - image-tag: v22.2.0
+            version: 222
+          - image-tag: v23.1.0
+            version: 231
+          - image-tag: v23.2.0
+            version: 232
+          - image-tag: v24.1.0
+            version: 241
+          - image-tag: v24.2.0
+            version: 242
 
     steps:
       - uses: actions/checkout@v4
@@ -58,13 +72,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Install pyfluent-parametric
         run: make install
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ secrets.GH_USERNAME }}
@@ -76,10 +90,55 @@ jobs:
           FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
       - name: Test with pytest
-        run: make unittest
+        run: make unittest-${{ matrix.version }}
         env:
           FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
+  tests-self-hosted:
+    name: Self-hosted tests and coverage
+    runs-on: [self-hosted, pyfluent]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image-tag: v22.2.0
+            version: 222
+          - image-tag: v23.1.0
+            version: 231
+          - image-tag: v23.2.0
+            version: 232
+          - image-tag: v24.1.0
+            version: 241
+          - image-tag: v24.2.0
+            version: 242
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Install pyfluent-parametric
+        run: make install
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GH_USERNAME }}
+          password: ${{ secrets.REPO_DOWNLOAD_PAT }}
+
+      - name: Pull Fluent docker image
+        run: make docker-pull
+        env:
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
+
+      - name: Test with pytest
+        run: make unittest-self-hosted-${{ matrix.version }}
+        env:
+          FLUENT_IMAGE_TAG: ${{ matrix.image-tag }}
 
   docs:
     name: Documentation
@@ -94,13 +153,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Install pyfluent-parametric
         run: make install
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ secrets.GH_USERNAME }}
@@ -148,7 +207,7 @@ jobs:
 
   build:
     name: Build library
-    needs: [tests, docs]
+    needs: [tests, tests-self-hosted, docs]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -156,7 +215,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Add version information
         run: make version-info
@@ -186,7 +245,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.9
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - uses: actions/download-artifact@v3
 

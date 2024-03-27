@@ -35,7 +35,7 @@ solver_session = pyfluent.launch_fluent(
 # Download the files for this example and read the case for the static mixer.
 
 import_filename = examples.download_file(
-    "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_only_filename=False
+    "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_without_path=False
 )
 
 solver_session.tui.file.read_case(import_filename)
@@ -130,7 +130,7 @@ solver_session.tui.file.write_case(case_path)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Initialize a parametric design point study from a Fluent session.
 
-study_1 = ParametricStudy(solver_session.parametric_studies).initialize()
+study_1 = ParametricStudy(solver_session.parametric_studies)
 
 ###############################################################################
 # .. image:: /_static/DP_table_011.png

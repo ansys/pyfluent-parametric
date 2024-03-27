@@ -42,7 +42,7 @@ the project support team, email `pyansys.core@ansys.com <pyansys.core@ansys.com>
 
 Installation
 ------------
-The ``ansys-fluent-parametric`` package currently supports Python 3.8 through Python
+The ``ansys-fluent-parametric`` package currently supports Python 3.9 through Python
 3.11 on Windows and Linux.
 
 Install the latest release from `PyPI
@@ -89,7 +89,7 @@ the PyFluent-Parametric documentation.
    import ansys.fluent.core as pyfluent
    from ansys.fluent.parametric import ParametricStudy
    solver_session = pyfluent.launch_fluent(mode="solver")
-   study = ParametricStudy(solver_session.parametric_studies).initialize()
+   study = ParametricStudy(solver_session.parametric_studies)
    input_parameters_update = study.design_points["Base DP"].input_parameters
    input_parameters_update["inlet1_vel"] = 0.5
    study.design_points["Base DP"].input_parameters = input_parameters_update

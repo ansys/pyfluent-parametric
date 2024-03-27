@@ -166,11 +166,11 @@ class InputParameters(MutableMapping):
 
         """
         value = str(self[name])
-        value_split = value.split(maxsplit=1)
+        value_split = value.split("[", maxsplit=1)
         if len(value_split) == 1:
             return ""
         else:
-            return value_split[1].lstrip("[").rstrip("]")
+            return value_split[-1].strip().rstrip("]")
 
     def __setitem__(self, name: str, value: V) -> None:
         """Set value of an input parameter.
