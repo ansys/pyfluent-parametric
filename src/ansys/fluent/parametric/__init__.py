@@ -52,6 +52,7 @@ Use a parametric session:
 >>> study2 = session1.new_study()
 >>> session2 = ParametricSession(project_filepath="nozzle_para_named.flprj")
 """
+
 import logging
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import tempfile
