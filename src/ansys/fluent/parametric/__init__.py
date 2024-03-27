@@ -229,7 +229,7 @@ class ParametricStudy:
         new_name : str
             New name.
         """
-        self._parametric_studies.rename(new_name, self.name)
+        self._parametric_studies[self.name].rename(new_name)
         self.name = new_name
         self.design_points = {
             k: DesignPoint(k, self._parametric_studies[self.name])
