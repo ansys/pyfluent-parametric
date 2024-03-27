@@ -26,6 +26,7 @@ from ansys.fluent.core import examples
 import pytest
 
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
+from utils import pytest_approx
 
 
 def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
@@ -52,7 +53,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     # Read the hopper/mixer case
 
     import_filepath = examples.download_file(
-        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_only_filename=False
+        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_without_path=False
     )
 
     solver_session.tui.file.read_case(import_filepath)
@@ -173,7 +174,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     }
     base_DP_output_tested = study_1.design_points["Base DP"].output_parameters
 
-    assert base_DP_output_tested == pytest.approx(base_DP_output_expected)
+    assert base_DP_output_tested == pytest_approx(base_DP_output_expected)
 
     ###########################################################################
     # Add a new design point
@@ -240,9 +241,9 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     DP1_output_tested = study_1.design_points["DP1"].output_parameters
     DP2_output_tested = study_1.design_points["DP2"].output_parameters
 
-    assert BaseDP_output_tested == pytest.approx(BaseDP_output_expected)
-    assert DP1_output_tested == pytest.approx(DP1_output_expected)
-    assert DP2_output_tested == pytest.approx(DP2_output_expected)
+    assert BaseDP_output_tested == pytest_approx(BaseDP_output_expected)
+    assert DP1_output_tested == pytest_approx(DP1_output_expected)
+    assert DP2_output_tested == pytest_approx(DP2_output_expected)
     assert len(study_1.design_points) == 3
 
     ###############################################################################

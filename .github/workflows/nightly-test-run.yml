@@ -7,6 +7,7 @@ on:
 
 env:
   ANSYSLMD_LICENSE_FILE: ${{ format('1055@{0}', secrets.LICENSE_SERVER) }}
+  MAIN_PYTHON_VERSION: '3.9'
   PYFLUENT_TIMEOUT_FORCE_EXIT: 5
   PYFLUENT_LAUNCH_CONTAINER: 1
   PYFLUENT_LOGGING: 'DEBUG'
@@ -29,6 +30,8 @@ jobs:
             version: 232
           - image-tag: v24.1.0
             version: 241
+          - image-tag: v24.2.0
+            version: 242
 
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +39,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Install pyfluent-parametric
         run: make install
@@ -80,6 +83,8 @@ jobs:
             version: 232
           - image-tag: v24.1.0
             version: 241
+          - image-tag: v24.2.0
+            version: 242
 
     steps:
       - uses: actions/checkout@v3
@@ -87,7 +92,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Install pyfluent-parametric
         run: make install
