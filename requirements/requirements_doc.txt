@@ -14,6 +14,6 @@ matplotlib==3.8.3
 pandas==2.2.1
 pypandoc==1.13
 pyside6==6.6.3
-pyvista==0.43.3
+pyvista==0.43.4
 pyvistaqt==0.11.0
 vtk==9.3.0
