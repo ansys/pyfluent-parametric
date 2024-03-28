@@ -52,6 +52,7 @@ Use a parametric session:
 >>> study2 = session1.new_study()
 >>> session2 = ParametricSession(project_filepath="nozzle_para_named.flprj")
 """
+
 import logging
 from pathlib import Path, PurePosixPath, PureWindowsPath
 import tempfile
@@ -229,7 +230,7 @@ class ParametricStudy:
         new_name : str
             New name.
         """
-        self._parametric_studies.rename(new_name, self.name)
+        self._parametric_studies[self.name].rename(new_name)
         self.name = new_name
         self.design_points = {
             k: DesignPoint(k, self._parametric_studies[self.name])

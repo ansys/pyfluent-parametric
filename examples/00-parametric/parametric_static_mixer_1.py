@@ -6,6 +6,7 @@ This example shows how you can use the parametric study workflow to analyze a
 static mixer.
 
 """
+
 from pathlib import Path
 
 import ansys.fluent.core as pyfluent
@@ -35,7 +36,7 @@ solver_session = pyfluent.launch_fluent(
 # Download the files for this example and read the case for the static mixer.
 
 import_filename = examples.download_file(
-    "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_only_filename=False
+    "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_without_path=False
 )
 
 solver_session.tui.file.read_case(import_filename)
@@ -81,23 +82,23 @@ solver_session.tui.define.boundary_conditions.set.velocity_inlet(
 # using report definitions.
 
 solver_session.solution.report_definitions.surface["outlet-temp-avg"] = {}
-solver_session.solution.report_definitions.surface[
-    "outlet-temp-avg"
-].report_type = "surface-areaavg"
-solver_session.solution.report_definitions.surface[
-    "outlet-temp-avg"
-].field = "temperature"
+solver_session.solution.report_definitions.surface["outlet-temp-avg"].report_type = (
+    "surface-areaavg"
+)
+solver_session.solution.report_definitions.surface["outlet-temp-avg"].field = (
+    "temperature"
+)
 solver_session.solution.report_definitions.surface["outlet-temp-avg"].surface_names = [
     "outlet"
 ]
 
 solver_session.solution.report_definitions.surface["outlet-vel-avg"] = {}
-solver_session.solution.report_definitions.surface[
-    "outlet-vel-avg"
-].report_type = "surface-areaavg"
-solver_session.solution.report_definitions.surface[
-    "outlet-vel-avg"
-].field = "velocity-magnitude"
+solver_session.solution.report_definitions.surface["outlet-vel-avg"].report_type = (
+    "surface-areaavg"
+)
+solver_session.solution.report_definitions.surface["outlet-vel-avg"].field = (
+    "velocity-magnitude"
+)
 solver_session.solution.report_definitions.surface["outlet-vel-avg"].surface_names = [
     "outlet"
 ]
