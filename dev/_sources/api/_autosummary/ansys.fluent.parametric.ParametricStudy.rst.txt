@@ -1,0 +1,87 @@
+﻿ansys.fluent.parametric.ParametricStudy
+=======================================
+
+.. currentmodule:: ansys.fluent.parametric
+
+.. autoclass:: ParametricStudy
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ParametricStudy.add_design_point
+      
+      
+      ParametricStudy.clear_generated_data
+      
+      
+      ParametricStudy.delete
+      
+      
+      ParametricStudy.delete_design_points
+      
+      
+      ParametricStudy.duplicate
+      
+      
+      ParametricStudy.duplicate_design_point
+      
+      
+      ParametricStudy.export_design_table
+      
+      
+      ParametricStudy.get_all_studies
+      
+      
+      ParametricStudy.import_design_table
+      
+      
+      ParametricStudy.initialize
+      
+      
+      ParametricStudy.load_current_design_point_case_data
+      
+      
+      ParametricStudy.rename
+      
+      
+      ParametricStudy.save_journals
+      
+      
+      ParametricStudy.set_as_current
+      
+      
+      ParametricStudy.update_all_design_points
+      
+      
+      ParametricStudy.update_current_design_point
+      
+      
+      ParametricStudy.update_selected_design_points
+      
+      
+      ParametricStudy.use_base_data
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      
+      ParametricStudy.current_design_point
+      
+      
+      ParametricStudy.is_current
+      
+   
+   

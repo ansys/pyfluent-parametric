@@ -1,0 +1,42 @@
+
+
+.. _sphx_glr_examples_00-parametric:
+
+Parametric examples
+===================
+These examples show how you can use PyFluent-Parameteric to perform
+parametric studies with Fluent.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Parametric study workflow">
+
+.. only:: html
+
+  .. image:: /examples/00-parametric/images/thumb/sphx_glr_parametric_static_mixer_1_thumb.png
+    :alt: Parametric study workflow
+
+  :ref:`sphx_glr_examples_00-parametric_parametric_static_mixer_1.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Parametric study workflow</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/00-parametric/parametric_static_mixer_1
+

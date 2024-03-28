@@ -1,0 +1,6 @@
+current\_study\_name
+====================
+
+.. currentmodule:: ansys.fluent.parametric
+
+.. autoattribute:: ParametricStudy.current_study_name
