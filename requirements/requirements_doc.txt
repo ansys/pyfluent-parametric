@@ -2,7 +2,7 @@ ansys-sphinx-theme==0.14.1
 jupyter_sphinx==0.5.3
 numpydoc==1.6.0
 Sphinx==7.2.6
-pytest-sphinx==0.6.0
+pytest-sphinx==0.6.2
 sphinx-autobuild==2024.2.4
 sphinx-autodoc-typehints==2.0.0
 sphinx-copybutton==0.5.2
@@ -14,7 +14,7 @@ sphinxemoji==0.3.1
 matplotlib==3.8.3
 pandas==2.2.1
 pypandoc==1.13
-pytest-sphinx==0.6.0
+pytest-sphinx==0.6.2
 pyside6==6.6.3
 pyvista==0.43.4
 pyvistaqt==0.11.0
