@@ -1,0 +1,630 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>ansys.fluent.parametric.ParametricStudy &#8212; PyFluent-Parametric</title>
+    
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/ansys_sphinx_theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    
+        <link href="../../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <link rel="shortcut icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="add_design_point" href="ansys.fluent.parametric.ParametricStudy.add_design_point.html" />
+    <link rel="prev" title="write_data_enabled" href="ansys.fluent.parametric.DesignPoint.write_data_enabled.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    <img src="../../_static/pyansys-logo-black-cropped.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/pyansys-logo-black-cropped.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../getting_started/index.html">
+  Getting started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../users_guide/index.html">
+  User guide
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../contributing.html">
+  Contributing
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        0.5  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables api/_autosummary/ansys.fluent.parametric.ParametricStudy and {'json_url': 'https://parametric.fluent.docs.pyansys.com/versions.json', 'version_match': '0.5'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "api/_autosummary/ansys.fluent.parametric.ParametricStudy.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://parametric.fluent.docs.pyansys.com/versions.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "api/_autosummary/ansys.fluent.parametric.ParametricStudy.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.5.1 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "0.5") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/pyansys/pyfluent-parametric" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+     
+<div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(text => document.getElementById("announcement_msg").innerHTML = text)
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+
+    
+        <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-additional-breadcrumb"><a href="https://docs.pyansys.com/">PyAnsys</a> » </li>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyFluent-Parametric</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">API reference</a> » </li>
+        <li class="nav-item nav-item-this"><a href="">ansys.fluent.parametric.ParametricStudy</a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ansys.fluent.parametric.DesignPoint.html">
+   ansys.fluent.parametric.DesignPoint
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.DesignPoint.capture_simulation_report_data_enabled.html">
+     capture_simulation_report_data_enabled
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.DesignPoint.input_parameters.html">
+     input_parameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.DesignPoint.output_parameters.html">
+     output_parameters
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.DesignPoint.write_data_enabled.html">
+     write_data_enabled
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   ansys.fluent.parametric.ParametricStudy
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.add_design_point.html">
+     add_design_point
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.clear_generated_data.html">
+     clear_generated_data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.delete.html">
+     delete
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.delete_design_points.html">
+     delete_design_points
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.duplicate.html">
+     duplicate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.duplicate_design_point.html">
+     duplicate_design_point
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.export_design_table.html">
+     export_design_table
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.get_all_studies.html">
+     get_all_studies
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.import_design_table.html">
+     import_design_table
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.initialize.html">
+     initialize
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.load_current_design_point_case_data.html">
+     load_current_design_point_case_data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.rename.html">
+     rename
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.save_journals.html">
+     save_journals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.set_as_current.html">
+     set_as_current
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.update_all_design_points.html">
+     update_all_design_points
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.update_current_design_point.html">
+     update_current_design_point
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.update_selected_design_points.html">
+     update_selected_design_points
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.use_base_data.html">
+     use_base_data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.current_design_point.html">
+     current_design_point
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.is_current.html">
+     is_current
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="ansys.fluent.parametric.InputParameters.html">
+   ansys.fluent.parametric.InputParameters
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ansys.fluent.parametric.InputParameters.get_unit_label.html">
+     get_unit_label
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ansys.fluent.parametric.OutputParameters.html">
+   ansys.fluent.parametric.OutputParameters
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+
+<nav id="bd-toc-nav">
+    
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="ansys-fluent-parametric-parametricstudy">
+<h1>ansys.fluent.parametric.ParametricStudy<a class="headerlink" href="#ansys-fluent-parametric-parametricstudy" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ansys.fluent.parametric.ParametricStudy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansys.fluent.parametric.</span></span><span class="sig-name descname"><span class="pre">ParametricStudy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parametric_studies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ansys.fluent.parametric.ParametricStudy" title="Permalink to this definition">#</a></dt>
+<dd><p>Provides for managing parametric studies and their respective design points.</p>
+<p>A parametric study is used to parametrize design points in a Fluent solver
+set up. This class provides the ability to run Fluent for a series of
+design points and access or modify input and output parameters.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>parametric_studies</strong></dt><dd></dd>
+<dt><strong>session</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Session</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>Connected Fluent session. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt><strong>name</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>Name of the parametric study. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+<dt><strong>design_points</strong><span class="classifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dict</span></code>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="ansys.fluent.parametric.DesignPoint.html#ansys.fluent.parametric.DesignPoint" title="ansys.fluent.parametric.DesignPoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DesignPoint</span></code></a>], <code class="xref py py-obj docutils literal notranslate"><span class="pre">optional</span></code></span></dt><dd><p>Dictionary of design points under the parametric study by name.
+The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.add_design_point.html#ansys.fluent.parametric.ParametricStudy.add_design_point" title="ansys.fluent.parametric.ParametricStudy.add_design_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.add_design_point</span></code></a>([...])</p></td>
+<td><p>Add a new design point under the parametric study.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.clear_generated_data.html#ansys.fluent.parametric.ParametricStudy.clear_generated_data" title="ansys.fluent.parametric.ParametricStudy.clear_generated_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.clear_generated_data</span></code></a>(...)</p></td>
+<td><p>Clear the generated data for a list of design points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.delete.html#ansys.fluent.parametric.ParametricStudy.delete" title="ansys.fluent.parametric.ParametricStudy.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.delete</span></code></a>()</p></td>
+<td><p>Delete the parametric study.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.delete_design_points.html#ansys.fluent.parametric.ParametricStudy.delete_design_points" title="ansys.fluent.parametric.ParametricStudy.delete_design_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.delete_design_points</span></code></a>(...)</p></td>
+<td><p>Delete a list of design points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.duplicate.html#ansys.fluent.parametric.ParametricStudy.duplicate" title="ansys.fluent.parametric.ParametricStudy.duplicate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.duplicate</span></code></a>([copy_design_points])</p></td>
+<td><p>Duplicate the current study.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.duplicate_design_point.html#ansys.fluent.parametric.ParametricStudy.duplicate_design_point" title="ansys.fluent.parametric.ParametricStudy.duplicate_design_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.duplicate_design_point</span></code></a>(...)</p></td>
+<td><p>Duplicate the design point.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.export_design_table.html#ansys.fluent.parametric.ParametricStudy.export_design_table" title="ansys.fluent.parametric.ParametricStudy.export_design_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.export_design_table</span></code></a>(filepath)</p></td>
+<td><p>Export the design table for the parametric study.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.get_all_studies.html#ansys.fluent.parametric.ParametricStudy.get_all_studies" title="ansys.fluent.parametric.ParametricStudy.get_all_studies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.get_all_studies</span></code></a>()</p></td>
+<td><p>Get all currently active studies.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.import_design_table.html#ansys.fluent.parametric.ParametricStudy.import_design_table" title="ansys.fluent.parametric.ParametricStudy.import_design_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.import_design_table</span></code></a>(filepath)</p></td>
+<td><p>Import the design table for the parametric study.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.initialize.html#ansys.fluent.parametric.ParametricStudy.initialize" title="ansys.fluent.parametric.ParametricStudy.initialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.initialize</span></code></a>()</p></td>
+<td><p>Initialize the parametric study.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.load_current_design_point_case_data.html#ansys.fluent.parametric.ParametricStudy.load_current_design_point_case_data" title="ansys.fluent.parametric.ParametricStudy.load_current_design_point_case_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.load_current_design_point_case_data</span></code></a>()</p></td>
+<td><p>Load case data of the current design point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.rename.html#ansys.fluent.parametric.ParametricStudy.rename" title="ansys.fluent.parametric.ParametricStudy.rename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.rename</span></code></a>(new_name)</p></td>
+<td><p>Rename the parametric study.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.save_journals.html#ansys.fluent.parametric.ParametricStudy.save_journals" title="ansys.fluent.parametric.ParametricStudy.save_journals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.save_journals</span></code></a>(separate_journals)</p></td>
+<td><p>Save journals.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.set_as_current.html#ansys.fluent.parametric.ParametricStudy.set_as_current" title="ansys.fluent.parametric.ParametricStudy.set_as_current"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.set_as_current</span></code></a>()</p></td>
+<td><p>Set the parametric study as the current parametric study.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.update_all_design_points.html#ansys.fluent.parametric.ParametricStudy.update_all_design_points" title="ansys.fluent.parametric.ParametricStudy.update_all_design_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.update_all_design_points</span></code></a>()</p></td>
+<td><p>Update all design points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.update_current_design_point.html#ansys.fluent.parametric.ParametricStudy.update_current_design_point" title="ansys.fluent.parametric.ParametricStudy.update_current_design_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.update_current_design_point</span></code></a>()</p></td>
+<td><p>Update the current design point.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.update_selected_design_points.html#ansys.fluent.parametric.ParametricStudy.update_selected_design_points" title="ansys.fluent.parametric.ParametricStudy.update_selected_design_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.update_selected_design_points</span></code></a>(...)</p></td>
+<td><p>Update a list of design points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.use_base_data.html#ansys.fluent.parametric.ParametricStudy.use_base_data" title="ansys.fluent.parametric.ParametricStudy.use_base_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.use_base_data</span></code></a>()</p></td>
+<td><p>Use base data for the parametric study.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.current_design_point.html#ansys.fluent.parametric.ParametricStudy.current_design_point" title="ansys.fluent.parametric.ParametricStudy.current_design_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.current_design_point</span></code></a></p></td>
+<td><p>Get the current design point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ansys.fluent.parametric.ParametricStudy.is_current.html#ansys.fluent.parametric.ParametricStudy.is_current" title="ansys.fluent.parametric.ParametricStudy.is_current"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParametricStudy.is_current</span></code></a></p></td>
+<td><p>Whether the parametric study is the current parametric study.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</section>
+
+
+              </article>
+              
+
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright (c) 2023 ANSYS, Inc. All rights reserved.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

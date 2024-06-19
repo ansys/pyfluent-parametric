@@ -1,0 +1,6 @@
+reset\_study\_registry
+======================
+
+.. currentmodule:: ansys.fluent.parametric
+
+.. automethod:: ParametricStudy.reset_study_registry
