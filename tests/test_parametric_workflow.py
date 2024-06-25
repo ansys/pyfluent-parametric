@@ -51,14 +51,14 @@ def test_parametric_workflow():
     # Read the hopper/mixer case
 
     import_filepath = examples.download_file(
-        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_without_path=False
+        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer"
     )
 
     solver_session.tui.file.read_case(import_filepath)
 
     ############################################################################
     # Set number of iterations to 100
-    solver_session.tui.solve.set.number_of_iterations("100")
+    solver_session.tui.solve.set.number_of_iterations(100)
 
     ############################################################################
     # Create input parameters after enabling parameter creation in the TUI:
