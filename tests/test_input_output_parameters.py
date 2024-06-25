@@ -9,6 +9,7 @@ def test_input_output_parameters():
         "nozzle-2D-WB.cas.h5", "pyfluent/optislang", return_without_path=False
     )
     solver_session = pyfluent.launch_fluent(version="2d", mode="solver")
+    solver_session.upload(case_filepath)
     solver_session.file.read(file_name=case_filepath, file_type="case")
     inp = InputParameters(solver_session)
     assert len(inp) == 1
