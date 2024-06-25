@@ -23,11 +23,13 @@ import shutil
 
 import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
+import pytest
 
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
 from utils import pytest_approx
 
 
+@pytest.mark.self_hosted
 def test_parametric_workflow():
     ############################################################################
     # Launch Fluent in 3D and double precision
