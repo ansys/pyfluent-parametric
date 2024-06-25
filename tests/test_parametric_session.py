@@ -18,3 +18,4 @@ def test_parametric_session(monkeypatch: pytest.MonkeyPatch):
     assert "Base DP" in design_points
     assert "DP1" in design_points
     assert "DP2" in design_points
+    session.exit()

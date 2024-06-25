@@ -1,6 +1,7 @@
 import functools
 import operator
 
+import ansys.fluent.core as pyfluent
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 import pytest
@@ -48,3 +49,4 @@ def run_before_each_test(
     monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
 ) -> None:
     monkeypatch.setenv("PYFLUENT_TEST_NAME", request.node.name)
+    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)

@@ -5,7 +5,9 @@ from ansys.fluent.parametric.parameters import InputParameters, OutputParameters
 
 
 def test_input_output_parameters():
-    case_filepath = examples.download_file("nozzle-2D-WB.cas.h5", "pyfluent/optislang")
+    case_filepath = examples.download_file(
+        "nozzle-2D-WB.cas.h5", "pyfluent/optislang", return_without_path=False
+    )
     solver_session = pyfluent.launch_fluent(version="2d", mode="solver")
     solver_session.file.read(file_name=case_filepath, file_type="case")
     inp = InputParameters(solver_session)

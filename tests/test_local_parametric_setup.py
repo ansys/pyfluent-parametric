@@ -4,7 +4,6 @@ This local parametric study workflow test performs these steps
 TODO
 """
 
-import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import pytest
 
@@ -14,7 +13,6 @@ from ansys.fluent.parametric.local import LocalParametricStudy
 
 
 def test_local_parametric_setup(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Read the hopper/mixer case
 
