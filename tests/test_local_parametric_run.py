@@ -8,7 +8,6 @@ TODO
 
 from math import inf
 
-import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import pytest
 
@@ -19,8 +18,7 @@ from ansys.fluent.parametric.local import (
 
 
 @pytest.mark.self_hosted
-def test_local_parametric_run(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
+def test_local_parametric_run():
     ############################################################################
     # Read the hopper/mixer case
 

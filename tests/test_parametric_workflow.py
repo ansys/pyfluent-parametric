@@ -29,8 +29,8 @@ from ansys.fluent.parametric import ParametricProject, ParametricStudy
 from utils import pytest_approx
 
 
-def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
+@pytest.mark.self_hosted
+def test_parametric_workflow():
     ############################################################################
     # Launch Fluent in 3D and double precision
 
@@ -53,14 +53,14 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     # Read the hopper/mixer case
 
     import_filepath = examples.download_file(
-        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer", return_without_path=False
+        "Static_Mixer_main.cas.h5", "pyfluent/static_mixer"
     )
 
     solver_session.tui.file.read_case(import_filepath)
 
     ############################################################################
     # Set number of iterations to 100
-    solver_session.tui.solve.set.number_of_iterations("100")
+    solver_session.tui.solve.set.number_of_iterations(100)
 
     ############################################################################
     # Create input parameters after enabling parameter creation in the TUI:
@@ -125,7 +125,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     case_path = str(Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5")
     solver_session.tui.file.write_case(case_path)
 
-    assert (Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5").exists()
+    assert Path(case_path).exists()
 
     ###########################################################################
     # Instantiate a parametric study from a Fluent session
