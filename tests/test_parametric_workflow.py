@@ -123,7 +123,7 @@ def test_parametric_workflow():
     case_path = str(Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5")
     solver_session.tui.file.write_case(case_path)
 
-    assert (Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5").exists()
+    assert Path(case_path).exists()
 
     ###########################################################################
     # Instantiate a parametric study from a Fluent session
