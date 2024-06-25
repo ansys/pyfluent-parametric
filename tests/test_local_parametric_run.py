@@ -9,7 +9,6 @@ TODO
 from math import inf
 
 from ansys.fluent.core import examples
-import pytest
 
 from ansys.fluent.parametric.local import (
     LocalParametricStudy,
@@ -18,7 +17,7 @@ from ansys.fluent.parametric.local import (
 
 
 @pytest.mark.self_hosted
-def test_local_parametric_run(monkeypatch: pytest.MonkeyPatch):
+def test_local_parametric_run():
     ############################################################################
     # Read the hopper/mixer case
 

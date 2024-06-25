@@ -1,10 +1,9 @@
 from ansys.fluent.core import examples
-import pytest
 
 from ansys.fluent.parametric import ParametricSession
 
 
-def test_parametric_session(monkeypatch: pytest.MonkeyPatch):
+def test_parametric_session():
     project_filepath = examples.download_file(
         "project-elbow-param.flprz",
         "pyfluent/mixing_elbow",

@@ -33,7 +33,7 @@ from utils import pytest_approx
 # test not working correctly on GitHub runners, see issue #121
 # method that fails: .file.parametric_project.save_as
 @pytest.mark.fluent_version(">=24.1")
-def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
+def test_parametric_workflow_settings_api():
     ############################################################################
     # Launch Fluent in 3D and double precision
 

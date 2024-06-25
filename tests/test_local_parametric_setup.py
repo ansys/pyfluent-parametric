@@ -5,14 +5,13 @@ TODO
 """
 
 from ansys.fluent.core import examples
-import pytest
 
 from ansys.fluent.parametric.local import LocalParametricStudy
 
 ############################################################################
 
 
-def test_local_parametric_setup(monkeypatch: pytest.MonkeyPatch):
+def test_local_parametric_setup():
     ############################################################################
     # Read the hopper/mixer case
 
