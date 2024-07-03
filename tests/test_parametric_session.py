@@ -1,8 +1,10 @@
 from ansys.fluent.core import examples
+import pytest
 
 from ansys.fluent.parametric import ParametricSession
 
 
+@pytest.mark.skip("https://github.com/ansys/pyfluent-parametric/issues/311")
 def test_parametric_session():
     project_filepath = examples.download_file(
         "project-elbow-param.flprz",
