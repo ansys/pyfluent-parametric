@@ -1,4 +1,3 @@
-import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import pytest
 

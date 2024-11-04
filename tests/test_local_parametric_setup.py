@@ -4,7 +4,6 @@ This local parametric study workflow test performs these steps
 TODO
 """
 
-import ansys.fluent.core as pyfluent
 from ansys.fluent.core import examples
 import pytest
 
