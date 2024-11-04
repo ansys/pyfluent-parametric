@@ -1,11 +1,10 @@
 import functools
 import operator
 
+import ansys.fluent.core as pyfluent
 from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 import pytest
-
-import ansys.fluent.core as pyfluent
 
 
 def pytest_addoption(parser):
