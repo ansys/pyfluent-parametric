@@ -12,7 +12,7 @@ def test_parametric_session(monkeypatch: pytest.MonkeyPatch):
         "pyfluent/mixing_elbow",
         return_without_path=False,
     )
-    session = ParametricSession(project_filepath=project_filepath, initialize=False)
+    session = ParametricSession(project_filepath=project_filepath)
     assert "Static_Mixer_main-Solve" in session.studies
     design_points = session.studies["Static_Mixer_main-Solve"].design_points
     assert "Base DP" in design_points
