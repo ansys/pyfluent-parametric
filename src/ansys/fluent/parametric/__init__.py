@@ -285,7 +285,6 @@ class ParametricStudy:
             self.session,
             clone_name,
             clone_design_points,
-            initialize=False,
         )
         self.session.current_study_name = clone.name
         return clone
@@ -536,9 +535,7 @@ class ParametricProject:
         )
         self.project_filepath = project_filepath
         for study_name in self._parametric_studies.get_object_names():
-            study = ParametricStudy(
-                self._parametric_studies, self.session, study_name, initialize=False
-            )
+            study = ParametricStudy(self._parametric_studies, self.session, study_name)
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
                 study.design_points[dp_name] = DesignPoint(
