@@ -29,7 +29,6 @@ from utils import pytest_approx
 
 
 def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Launch Fluent in 3D and double precision
 

@@ -14,7 +14,6 @@ from ansys.fluent.parametric.local import LocalParametricStudy
 
 
 def test_local_parametric_setup(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Read the hopper/mixer case
 

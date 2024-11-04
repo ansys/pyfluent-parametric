@@ -5,6 +5,8 @@ from packaging.specifiers import SpecifierSet
 from packaging.version import Version
 import pytest
 
+import ansys.fluent.core as pyfluent
+
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -48,3 +50,5 @@ def run_before_each_test(
     monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
 ) -> None:
     monkeypatch.setenv("PYFLUENT_TEST_NAME", request.node.name)
+    pyfluent.CONTAINER_MOUNT_SOURCE = pyfluent.EXAMPLES_PATH
+    pyfluent.CONTAINER_MOUNT_TARGET = pyfluent.EXAMPLES_PATH
