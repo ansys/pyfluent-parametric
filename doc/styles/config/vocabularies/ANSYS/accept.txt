@@ -1,10 +1,6 @@
-ANSYS
-Ansys
-ansys
-Fluent
-fluent
-Fluent's
-PyFluent
+(?i)Ansys
+(?i)PyFluent
+(?i)Fluent
 PyFluent-Parametric
 Pythonic
 datamodel
