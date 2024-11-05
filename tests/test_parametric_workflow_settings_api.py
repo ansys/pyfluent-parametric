@@ -298,8 +298,7 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
     #########################################################################
     # Save the parametric project and close Fluent
 
-    # is_active condition of save_as method was not correct in 24.2
-    if solver_session.get_fluent_version() == FluentVersion.v242:
+    if solver_session.get_fluent_version() >= FluentVersion.v242:
         solver_session.exit()
         return
 
