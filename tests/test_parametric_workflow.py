@@ -28,7 +28,6 @@ from ansys.fluent.parametric import ParametricProject, ParametricStudy
 from utils import pytest_approx
 
 
-@pytest.mark.self_hosted
 def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     ############################################################################
     # Launch Fluent in 3D and double precision
