@@ -21,7 +21,7 @@ from pathlib import Path
 import shutil
 
 import ansys.fluent.core as pyfluent
-from ansys.fluent.core import examples
+from ansys.fluent.core import FluentVersion, examples
 import pytest
 
 from ansys.fluent.parametric import ParametricProject, ParametricStudy
@@ -121,9 +121,19 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
         "surface_names": "outlet",
     }
 
-    report_definitions = solver_session.parameters.output_parameters.report_definitions
-    report_definitions["report-def-1"] = {"report_definition": "outlet-temp-avg"}
-    report_definitions["report-def-2"] = {"report_definition": "outlet-vel-avg"}
+    if solver_session.get_fluent_version() >= FluentVersion.v251:
+        solver_session.settings.parameters.output_parameters.report_definitions.create(
+            report_def_name="outlet-temp-avg"
+        )
+        solver_session.settings.parameters.output_parameters.report_definitions.create(
+            report_def_name="outlet-vel-avg"
+        )
+    else:
+        report_definitions = (
+            solver_session.parameters.output_parameters.report_definitions
+        )
+        report_definitions["report-def-1"] = {"report_definition": "outlet-temp-avg"}
+        report_definitions["report-def-2"] = {"report_definition": "outlet-vel-avg"}
 
     ###########################################################################
     # Enable convergence condition check
@@ -287,6 +297,11 @@ def test_parametric_workflow_settings_api(monkeypatch: pytest.MonkeyPatch):
 
     #########################################################################
     # Save the parametric project and close Fluent
+
+    # is_active condition of save_as method was not correct in 24.2
+    if solver_session.get_fluent_version() == FluentVersion.v242:
+        solver_session.exit()
+        return
 
     project_filepath = str(temporary_resource_path / "static_mixer_study.flprj")
 
