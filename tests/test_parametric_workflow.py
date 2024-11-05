@@ -17,7 +17,6 @@ This test queries the following using PyTest:
 """
 
 ############################################################################
-import os
 from pathlib import Path
 import shutil
 
@@ -30,7 +29,6 @@ from utils import pytest_approx
 
 
 def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
-    monkeypatch.setenv("PYFLUENT_CONTAINER_MOUNT_PATH", pyfluent.EXAMPLES_PATH)
     ############################################################################
     # Launch Fluent in 3D and double precision
 
@@ -41,13 +39,13 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     ############################################################################
     # Create a directory structure to store the temporarily created files in this test.
 
-    temporary_resource_path = os.path.join(
-        pyfluent.EXAMPLES_PATH, "parametric_workflow_resources"
+    temporary_resource_path = (
+        Path(pyfluent.EXAMPLES_PATH) / "parametric_workflow_resources"
     )
-    if os.path.exists(temporary_resource_path):
+    if temporary_resource_path.exists():
         shutil.rmtree(temporary_resource_path, ignore_errors=True)
-    if not os.path.exists(temporary_resource_path):
-        os.mkdir(temporary_resource_path)
+    if not temporary_resource_path.exists():
+        temporary_resource_path.mkdir(parents=True)
 
     ############################################################################
     # Read the hopper/mixer case
@@ -122,10 +120,10 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
 
     ###########################################################################
     # Write case with all the settings in place
-    case_path = str(Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5")
+    case_path = str(temporary_resource_path / "Static_Mixer_Parameters.cas.h5")
     solver_session.tui.file.write_case(case_path)
 
-    assert (Path(temporary_resource_path) / "Static_Mixer_Parameters.cas.h5").exists()
+    assert (temporary_resource_path / "Static_Mixer_Parameters.cas.h5").exists()
 
     ###########################################################################
     # Instantiate a parametric study from a Fluent session
@@ -249,9 +247,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     ###############################################################################
     # Export design point table as a CSV table
 
-    design_point_table = str(
-        Path(temporary_resource_path) / "design_point_table_study_1.csv"
-    )
+    design_point_table = str(temporary_resource_path / "design_point_table_study_1.csv")
     study_1.export_design_table(design_point_table)
 
     ##########################################################################
@@ -287,11 +283,11 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     #########################################################################
     # Save the parametric project and close Fluent
 
-    project_filepath = str(Path(temporary_resource_path) / "static_mixer_study.flprj")
+    project_filepath = str(temporary_resource_path / "static_mixer_study.flprj")
 
     solver_session.tui.file.parametric_project.save_as(project_filepath)
 
-    assert (Path(temporary_resource_path) / "static_mixer_study.flprj").exists()
+    assert (temporary_resource_path / "static_mixer_study.flprj").exists()
 
     solver_session.exit()
 
@@ -301,9 +297,7 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     solver_session = pyfluent.launch_fluent(
         precision="double", processor_count=2, mode="solver"
     )
-    project_filepath_read = str(
-        Path(temporary_resource_path) / "static_mixer_study.flprj"
-    )
+    project_filepath_read = str(temporary_resource_path / "static_mixer_study.flprj")
 
     proj = ParametricProject(
         solver_session.file.parametric_project,
@@ -320,28 +314,28 @@ def test_parametric_workflow(monkeypatch: pytest.MonkeyPatch):
     # Save the current project to a different file name
 
     project_filepath_save_as = str(
-        Path(temporary_resource_path) / "static_mixer_study_save_as.flprj"
+        temporary_resource_path / "static_mixer_study_save_as.flprj"
     )
     proj.save_as(project_filepath=project_filepath_save_as)
 
-    assert (Path(temporary_resource_path) / "static_mixer_study_save_as.flprj").exists()
+    assert (temporary_resource_path / "static_mixer_study_save_as.flprj").exists()
 
     #########################################################################
     # Export the current project
 
     project_filepath_export = str(
-        Path(temporary_resource_path) / "static_mixer_study_export.flprj"
+        temporary_resource_path / "static_mixer_study_export.flprj"
     )
     proj.export(project_filepath=project_filepath_export)
 
-    assert (Path(temporary_resource_path) / "static_mixer_study_export.flprj").exists()
+    assert (temporary_resource_path / "static_mixer_study_export.flprj").exists()
 
     #########################################################################
     # Archive the current project
 
     proj.archive()
 
-    assert (Path(temporary_resource_path) / "static_mixer_study.flprz").exists()
+    assert (temporary_resource_path / "static_mixer_study.flprz").exists()
 
     #########################################################################
     # Close Fluent

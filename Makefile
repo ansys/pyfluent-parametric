@@ -6,6 +6,7 @@ install:
 	@pip install -r requirements/requirements_build.txt
 	@python -m build
 	@pip install dist/*.whl --force-reinstall
+	@pip install ansys-fluent-core[reader]
 
 version-info:
 	@bash -c "date -u +'Build date: %B %d, %Y %H:%M UTC ShaID: <id>' | xargs -I date sed -i 's/_VERSION_INFO = .*/_VERSION_INFO = \"date\"/g' src/ansys/fluent/parametric/__init__.py"

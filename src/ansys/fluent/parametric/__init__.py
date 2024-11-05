@@ -59,6 +59,7 @@ import tempfile
 from typing import Any, Dict, List, Optional
 
 import ansys.fluent.core as pyfluent
+from ansys.fluent.core import FluentVersion
 
 logger = logging.getLogger("ansys.fluent")
 
@@ -173,6 +174,7 @@ class ParametricStudy:
         initialize: Optional[bool] = True,
     ):
         self._parametric_studies = parametric_studies
+        self._version = FluentVersion(self._parametric_studies.version)
         self.session = (
             session if session is not None else (_shared_parametric_study_registry())
         )
@@ -283,7 +285,6 @@ class ParametricStudy:
             self.session,
             clone_name,
             clone_design_points,
-            initialize=False,
         )
         self.session.current_study_name = clone.name
         return clone
@@ -355,10 +356,16 @@ class ParametricStudy:
         self.set_as_current()
         dp_settings = self._parametric_studies[self.name].design_points
         dps_before = dp_settings.get_object_names()
-        dp_settings.create_1(
-            write_data=write_data,
-            capture_simulation_report_data=capture_simulation_report_data,
-        )
+        if self._version < FluentVersion.v251:
+            dp_settings.create_1(
+                write_data=write_data,
+                capture_simulation_report_data=capture_simulation_report_data,
+            )
+        else:
+            dp_settings.create(
+                write_data=write_data,
+                capture_simulation_report_data=capture_simulation_report_data,
+            )
         dps_after = dp_settings.get_object_names()
         dp_name = set(dps_after).difference(set(dps_before)).pop()
         design_point = DesignPoint(
@@ -528,9 +535,7 @@ class ParametricProject:
         )
         self.project_filepath = project_filepath
         for study_name in self._parametric_studies.get_object_names():
-            study = ParametricStudy(
-                self._parametric_studies, self.session, study_name, initialize=False
-            )
+            study = ParametricStudy(self._parametric_studies, self.session, study_name)
             dps_settings = self._parametric_studies[study_name].design_points
             for dp_name in dps_settings.get_object_names():
                 study.design_points[dp_name] = DesignPoint(
