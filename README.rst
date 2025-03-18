@@ -1,3 +1,6 @@
+![Deprecated](https://img.shields.io/badge/status-deprecated-red)
+***
+
 PyFluent-Parametric
 ===================
 |pyansys| |pypi| |GH-CI| |MIT| |black| |pre-commit|
