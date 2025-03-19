@@ -1,6 +1,9 @@
 ![Deprecated](https://img.shields.io/badge/status-deprecated-red)
 ***
 
+This repository is deprecated. The parametric workflow is supported in the `core library <https://github.com/ansys/pyfluent>`_. 
+Please use the core library for all parametric functionalities. This `tutorial <https://fluent.docs.pyansys.com/version/stable/examples/00-fluent/parametric_static_mixer_1.html#sphx-glr-examples-00-fluent-parametric-static-mixer-1-py>`_ demonstrates how to use the core library to set up a parametric study.
+
 [Deprecated] PyFluent-Parametric
 ================================
 |pyansys| |pypi| |GH-CI| |MIT| |black| |pre-commit|
