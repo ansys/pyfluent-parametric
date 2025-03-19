@@ -1,5 +1,4 @@
 ![Deprecated](https://img.shields.io/badge/status-deprecated-red)
-***
 
 The parametric workflow is now supported within the `core pyfluent library <https://github.com/ansys/pyfluent>_`. This repository is deprecated, and all parametric functionalities have been migrated to the core library.
 
