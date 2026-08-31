@@ -1,5 +1,4 @@
-"""Classes interfacing input and output parameters in Fluent.
-"""
+"""Classes interfacing input and output parameters in Fluent."""
 
 from collections.abc import Mapping, MutableMapping
 from typing import Iterator, Union
