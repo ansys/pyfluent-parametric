@@ -1,6 +1,6 @@
 """
 Classes for locally defining a parametric study for Fluent without
-running Fluent. The study can then be submitted to be executed in 
+running Fluent. The study can then be submitted to be executed in
 parallel.
 
 Example
@@ -45,7 +45,7 @@ from ansys.fluent.parametric import (
 
 
 def convert_design_point_parameter_units(
-    value: Dict[str, Union[float, int, str]]
+    value: Dict[str, Union[float, int, str]],
 ) -> Dict[str, Union[float, int]]:
     def conv(val):
         if type(val) in (float, int):
